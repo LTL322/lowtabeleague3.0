@@ -1292,6 +1292,17 @@
     .support-message-actions button:hover{border-color:var(--accent);color:var(--accent)}
     .player-detail-page{display:none!important}
     .player-detail-page.active{display:block!important}
+
+    .v9-role-quick{align-items:center;}
+    .v9-role-quick button{white-space:nowrap;}
+    @media(max-width:700px){
+      .role-management .role-item{align-items:flex-start;}
+      .v9-role-quick{width:100%;}
+      .v9-role-quick button{flex:1 1 auto;min-width:70px;}
+      .top-player-card{min-width:0;overflow-wrap:anywhere;}
+      .top-player-card .player-name,.top-player-card .player-team-name{overflow-wrap:anywhere;word-break:break-word;}
+      .top-player-card .player-stats-mini{display:flex;flex-wrap:wrap;gap:8px 14px;justify-content:center;line-height:1.5;}
+    }
 </style>
 
 <style id="support-chat-v11-fixes">
@@ -3326,6 +3337,12 @@
             <option value="admin" ${role === ROLES.ADMIN ? 'selected' : ''}>Админ</option>
           </select>
           ${role === ROLES.ADMIN ? `<button class="remove-admin-btn" data-user="${escHtml(username)}" style="padding:7px 9px;border-radius:6px;border:1px solid #ef5350;background:transparent;color:#ef5350;cursor:pointer;font-size:11px;">✕ Снять</button>` : ''}
+          <div class="v9-role-quick" style="width:100%;display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;">
+            <button type="button" data-v9-role="guest" data-user="${escHtml(username)}" style="padding:6px 9px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink);cursor:pointer;font-size:11px;">Гость</button>
+            <button type="button" data-v9-role="player" data-user="${escHtml(username)}" style="padding:6px 9px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink);cursor:pointer;font-size:11px;">Игрок</button>
+            <button type="button" data-v9-role="captain" data-user="${escHtml(username)}" style="padding:6px 9px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink);cursor:pointer;font-size:11px;">Капитан</button>
+            <button type="button" data-v9-role="admin" data-user="${escHtml(username)}" style="padding:6px 9px;border:1px solid var(--accent);border-radius:8px;background:var(--paper);color:var(--accent);cursor:pointer;font-size:11px;font-weight:700;">Админ</button>
+          </div>
         ` : '<span style="color:var(--muted);font-size:12px;white-space:nowrap;">👑 Глава</span>'}
       `;
       roleList.appendChild(div);
@@ -3349,6 +3366,28 @@
           currentRole = newRole;
           updateAdminVisibility();
           renderRoleList();
+        }
+        showNotification('Роль изменена!', 'Пользователь ' + username + ' теперь ' + ROLE_NAMES[newRole], 'fa-user-cog');
+      });
+    });
+
+    roleList.querySelectorAll('[data-v9-role]').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.preventDefault(); e.stopPropagation();
+        const username = this.dataset.user;
+        const newRole = this.dataset.v9Role;
+        const currentUsers = getUsers() || {};
+        const userKey = String(username).toLowerCase();
+        const target = currentUsers[userKey];
+        if (!target || target.role === ROLES.HEAD) return;
+        target.role = newRole;
+        if (newRole !== ROLES.PLAYER && newRole !== ROLES.CAPTAIN) target.teamId = null;
+        setUsers(currentUsers);
+        renderRoleList();
+        renderTopPlayers();
+        if (String(currentUser || '').toLowerCase() === userKey) {
+          currentRole = newRole;
+          updateAdminVisibility();
         }
         showNotification('Роль изменена!', 'Пользователь ' + username + ' теперь ' + ROLE_NAMES[newRole], 'fa-user-cog');
       });
@@ -3722,7 +3761,7 @@
         <div class="player-rating-edit"><input class="player-rating-input" data-team-id="${p.teamId}" data-player-name="${p.name}" type="number" value="${p.lts}" min="0" step="1"></div>
       ` : `<div class="player-rating">⭐ ${p.lts} LTS</div>`;
       return `
-        <div class="card top-player-card ${borderClass}" data-top-player-name="${escHtml(p.name)}" role="button" tabindex="0" style="cursor:pointer;">
+        <div class="card top-player-card ${borderClass}" data-top-player-name="${escHtml(p.name)}" data-top-team-id="${escHtml(p.teamId || '')}" role="button" tabindex="0" onclick="window.LTL_openTopPlayer(this.getAttribute('data-top-player-name'), this.getAttribute('data-top-team-id'))" style="cursor:pointer;">
           ${medalHtml}
           <div class="player-rank-num ${rankClass}">#${i+1}</div>
           <div class="player-avatar-big ${avatarClass}" style="overflow:hidden;display:grid;place-items:center;">${playerAvatarMarkup(p.name, 'player-avatar-shared', '')}</div>
@@ -6718,6 +6757,20 @@
     // Фоновая автоматическая активность отключена: действия выполняются только по запросу пользователя.
 
   });
+
+  // V9: прямой переход из карточки ТОП игрока в профиль.
+  // Функция объявляется внутри основного IIFE, поэтому имеет доступ ко всем
+  // внутренним функциям и состоянию приложения.
+  window.LTL_openTopPlayer = function(playerName, teamId) {
+    const name = String(playerName || '').trim();
+    if (!name) return;
+    try {
+      window.showPlayerDetail(teamId || null, name, 'top-players');
+    } catch (e) {
+      console.error('LTL V9: не удалось открыть профиль', e);
+      if (typeof showNotification === 'function') showNotification('Ошибка', 'Не удалось открыть профиль игрока.', 'fa-exclamation-triangle');
+    }
+  };
 
   setTimeout(() => { ltlMigrateLegacyMedia(); }, 2500);
 })();
