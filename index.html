@@ -225,6 +225,18 @@
       color: var(--ink);
       font-weight: 700;
     }
+
+    .registration-security-note {
+      margin: 8px 0 12px;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--bg2);
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    .registration-security-note strong { color: var(--ink); }
     
     .donate-btn {
       display: flex;
@@ -2026,16 +2038,17 @@
     <input type="text" id="regNick" placeholder="Придумайте никнейм" autocomplete="username">
     <label>Email</label>
     <input type="email" id="regEmail" placeholder="Введите ваш email" autocomplete="email">
+    <div class="registration-security-note" role="note">⚠️ <strong>Важно:</strong> не указывайте основной email, на котором хранятся важные данные. Для этого сайта лучше использовать отдельный email, чтобы снизить риски.</div>
     <label>Пароль</label>
     <div class="password-wrapper">
-      <input type="password" id="regPassword" placeholder="Придумайте пароль (мин. 8 символов)">
+      <input type="password" id="regPassword" placeholder="Минимум 8: только латинские буквы и цифры" inputmode="text" autocomplete="new-password" pattern="[A-Za-z0-9]{8,}" title="Пароль: минимум 8 символов, только латинские буквы и цифры">
       <button class="toggle-password" id="toggleRegPass" type="button">
         <i class="far fa-eye"></i>
       </button>
     </div>
     <label>Подтверждение пароля</label>
     <div class="password-wrapper">
-      <input type="password" id="regConfirmPassword" placeholder="Подтвердите пароль">
+      <input type="password" id="regConfirmPassword" placeholder="Повторите пароль" inputmode="text" autocomplete="new-password" pattern="[A-Za-z0-9]{8,}" title="Пароль: минимум 8 символов, только латинские буквы и цифры">
       <button class="toggle-password" id="toggleRegConfirmPass" type="button">
         <i class="far fa-eye"></i>
       </button>
@@ -2713,6 +2726,9 @@
   }
 
   // ===== ОБЩИЙ ОНЛАЙН ЧЕРЕЗ SUPABASE REALTIME PRESENCE =====
+  // Канал должен быть объявлен до первого чтения: иначе счётчик падал с ReferenceError.
+  let ltlOnlineChannel = null;
+  let ltlPresenceSubscribed = false;
   let ltlClientId = sessionStorage.getItem('ltl_client_id');
   if (!ltlClientId) {
     ltlClientId = 'c_' + Date.now() + '_' + Math.random().toString(36).slice(2);
@@ -2720,13 +2736,20 @@
   }
 
   function ltlUpdatePresenceCount() {
-    const sb = ltlGetSupabaseClient();
-    if (!sb || !ltlOnlineChannel) return;
-    const state = ltlOnlineChannel.presenceState ? ltlOnlineChannel.presenceState() : {};
-    const ids = new Set(Object.keys(state));
-    const count = ids.size;
     const el = document.getElementById('onlineCount');
-    if (el) el.textContent = String(count);
+    if (!el) return;
+    if (!ltlOnlineChannel || !ltlPresenceSubscribed) {
+      el.textContent = '1';
+      return;
+    }
+    try {
+      const state = ltlOnlineChannel.presenceState ? ltlOnlineChannel.presenceState() : {};
+      const count = Math.max(1, Object.keys(state || {}).length);
+      el.textContent = String(count);
+    } catch (e) {
+      console.warn('Не удалось получить online presence:', e);
+      el.textContent = '1';
+    }
   }
 
   async function ltlStartOnlinePresence() {
@@ -2739,28 +2762,45 @@
       .on('presence', { event: 'leave' }, ltlUpdatePresenceCount)
       .subscribe(async (status) => {
         if (status === 'SUBSCRIBED') {
-          await ltlOnlineChannel.track({ clientId: ltlClientId, username: currentUser || 'Гость', at: Date.now() });
+          ltlPresenceSubscribed = true;
+          try {
+            await ltlOnlineChannel.track({ clientId: ltlClientId, username: currentUser || 'Гость', at: Date.now() });
+          } catch (e) {
+            console.warn('Не удалось зарегистрировать online presence:', e);
+          }
           ltlUpdatePresenceCount();
+        } else if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT' || status === 'CLOSED') {
+          ltlPresenceSubscribed = false;
+          const el = document.getElementById('onlineCount');
+          if (el) el.textContent = '1';
+          console.warn('Supabase Realtime status:', status);
         }
       });
   }
 
   async function updateOnlineCounter() {
-    if (ltlOnlineChannel) ltlUpdatePresenceCount();
-    else {
+    if (!ltlOnlineChannel) {
       const el = document.getElementById('onlineCount');
-      if (el) el.textContent = '0';
+      if (el) el.textContent = '1';
       await ltlStartOnlinePresence();
+    } else {
+      ltlUpdatePresenceCount();
     }
   }
 
   async function updateUserOnline() {
-    if (ltlOnlineChannel) {
+    if (!ltlOnlineChannel) {
+      await ltlStartOnlinePresence();
+      return;
+    }
+    if (ltlPresenceSubscribed) {
       try {
         await ltlOnlineChannel.track({ clientId: ltlClientId, username: currentUser || 'Гость', at: Date.now() });
         ltlUpdatePresenceCount();
         return;
-      } catch (e) { console.warn('Presence update failed:', e); }
+      } catch (e) {
+        console.warn('Presence update failed:', e);
+      }
     }
     await ltlStartOnlinePresence();
   }
@@ -4934,6 +4974,16 @@
       document.getElementById('loginPassword').value = '';
     });
     
+    // Ограничение пароля при вводе: только латинские буквы и цифры.
+    ['regPassword', 'regConfirmPassword'].forEach(function(id) {
+      const input = document.getElementById(id);
+      if (!input) return;
+      input.addEventListener('input', function() {
+        const clean = this.value.replace(/[^A-Za-z0-9]/g, '');
+        if (this.value !== clean) this.value = clean;
+      });
+    });
+
     // Регистрация
     document.getElementById('registerSubmit').addEventListener('click', async function() {
       const nick = document.getElementById('regNick').value.trim();
@@ -4950,7 +5000,7 @@
       const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
       if (!passwordRegex.test(password)) {
         passError.style.display = 'block';
-        passError.textContent = 'Пароль должен содержать минимум 8 символов, буквы и цифры';
+        passError.textContent = 'Пароль: минимум 8 символов, только латинские буквы и цифры. Знаки вроде №, ;, !, @, # и пробелы запрещены.';
         return;
       }
       
