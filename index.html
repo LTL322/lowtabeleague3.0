@@ -3061,9 +3061,21 @@
       if (!session || !session.user) return false;
       const username = String(session.user.user_metadata?.username || session.user.email || '').trim();
       if (!username) return false;
-      const users = getUsers();
-      const profile = users[username.toLowerCase()] || {};
-      loginUser(username, profile.role || ROLES.GUEST, false);
+
+      // Never restore a role from localStorage/public cache: ask the protected RPC.
+      const { data: myProfile, error: profileError } = await sb.rpc('nexus_get_my_profile');
+      if (profileError || !myProfile || !myProfile.username) {
+        await sb.auth.signOut();
+        localStorage.removeItem(STORAGE_KEYS.SESSION);
+        return false;
+      }
+      const serverUsername = String(myProfile.username);
+      const serverRole = myProfile.role || ROLES.GUEST;
+      ltlState[STORAGE_KEYS.USERS] = {
+        ...getUsers(),
+        [serverUsername.toLowerCase()]: myProfile
+      };
+      loginUser(serverUsername, serverRole, false);
       return true;
     } catch (e) {
       console.warn('Не удалось восстановить защищённую сессию:', e);
@@ -4891,9 +4903,30 @@
       if (!profile) { error.textContent = 'Пользователь не найден'; error.classList.add('show'); return; }
       const { data: loginEmail, error: resolveError } = await sb.rpc('nexus_resolve_login', { p_username: username });
       if (resolveError || !loginEmail) { error.textContent = 'Пользователь не найден'; error.classList.add('show'); return; }
-      const { error: authError } = await sb.auth.signInWithPassword({ email: loginEmail, password });
-      if (authError) { error.textContent = 'Неверный логин или пароль'; error.classList.add('show'); return; }
-      loginUser(username, profile.role || ROLES.GUEST);
+      const { data: authData, error: authError } = await sb.auth.signInWithPassword({ email: loginEmail, password });
+      if (authError) {
+        error.textContent = authError.message && /email.*confirm|confirmed/i.test(authError.message)
+          ? 'Подтвердите email по ссылке из письма, затем войдите снова'
+          : 'Неверный логин или пароль';
+        error.classList.add('show');
+        return;
+      }
+
+      // Роль и профиль берём только с сервера после успешной Auth-сессии.
+      const { data: myProfile, error: myProfileError } = await sb.rpc('nexus_get_my_profile');
+      if (myProfileError || !myProfile || !myProfile.username) {
+        await sb.auth.signOut();
+        error.textContent = 'Профиль пользователя не найден. Обратитесь к администратору.';
+        error.classList.add('show');
+        return;
+      }
+      const serverUsername = String(myProfile.username);
+      const serverRole = myProfile.role || ROLES.GUEST;
+      ltlState[STORAGE_KEYS.USERS] = {
+        ...getUsers(),
+        [serverUsername.toLowerCase()]: myProfile
+      };
+      loginUser(serverUsername, serverRole);
       closeModal(document.getElementById('loginModal'));
       document.getElementById('loginUsername').value = '';
       document.getElementById('loginPassword').value = '';
@@ -4941,18 +4974,45 @@
         error.classList.add('show');
         return;
       }
-      const createdUserId = authData?.user?.id;
-      if (createdUserId) {
-        const { error: profileError } = await sb.rpc('nexus_create_profile', { p_user_id: createdUserId, p_username: nick, p_email: email });
-        if (profileError) {
-          error.textContent = profileError.message || 'Не удалось сохранить профиль';
-          error.classList.add('show');
-          return;
-        }
+      const createdUser = authData?.user || null;
+      if (!createdUser) {
+        error.textContent = 'Supabase не вернул созданного пользователя';
+        error.classList.add('show');
+        return;
       }
-      users[userKey] = { username: nick, email: email, role: ROLES.GUEST, teamId: null, createdAt: new Date().toISOString(), avatar: null, authUserId: createdUserId || null };
-      ltlState[STORAGE_KEYS.USERS] = users;
-      loginUser(nick, ROLES.GUEST);
+
+      // Профиль создаётся серверным trigger'ом auth.users -> nexus_users.
+      // Это работает и при включённом подтверждении email, когда session ещё null.
+      const session = authData?.session || null;
+      if (!session) {
+        closeModal(document.getElementById('registerModal'));
+        document.getElementById('regNick').value = '';
+        document.getElementById('regEmail').value = '';
+        document.getElementById('regPassword').value = '';
+        document.getElementById('regConfirmPassword').value = '';
+        showNotification(
+          'Регистрация завершена',
+          'Проверьте почту и подтвердите email. После подтверждения войдите в аккаунт.',
+          'fa-envelope'
+        );
+        return;
+      }
+
+      const { data: myProfile, error: profileError } = await sb.rpc('nexus_get_my_profile');
+      if (profileError || !myProfile || !myProfile.username) {
+        await sb.auth.signOut();
+        error.textContent = 'Аккаунт создан, но профиль ещё не доступен. Попробуйте войти через несколько секунд.';
+        error.classList.add('show');
+        return;
+      }
+
+      const serverUsername = String(myProfile.username);
+      const serverRole = myProfile.role || ROLES.GUEST;
+      ltlState[STORAGE_KEYS.USERS] = {
+        ...getUsers(),
+        [serverUsername.toLowerCase()]: myProfile
+      };
+      loginUser(serverUsername, serverRole);
       closeModal(document.getElementById('registerModal'));
       document.getElementById('regNick').value = '';
       document.getElementById('regEmail').value = '';
@@ -4960,7 +5020,7 @@
       document.getElementById('regConfirmPassword').value = '';
       updateTotalUsersCount();
       updateUserOnline();
-      showNotification('Аккаунт создан!', 'Добро пожаловать, ' + nick + '!', 'fa-user-plus');
+      showNotification('Аккаунт создан!', 'Добро пожаловать, ' + serverUsername + '!', 'fa-user-plus');
     });
     
     // Переходы между входом и регистрацией.

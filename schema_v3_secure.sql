@@ -226,10 +226,8 @@ $$;
 revoke all on function public.nexus_update_my_profile(jsonb) from public, anon;
 grant execute on function public.nexus_update_my_profile(jsonb) to authenticated;
 
--- Profile creation: when called from an authenticated signup, the profile
--- must belong to the current auth user. For email-confirmation flows, call
--- this only after the user has a valid authenticated session or replace with
--- the trigger shown in the install guide.
+-- Legacy profile-creation RPC. V4 registration no longer calls this from the browser;
+-- the auth.users trigger below creates profiles server-side, including email-confirmation flows.
 create or replace function public.nexus_create_profile(
   p_user_id uuid,
   p_username text,
@@ -344,3 +342,74 @@ using (bucket_id = 'ltl-media');
 -- Public reads are intentionally allowed only if the bucket is public,
 -- because the existing frontend uses /object/public/ URLs for images.
 -- If you want private media, replace the frontend with signed URLs.
+
+-- V4 registration fix:
+-- Create the application profile from auth.users server-side.
+-- This runs even when Supabase requires email confirmation and no Auth session
+-- is returned to the browser after signUp().
+create or replace function public.nexus_handle_new_auth_user()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  k text := lower(trim(coalesce(new.raw_user_meta_data->>'username', '')));
+  current_map jsonb;
+  profile jsonb;
+begin
+  if k = '' or length(k) > 40 then
+    raise exception 'username is required';
+  end if;
+
+  if position('@' in coalesce(new.email, '')) < 2 then
+    raise exception 'valid email is required';
+  end if;
+
+  if exists (
+    select 1
+    from public.nexus_users n
+    where n.key = 'nexus_users'
+      and n.value_json ? k
+  ) then
+    raise exception 'username already exists';
+  end if;
+
+  select coalesce(value_json, '{}'::jsonb)
+    into current_map
+  from public.nexus_users
+  where key = 'nexus_users'
+  for update;
+
+  profile := jsonb_build_object(
+    'username', trim(new.raw_user_meta_data->>'username'),
+    'email', new.email,
+    'role', 'guest',
+    'teamId', null,
+    'createdAt', now(),
+    'avatar', null,
+    'authUserId', new.id
+  );
+
+  insert into public.nexus_users(key, value_json, updated_at)
+  values ('nexus_users', jsonb_build_object(k, profile), now())
+  on conflict (key) do update
+    set value_json = public.nexus_users.value_json || jsonb_build_object(k, profile),
+        updated_at = now();
+
+  return new;
+end;
+$$;
+
+revoke all on function public.nexus_handle_new_auth_user() from public, anon, authenticated;
+
+drop trigger if exists on_auth_user_created_ltl on auth.users;
+create trigger on_auth_user_created_ltl
+  after insert on auth.users
+  for each row
+  execute function public.nexus_handle_new_auth_user();
+
+-- The browser no longer creates profiles directly.
+-- Keep the legacy RPC definition for rollback/migration, but make it unavailable
+-- to clients so a normal user cannot create arbitrary extra profiles.
+revoke all on function public.nexus_create_profile(uuid,text,text) from public, anon, authenticated;
