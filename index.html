@@ -684,7 +684,7 @@
     .role-management .role-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
     .role-management .role-item{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--paper);border-radius:12px;border:1px solid var(--line)}
     .role-management .role-item .user-name{font-weight:700}
-    .role-management .role-item .role-select{padding:7px 9px;border-radius:8px;border:1px solid var(--line);background:var(--paper);font-size:12px;color:var(--ink);font-weight:600;min-width:105px}
+    .role-management .role-item .role-select{padding:7px 9px;border-radius:8px;border:1px solid var(--line);background:var(--paper);font-size:12px;color:var(--ink);font-weight:600;min-width:105px}.role-quick-actions{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}.role-quick-actions button{border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:7px;padding:5px 7px;font-size:11px;font-weight:700;cursor:pointer}.role-quick-actions button:hover{transform:translateY(-1px)}
     .role-management .role-item{gap:10px;flex-wrap:wrap}
     .role-management .role-item .user-name{min-width:0;overflow-wrap:anywhere}
     .top-player-card{cursor:pointer;user-select:none}
@@ -3336,6 +3336,12 @@
             <option value="captain" ${role === ROLES.CAPTAIN ? 'selected' : ''}>Капитан</option>
             <option value="admin" ${role === ROLES.ADMIN ? 'selected' : ''}>Админ</option>
           </select>
+          <div class="role-quick-actions" data-user="${escHtml(username)}">
+            <button type="button" data-role="guest">Гость</button>
+            <button type="button" data-role="player">Игрок</button>
+            <button type="button" data-role="captain">Капитан</button>
+            <button type="button" data-role="admin">Админ</button>
+          </div>
           ${role === ROLES.ADMIN ? `<button class="remove-admin-btn" data-user="${escHtml(username)}" style="padding:7px 9px;border-radius:6px;border:1px solid #ef5350;background:transparent;color:#ef5350;cursor:pointer;font-size:11px;">✕ Снять</button>` : ''}
           <div class="v9-role-quick" style="width:100%;display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;">
             <button type="button" data-v9-role="guest" data-user="${escHtml(username)}" style="padding:6px 9px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink);cursor:pointer;font-size:11px;">Гость</button>
@@ -3368,6 +3374,15 @@
           renderRoleList();
         }
         showNotification('Роль изменена!', 'Пользователь ' + username + ' теперь ' + ROLE_NAMES[newRole], 'fa-user-cog');
+      });
+    });
+    roleList.querySelectorAll('.role-quick-actions button').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const username = this.closest('.role-quick-actions')?.dataset.user || '';
+        const select = roleList.querySelector(`.role-select[data-user="${CSS.escape(username)}"]`);
+        if (!select) return;
+        select.value = this.dataset.role || 'guest';
+        select.dispatchEvent(new Event('change', { bubbles: true }));
       });
     });
 
@@ -3784,23 +3799,14 @@
       });
     }
 
-    // Профиль игрока открывается по клику по всей карточке.
-    // Навешиваем обработчики после каждого renderTopPlayers(), поэтому они не пропадают
-    // после синхронизации с Supabase или изменения рейтинга.
+    // Карточка уже содержит inline-вызов LTL_openTopPlayer с точным teamId.
+    // Не добавляем второй обработчик, чтобы профиль не открывался дважды.
     grid.querySelectorAll('.top-player-card').forEach(card => {
-      const open = () => {
-        const name = card.getAttribute('data-top-player-name') || '';
-        if (name && typeof window.openPlayerFromTop === 'function') window.openPlayerFromTop(name);
-      };
-      card.addEventListener('click', function(e) {
-        if (e.target.closest('button, a, input, select, textarea')) return;
-        open();
-      });
       card.addEventListener('keydown', function(e) {
-        if ((e.key === 'Enter' || e.key === ' ') && !e.target.closest('button, a, input, select, textarea')) {
-          e.preventDefault();
-          open();
-        }
+        if (e.key !== 'Enter' && e.key !== ' ') return;
+        if (e.target.closest('button, a, input, select, textarea')) return;
+        e.preventDefault();
+        card.click();
       });
     });
   }
@@ -4554,6 +4560,8 @@
 
   window.showPlayerDetail = function(teamId, playerName, origin = 'teams') {
     playerDetailOrigin = origin;
+    const backBtn = document.getElementById('backToTeamBtn');
+    if (backBtn) backBtn.innerHTML = origin === 'top-players' ? '<i class="fas fa-arrow-left"></i> Назад к топу игроков' : '<i class="fas fa-arrow-left"></i> Назад к команде';
     mountPlayerDetail(origin);
     if (origin === 'teams') navigateTo('teams', true);
     else navigateTo('top-players', true);
@@ -6765,145 +6773,18 @@
     const name = String(playerName || '').trim();
     if (!name) return;
     try {
+      // ВАЖНО: эта функция находится внутри основного IIFE и поэтому видит
+      // настоящий showPlayerDetail и все внутренние функции приложения.
       window.showPlayerDetail(teamId || null, name, 'top-players');
     } catch (e) {
-      console.error('LTL V9: не удалось открыть профиль', e);
-      if (typeof showNotification === 'function') showNotification('Ошибка', 'Не удалось открыть профиль игрока.', 'fa-exclamation-triangle');
+      console.error('LTL V10: не удалось открыть профиль:', e);
+      if (typeof showNotification === 'function') showNotification('Ошибка', 'Не удалось открыть профиль игрока: ' + (e.message || 'неизвестная ошибка'), 'fa-exclamation-triangle');
     }
   };
 
   setTimeout(() => { ltlMigrateLegacyMedia(); }, 2500);
 })();
-
-
-  // ===== PATCH: стабильный просмотр профиля из «Топ игроков» =====
-  // Профиль игрока из рейтинга открывается внутри страницы top-players и
-  // никогда не переводит пользователя в раздел «Команды».
-  window.showPlayerDetail = function(teamId, playerName, origin = 'teams') {
-    origin = origin === 'top-players' ? 'top-players' : 'teams';
-    playerDetailOrigin = origin;
-    try { localStorage.setItem('ltl_current_route', JSON.stringify({page: origin, nested:'player', teamId: teamId || null, playerName: playerName || '', origin})); } catch (_) {}
-    const name = String(playerName || '').trim();
-    if (!name) return;
-
-    const teams = getTeams();
-    const team = teamId ? teams.find(t => String(t.id) === String(teamId)) : null;
-    const data = ensurePlayerProfile(name, team ? team.id : null, true);
-
-    // Всегда сохраняем актуальную связь с командой, если она известна.
-    if (team && data.teamId !== team.id) {
-      data.teamId = team.id;
-      const players = getPlayers();
-      players[playerStorageKey(team.id, name)] = data;
-      setPlayers(players);
-    }
-
-    editingPlayerName = name;
-    editingPlayerTeamId = team ? team.id : (data.teamId || null);
-
-    // Показываем правильные данные профиля.
-    document.getElementById('playerAvatarBig').innerHTML = playerAvatarMarkup(name, 'player-avatar-shared', '');
-    document.getElementById('playerAvatarBig').style.overflow = 'hidden';
-    document.getElementById('playerAvatarBig').style.display = 'grid';
-    document.getElementById('playerAvatarBig').style.placeItems = 'center';
-    document.getElementById('playerName').textContent = name;
-    document.getElementById('playerTeam').textContent = team ? team.name : 'Без команды';
-    document.getElementById('playerMatches').textContent = data.matches || 0;
-    document.getElementById('playerWins').textContent = data.wins || 0;
-    document.getElementById('playerLosses').textContent = data.losses || 0;
-    document.getElementById('playerEarnings').textContent = data.earnings || '0 ₽';
-    document.getElementById('playerRatingPoints').textContent = data.lts || 0;
-    document.getElementById('playerBio').textContent = data.bio || 'Биография игрока пока не заполнена.';
-
-    const highlights = getHighlights()[playerStorageKey(editingPlayerTeamId, name)] || [];
-    const highlightsGrid = document.getElementById('highlightsGrid');
-    highlightsGrid.innerHTML = highlights.length ? highlights.map(h => `
-      <div class="highlight-item">
-        <div class="highlight-header"><span class="highlight-text">${escHtml(h.text || '')}</span></div>
-        ${h.video ? `<div class="highlight-video"><video controls preload="metadata" playsinline style="width:100%;max-height:420px;background:#000;border-radius:12px"><source src="${ltlMediaSource(h.video)}" type="${h.videoType || 'video/mp4'}">Ваш браузер не поддерживает видео.</video></div>` : ''}
-      </div>`).join('') : '<p style="color:var(--muted);font-size:14px;">Пока нет добавленных моментов</p>';
-
-    const isAdmin = currentRole === ROLES.ADMIN || currentRole === ROLES.HEAD;
-    document.getElementById('playerAdminControls').style.display = isAdmin ? 'block' : 'none';
-    document.getElementById('addHighlightContainer').style.display = isAdmin ? 'block' : 'none';
-
-    // Ключевой фикс: не вызываем navigateTo('teams') при открытии из топа.
-    const topPage = document.getElementById('top-players');
-    const teamsPage = document.getElementById('teams');
-    if (origin === 'top-players') {
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      topPage.classList.add('active');
-      document.querySelectorAll('#nav button, .nav-mobile button').forEach(b => b.classList.remove('active'));
-      document.querySelectorAll('#nav button[data-page="top-players"], .nav-mobile button[data-page="top-players"]').forEach(b => b.classList.add('active'));
-      document.getElementById('topPlayersGrid').style.display = 'none';
-      document.querySelector('#top-players .section-head').style.display = 'none';
-      document.getElementById('teamDetailPage').style.display = 'none';
-      document.getElementById('teamsGrid').style.display = 'none';
-      mountPlayerDetail('top-players');
-      document.getElementById('playerDetailPage').classList.add('active');
-    } else {
-      navigateTo('teams', true);
-      document.getElementById('teamDetailPage').style.display = 'none';
-      document.getElementById('teamsGrid').style.display = 'none';
-      mountPlayerDetail('teams');
-      document.getElementById('playerDetailPage').classList.add('active');
-    }
-    try { localStorage.setItem('ltl_current_route', JSON.stringify({page:origin,nested:'player',teamId:editingPlayerTeamId,playerName:name,at:Date.now()})); } catch(e) {}
-  };
-
-  window.openPlayerFromTop = function(playerName) {
-    const name = String(playerName || '').trim();
-    if (!name) return;
-    try {
-      const users = getUsers() || {};
-      const key = name.toLowerCase();
-      const user = users[key] || Object.values(users).find(u => u && String(u.username || '').toLowerCase() === key);
-      const teams = getTeams() || [];
-      let team = user && user.teamId ? teams.find(t => String(t.id) === String(user.teamId)) : null;
-      if (!team) team = teams.find(t => Array.isArray(t.roster) && t.roster.some(n => String(n).toLowerCase() === key));
-      const data = ensurePlayerProfile(name, team ? team.id : null, true);
-      if (!team && data && data.teamId) team = teams.find(t => String(t.id) === String(data.teamId));
-
-      // Профиль может существовать без команды — это нормально.
-      // Важно всегда передавать origin=top-players, чтобы не отправлять пользователя в «Команды».
-      window.showPlayerDetail(team ? team.id : null, name, 'top-players');
-    } catch (e) {
-      console.error('Ошибка открытия профиля игрока из ТОП:', e);
-      if (typeof showNotification === 'function') showNotification('Не удалось открыть профиль', 'Попробуйте обновить страницу.', 'fa-exclamation-triangle');
-    }
-  };
-
-  // Назад из профиля, открытого через «Топ игроков».
-  let topBackButton = document.getElementById('backToTeamBtn');
-  if (topBackButton) {
-    // Удаляем старые обработчики, чтобы возврат из профиля не выполнялся дважды.
-    const cleanBackButton = topBackButton.cloneNode(true);
-    topBackButton.parentNode.replaceChild(cleanBackButton, topBackButton);
-    topBackButton = cleanBackButton;
-    topBackButton.onclick = function(e) {
-      e.preventDefault();
-      document.getElementById('playerDetailPage').classList.remove('active');
-      document.getElementById('playerDetailPage').style.display = 'none';
-      if (playerDetailOrigin === 'top-players') {
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.getElementById('top-players').classList.add('active');
-        document.getElementById('topPlayersGrid').style.display = 'grid';
-        document.querySelector('#top-players .section-head').style.display = 'flex';
-        renderTopPlayers();
-        document.querySelectorAll('#nav button, .nav-mobile button').forEach(b => b.classList.remove('active'));
-        document.querySelectorAll('#nav button[data-page="top-players"], .nav-mobile button[data-page="top-players"]').forEach(b => b.classList.add('active'));
-        try { localStorage.setItem('ltl_current_route', JSON.stringify({page:'top-players',at:Date.now()})); } catch(e) {}
-      } else {
-        document.getElementById('teams').classList.add('active');
-        document.getElementById('teamDetailPage').style.display = 'block';
-        document.getElementById('teamDetailPage').classList.add('active');
-        if (editingPlayerTeamId) window.showTeamDetail(editingPlayerTeamId);
-      }
-    };
-  }
 </script>
-
-
 
 </body>
 </html>
