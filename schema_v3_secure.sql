@@ -354,11 +354,16 @@ security definer
 set search_path = public
 as $$
 declare
-  k text := lower(trim(coalesce(new.raw_user_meta_data->>'username', '')));
+  requested_username text := trim(coalesce(new.raw_user_meta_data->>'username', ''));
+  email_local text := split_part(coalesce(new.email, ''), '@', 1);
+  k text;
   current_map jsonb;
   profile jsonb;
 begin
-  if k = '' or length(k) > 40 then
+  -- Dashboard-created users may not have username metadata. Use the email local-part as a safe fallback.
+  k := lower(regexp_replace(coalesce(nullif(requested_username, ''), email_local), '[^a-zA-Z0-9_\-]+', '_', 'g'));
+  k := left(k, 40);
+  if k = '' or length(k) < 2 then
     raise exception 'username is required';
   end if;
 
@@ -382,7 +387,7 @@ begin
   for update;
 
   profile := jsonb_build_object(
-    'username', trim(new.raw_user_meta_data->>'username'),
+    'username', coalesce(nullif(requested_username, ''), split_part(coalesce(new.email, ''), '@', 1)),
     'email', new.email,
     'role', 'guest',
     'teamId', null,

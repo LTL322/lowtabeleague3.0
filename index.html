@@ -2023,8 +2023,10 @@
     <h2>Регистрация</h2>
     <div class="sub">Создайте аккаунт</div>
     <label>Никнейм</label>
-    <input type="text" id="regNick" placeholder="Придумайте никнейм">
-<label>Пароль</label>
+    <input type="text" id="regNick" placeholder="Придумайте никнейм" autocomplete="username">
+    <label>Email</label>
+    <input type="email" id="regEmail" placeholder="Введите ваш email" autocomplete="email">
+    <label>Пароль</label>
     <div class="password-wrapper">
       <input type="password" id="regPassword" placeholder="Придумайте пароль (мин. 8 символов)">
       <button class="toggle-password" id="toggleRegPass" type="button">
@@ -4943,7 +4945,7 @@
       error.classList.remove('show');
       passError.style.display = 'none';
       
-      if (!nick || !email || !password || !confirmPass) { alert('Заполните все поля'); return; }
+      if (!nick || !email || !password || !confirmPass) { error.textContent = 'Заполните все поля'; error.classList.add('show'); return; }
       
       const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
       if (!passwordRegex.test(password)) {
@@ -4952,6 +4954,9 @@
         return;
       }
       
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        error.textContent = 'Введите корректный email'; error.classList.add('show'); return;
+      }
       if (password !== confirmPass) {
         passError.style.display = 'block';
         passError.textContent = 'Пароли не совпадают';
