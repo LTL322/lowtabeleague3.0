@@ -684,7 +684,12 @@
     .role-management .role-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
     .role-management .role-item{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--paper);border-radius:12px;border:1px solid var(--line)}
     .role-management .role-item .user-name{font-weight:700}
-    .role-management .role-item .role-select{padding:4px 8px;border-radius:8px;border:1px solid var(--line);background:var(--paper);font-size:12px;color:var(--ink);font-weight:600}
+    .role-management .role-item .role-select{padding:7px 9px;border-radius:8px;border:1px solid var(--line);background:var(--paper);font-size:12px;color:var(--ink);font-weight:600;min-width:105px}
+    .role-management .role-item{gap:10px;flex-wrap:wrap}
+    .role-management .role-item .user-name{min-width:0;overflow-wrap:anywhere}
+    .top-player-card{cursor:pointer;user-select:none}
+    .top-player-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+    @media (max-width:600px){.role-management .role-list{grid-template-columns:1fr}.role-management .role-item{align-items:flex-start}.role-management .role-item .role-select{flex:1}.role-tools input,.role-tools select{width:100%;min-width:0}.top-player-card{min-width:0}.top-player-card .player-name,.top-player-card .player-team-name,.top-player-card .player-stats-mini{overflow-wrap:anywhere;word-break:break-word}.top-player-card .player-stats-mini{display:flex;flex-wrap:wrap;gap:6px 12px;justify-content:center}}
     .team-detail-page{display:none;background:var(--card-bg);border:1px solid var(--line);border-radius:var(--radius);padding:32px 36px;margin-top:20px;box-shadow:var(--shadow)}
     .team-detail-page.active{display:block}
     .team-detail-page .back-btn{background:none;border:none;color:var(--muted);font-size:14px;cursor:pointer;margin-bottom:16px;padding:8px 0;font-weight:600}
@@ -2009,6 +2014,16 @@
           <div class="role-management" id="roleManagementPanel" style="display:none;">
             <h3>👑 Управление ролями (Глава)</h3>
             <p style="color:var(--muted); font-size:14px; margin-bottom:12px;">Управляйте ролями всех пользователей платформы</p>
+            <div class="role-tools" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;align-items:center;">
+              <input id="roleUserSearch" type="search" placeholder="🔎 Найти пользователя..." autocomplete="off" style="flex:1;min-width:220px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--paper);color:var(--ink);outline:none;">
+              <select id="roleQuickFilter" style="padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--paper);color:var(--ink);">
+                <option value="all">Все роли</option>
+                <option value="guest">Гости</option>
+                <option value="player">Игроки</option>
+                <option value="captain">Капитаны</option>
+                <option value="admin">Админы</option>
+              </select>
+            </div>
             <div class="role-list" id="roleList"></div>
           </div>
           <div class="admin-panel" id="profileAdminPanel" style="margin-top:24px;">
@@ -3277,83 +3292,94 @@
   function renderRoleList() {
     if (currentRole !== ROLES.HEAD) return;
     const roleList = document.getElementById('roleList');
+    if (!roleList) return;
     roleList.innerHTML = '';
-    const users = getUsers();
-    Object.keys(users).forEach(key => {
-      const user = users[key];
+    const users = getUsers() || {};
+    const searchEl = document.getElementById('roleUserSearch');
+    const filterEl = document.getElementById('roleQuickFilter');
+    const search = String(searchEl?.value || '').trim().toLowerCase();
+    const filter = String(filterEl?.value || 'all');
+
+    const entries = Object.keys(users).map(key => users[key]).filter(Boolean).filter(user => {
       const role = user.role || ROLES.GUEST;
+      const name = String(user.username || '').toLowerCase();
+      return (!search || name.includes(search)) && (filter === 'all' || role === filter);
+    });
+
+    if (!entries.length) {
+      roleList.innerHTML = '<div style="padding:18px;color:var(--muted);text-align:center;border:1px dashed var(--line);border-radius:12px;">Пользователи не найдены</div>';
+    }
+
+    entries.forEach(user => {
+      const role = user.role || ROLES.GUEST;
+      const username = String(user.username || '');
       const div = document.createElement('div');
       div.className = 'role-item';
       div.innerHTML = `
-        <span class="user-name">${user.username}</span>
+        <span class="user-name" style="flex:1">${escHtml(username)}</span>
         <span>${renderRoleBadge(role)}</span>
         ${role !== ROLES.HEAD ? `
-          <select class="role-select" data-user="${user.username}">
+          <select class="role-select" data-user="${escHtml(username)}" aria-label="Роль пользователя ${escHtml(username)}">
             <option value="guest" ${role === ROLES.GUEST ? 'selected' : ''}>Гость</option>
             <option value="player" ${role === ROLES.PLAYER ? 'selected' : ''}>Игрок</option>
             <option value="captain" ${role === ROLES.CAPTAIN ? 'selected' : ''}>Капитан</option>
             <option value="admin" ${role === ROLES.ADMIN ? 'selected' : ''}>Админ</option>
           </select>
-          ${role === ROLES.ADMIN ? `<button class="remove-admin-btn" data-user="${user.username}" style="padding:4px 8px;border-radius:6px;border:1px solid #ef5350;background:transparent;color:#ef5350;cursor:pointer;font-size:11px;">✕ Снять</button>` : ''}
-        ` : '<span style="color:var(--muted);font-size:12px;">👑 Глава</span>'}
+          ${role === ROLES.ADMIN ? `<button class="remove-admin-btn" data-user="${escHtml(username)}" style="padding:7px 9px;border-radius:6px;border:1px solid #ef5350;background:transparent;color:#ef5350;cursor:pointer;font-size:11px;">✕ Снять</button>` : ''}
+        ` : '<span style="color:var(--muted);font-size:12px;white-space:nowrap;">👑 Глава</span>'}
       `;
       roleList.appendChild(div);
     });
-    
-    document.querySelectorAll('.role-select').forEach(select => {
-      select.addEventListener('change', function() {
+
+    roleList.querySelectorAll('.role-select').forEach(select => {
+      select.addEventListener('change', async function() {
         const username = this.dataset.user;
         const newRole = this.value;
-        const users = getUsers();
-        const userKey = username.toLowerCase();
-        if (users[userKey] && users[userKey].role !== ROLES.HEAD) {
-          users[userKey].role = newRole;
-          if (newRole !== ROLES.PLAYER && newRole !== ROLES.CAPTAIN) {
-            users[userKey].teamId = null;
-          }
-          setUsers(users);
-          if (newRole === ROLES.PLAYER) {
-            addPlayerToTop(users[userKey].username, users[userKey].teamId || null);
-          }
-          renderTopPlayers();
+        const currentUsers = getUsers() || {};
+        const userKey = String(username).toLowerCase();
+        const target = currentUsers[userKey];
+        if (!target || target.role === ROLES.HEAD) return;
+        target.role = newRole;
+        if (newRole !== ROLES.PLAYER && newRole !== ROLES.CAPTAIN) target.teamId = null;
+        setUsers(currentUsers);
+        if (newRole === ROLES.PLAYER) addPlayerToTop(target.username, target.teamId || null);
+        renderTopPlayers();
+        renderRoleList();
+        if (String(currentUser || '').toLowerCase() === userKey) {
+          currentRole = newRole;
+          updateAdminVisibility();
           renderRoleList();
-          if (currentUser === username) {
-            currentRole = newRole;
-            document.getElementById('profileRole').textContent = ROLE_NAMES[newRole] || 'Гость';
-            document.getElementById('profileRole').className = 'role-badge ' + (ROLE_CLASSES[newRole] || 'guest');
-            document.getElementById('profileRoleBadge').textContent = ROLE_NAMES[newRole] || 'Гость';
-            document.getElementById('profileRoleBadge').className = 'role-badge ' + (ROLE_CLASSES[newRole] || 'guest');
-            const isAdmin = newRole === ROLES.ADMIN || newRole === ROLES.HEAD;
-            document.getElementById('adminPanel').classList.toggle('show', isAdmin);
-            document.getElementById('profileAdminPanel').classList.toggle('show', isAdmin);
-            document.getElementById('serverTextEdit').style.display = isAdmin ? 'block' : 'none';
-            document.getElementById('teamsAdminControls').style.display = isAdmin ? 'flex' : 'none';
-            document.getElementById('teamAdminControls').style.display = isAdmin ? 'flex' : 'none';
-            document.getElementById('matchesAdminControls').style.display = isAdmin ? 'flex' : 'none';
-            document.getElementById('tournamentAdminControls').style.display = isAdmin ? 'flex' : 'none';
-            document.getElementById('aboutAdminPanel').style.display = isAdmin ? 'block' : 'none';
-            updateAdminVisibility();
-          }
-          showNotification('Роль изменена!', 'Пользователь ' + username + ' теперь ' + ROLE_NAMES[newRole], 'fa-user-cog');
         }
+        showNotification('Роль изменена!', 'Пользователь ' + username + ' теперь ' + ROLE_NAMES[newRole], 'fa-user-cog');
       });
     });
-    
-    document.querySelectorAll('.remove-admin-btn').forEach(btn => {
+
+    roleList.querySelectorAll('.remove-admin-btn').forEach(btn => {
       btn.addEventListener('click', function() {
         const username = this.dataset.user;
         showConfirm('Снять с должности Админа', 'Вы уверены, что хотите снять пользователя ' + username + ' с должности Администратора?', function() {
-          const users = getUsers();
-          const userKey = username.toLowerCase();
-          if (users[userKey] && users[userKey].role === ROLES.ADMIN) {
-            users[userKey].role = ROLES.GUEST;
-            setUsers(users);
+          const currentUsers = getUsers() || {};
+          const userKey = String(username).toLowerCase();
+          if (currentUsers[userKey] && currentUsers[userKey].role === ROLES.ADMIN) {
+            currentUsers[userKey].role = ROLES.GUEST;
+            currentUsers[userKey].teamId = null;
+            setUsers(currentUsers);
             renderRoleList();
+            renderTopPlayers();
             showNotification('Должность снята!', username + ' больше не Администратор', 'fa-user-slash');
           }
         });
       });
     });
+
+    if (searchEl && !searchEl.dataset.bound) {
+      searchEl.dataset.bound = '1';
+      searchEl.addEventListener('input', renderRoleList);
+    }
+    if (filterEl && !filterEl.dataset.bound) {
+      filterEl.dataset.bound = '1';
+      filterEl.addEventListener('change', renderRoleList);
+    }
   }
 
   function updateAdminVisibility() {
@@ -3696,7 +3722,7 @@
         <div class="player-rating-edit"><input class="player-rating-input" data-team-id="${p.teamId}" data-player-name="${p.name}" type="number" value="${p.lts}" min="0" step="1"></div>
       ` : `<div class="player-rating">⭐ ${p.lts} LTS</div>`;
       return `
-        <div class="card top-player-card ${borderClass}" data-top-player-name="${escHtml(p.name)}" role="button" tabindex="0" onclick="window.openPlayerFromTop(${JSON.stringify(p.name)})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();window.openPlayerFromTop(${JSON.stringify(p.name)})}" style="cursor:pointer;">
+        <div class="card top-player-card ${borderClass}" data-top-player-name="${escHtml(p.name)}" role="button" tabindex="0" style="cursor:pointer;">
           ${medalHtml}
           <div class="player-rank-num ${rankClass}">#${i+1}</div>
           <div class="player-avatar-big ${avatarClass}" style="overflow:hidden;display:grid;place-items:center;">${playerAvatarMarkup(p.name, 'player-avatar-shared', '')}</div>
@@ -3718,6 +3744,26 @@
         });
       });
     }
+
+    // Профиль игрока открывается по клику по всей карточке.
+    // Навешиваем обработчики после каждого renderTopPlayers(), поэтому они не пропадают
+    // после синхронизации с Supabase или изменения рейтинга.
+    grid.querySelectorAll('.top-player-card').forEach(card => {
+      const open = () => {
+        const name = card.getAttribute('data-top-player-name') || '';
+        if (name && typeof window.openPlayerFromTop === 'function') window.openPlayerFromTop(name);
+      };
+      card.addEventListener('click', function(e) {
+        if (e.target.closest('button, a, input, select, textarea')) return;
+        open();
+      });
+      card.addEventListener('keydown', function(e) {
+        if ((e.key === 'Enter' || e.key === ' ') && !e.target.closest('button, a, input, select, textarea')) {
+          e.preventDefault();
+          open();
+        }
+      });
+    });
   }
 
   function renderNews() {
@@ -6657,7 +6703,7 @@
       try {
         const route = JSON.parse(localStorage.getItem('ltl_current_route') || 'null');
         if (route?.page) {
-          if (route.nested === 'player' && route.teamId && route.playerName) {
+          if (route.nested === 'player' && route.playerName) {
             const origin = route.origin === 'top-players' ? 'top-players' : 'teams';
             window.showPlayerDetail(route.teamId, route.playerName, origin);
           } else {
@@ -6755,14 +6801,23 @@
   window.openPlayerFromTop = function(playerName) {
     const name = String(playerName || '').trim();
     if (!name) return;
-    const users = getUsers();
-    const user = users[name.toLowerCase()] || Object.values(users).find(u => u && String(u.username || '').toLowerCase() === name.toLowerCase());
-    const teams = getTeams();
-    let team = user && user.teamId ? teams.find(t => String(t.id) === String(user.teamId)) : null;
-    if (!team) team = teams.find(t => (t.roster || []).some(n => String(n).toLowerCase() === name.toLowerCase()));
-    const data = ensurePlayerProfile(name, team ? team.id : null, true);
-    if (!team && data.teamId) team = teams.find(t => String(t.id) === String(data.teamId));
-    window.showPlayerDetail(team ? team.id : null, name, 'top-players');
+    try {
+      const users = getUsers() || {};
+      const key = name.toLowerCase();
+      const user = users[key] || Object.values(users).find(u => u && String(u.username || '').toLowerCase() === key);
+      const teams = getTeams() || [];
+      let team = user && user.teamId ? teams.find(t => String(t.id) === String(user.teamId)) : null;
+      if (!team) team = teams.find(t => Array.isArray(t.roster) && t.roster.some(n => String(n).toLowerCase() === key));
+      const data = ensurePlayerProfile(name, team ? team.id : null, true);
+      if (!team && data && data.teamId) team = teams.find(t => String(t.id) === String(data.teamId));
+
+      // Профиль может существовать без команды — это нормально.
+      // Важно всегда передавать origin=top-players, чтобы не отправлять пользователя в «Команды».
+      window.showPlayerDetail(team ? team.id : null, name, 'top-players');
+    } catch (e) {
+      console.error('Ошибка открытия профиля игрока из ТОП:', e);
+      if (typeof showNotification === 'function') showNotification('Не удалось открыть профиль', 'Попробуйте обновить страницу.', 'fa-exclamation-triangle');
+    }
   };
 
   // Назад из профиля, открытого через «Топ игроков».
