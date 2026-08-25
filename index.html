@@ -1122,8 +1122,12 @@
     .mobile-view .stream-full .stream-active iframe{height:200px}
     .mobile-view .tournament-detail-page{padding:10px}
     .mobile-view .tournament-detail-page .tournament-detail-header{flex-direction:column;gap:8px}
-    .mobile-view .top-player-card{padding:10px}
+    .mobile-view .top-player-card{padding:10px;min-width:0;overflow:hidden}
     .mobile-view .top-player-card .player-avatar-big{width:40px;height:40px;font-size:16px}
+    .mobile-view .top-player-card .player-name{font-size:14px;line-height:1.25;margin-top:2px}
+    .mobile-view .top-player-card .player-team-name{font-size:11px;line-height:1.3;margin-top:3px}
+    .mobile-view .top-player-card .player-rating{font-size:12px;line-height:1.3}
+    .mobile-view .top-player-card .player-stats-mini{font-size:10px;line-height:1.3;gap:3px 7px}
     .mobile-view .top-player-card .medal{width:24px;height:24px;font-size:12px}
     .mobile-view .support-bar input{min-width:50px;font-size:9px;max-width:80px}
     .mobile-view .support-bar{padding:2px 4px;gap:3px}
@@ -1234,6 +1238,28 @@
   .team-card strong { display:block; }
   .modal input, .modal textarea, .modal select { max-width:100%; width:100%; box-sizing:border-box; }
   .table-wrap, .matches-table-wrap, .bracket-container { max-width:100%; overflow-x:auto; }
+
+  /* Мобильный ТОП игроков: длинные имена и статистика не слипаются. */
+  .top-players-grid { min-width:0; }
+  .top-player-card { min-width:0; overflow:hidden; word-break:break-word; overflow-wrap:anywhere; line-height:1.35; }
+  .top-player-card .player-rank-num,
+  .top-player-card .player-name,
+  .top-player-card .player-team-name,
+  .top-player-card .player-rating {
+    min-width:0; max-width:100%; overflow-wrap:anywhere; word-break:break-word; line-height:1.35;
+  }
+  .top-player-card .player-stats-mini {
+    display:flex; flex-wrap:wrap; align-items:center; justify-content:center;
+    gap:4px 10px; min-width:0; line-height:1.35;
+  }
+  .top-player-card .player-stats-mini > span {
+    min-width:0; overflow-wrap:anywhere; word-break:break-word;
+  }
+  .top-player-card .player-stats-mini > span > span { white-space:nowrap; }
+  .top-player-card .player-rating-edit { min-width:0; flex-wrap:wrap; }
+  .top-player-card .top-player-delete-btn { max-width:100%; white-space:normal; line-height:1.25; }
+  .rank-row { min-width:0; }
+  .rank-row > * { min-width:0; overflow-wrap:anywhere; word-break:break-word; line-height:1.3; }
 }
 
 
@@ -3670,7 +3696,7 @@
         <div class="player-rating-edit"><input class="player-rating-input" data-team-id="${p.teamId}" data-player-name="${p.name}" type="number" value="${p.lts}" min="0" step="1"></div>
       ` : `<div class="player-rating">⭐ ${p.lts} LTS</div>`;
       return `
-        <div class="card top-player-card ${borderClass}" data-top-player-name="${escHtml(p.name)}" onclick="window.openPlayerFromTop(${JSON.stringify(p.name)})" style="cursor:pointer;">
+        <div class="card top-player-card ${borderClass}" data-top-player-name="${escHtml(p.name)}" role="button" tabindex="0" onclick="window.openPlayerFromTop(${JSON.stringify(p.name)})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();window.openPlayerFromTop(${JSON.stringify(p.name)})}" style="cursor:pointer;">
           ${medalHtml}
           <div class="player-rank-num ${rankClass}">#${i+1}</div>
           <div class="player-avatar-big ${avatarClass}" style="overflow:hidden;display:grid;place-items:center;">${playerAvatarMarkup(p.name, 'player-avatar-shared', '')}</div>
@@ -6770,25 +6796,6 @@
 </script>
 
 
-  // Делегирование клика для строк/карточек игроков в ТОПах.
-  document.addEventListener('click', function(e) {
-    const el = e.target.closest(
-      '[data-player-name], .top-player, .top-player-card, .top-player-row, .player-ranking-item'
-    );
-    if (!el) return;
-    if (el.closest('a,button,input,select,textarea') && !el.matches('a')) return;
-
-    const playerName =
-      el.dataset.playerName ||
-      el.getAttribute('data-player') ||
-      el.querySelector('.player-name, .top-player-name, .player-link')?.textContent?.trim();
-
-    if (playerName) {
-      e.preventDefault();
-      e.stopPropagation();
-      openPlayerFromTop(playerName);
-    }
-  }, true);
 
 </body>
 </html>
