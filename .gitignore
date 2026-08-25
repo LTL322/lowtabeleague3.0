@@ -1,31 +1,8 @@
-# Environment
 .env
-.env.local
-.env.development
-.env.production
-.env.*.local
+.env.*
 !.env.example
-
-# Dependencies
 node_modules/
-
-# Vercel
-.vercel/
-
-# Logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-pnpm-debug.log*
-
-# OS
 .DS_Store
-Thumbs.db
-
-# IDE
-.vscode/
-.idea/
-
-# Temporary files
-*.tmp
-*.temp
+*.log
+service_role*
+*service-role*
