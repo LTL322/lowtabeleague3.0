@@ -295,10 +295,19 @@
     .avatar-wrapper .avatar-img.small{width:36px;height:36px}
     .avatar-wrapper .avatar-placeholder{width:100%;height:100%;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;border:2px solid var(--accent)}
     .avatar-wrapper .avatar-placeholder.small{font-size:14px}
-    .player-avatar-shared{width:100%;height:100%;border-radius:50%;object-fit:cover;display:block;flex-shrink:0}
+    .player-avatar-shared{width:100%;height:100%;border-radius:50%;object-fit:cover;display:block;flex-shrink:0;position:relative;z-index:2}
+    .avatar-adaptive-wrap{position:relative;width:100%;height:100%;border-radius:50%;overflow:hidden;display:grid;place-items:center;isolation:isolate;background:var(--avatar-fallback,var(--accent));box-shadow:0 0 0 1px rgba(255,255,255,.08),0 10px 28px var(--avatar-glow,rgba(255,77,28,.16))}
+    .avatar-adaptive-wrap::before{content:"";position:absolute;inset:-18%;background-image:var(--avatar-bg-image);background-size:cover;background-position:center;filter:blur(16px) saturate(1.35);transform:scale(1.12);opacity:.62;z-index:0}
+    .avatar-adaptive-wrap::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 45%,rgba(255,255,255,.10),rgba(0,0,0,.18) 72%);z-index:1;pointer-events:none}
+    .avatar-adaptive-wrap .avatar-adaptive-bg{position:absolute;inset:-2px;width:calc(100% + 4px);height:calc(100% + 4px);object-fit:cover;border-radius:50%;filter:blur(14px) saturate(1.35);opacity:.48;transform:scale(1.08);z-index:0;display:block}
+    .avatar-adaptive-wrap .player-avatar-shared{position:relative;z-index:2}
+    .avatar-adaptive-wrap .avatar-adaptive-fallback{position:relative;z-index:2;width:100%;height:100%;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:800;font-size:inherit;background:var(--avatar-fallback,var(--accent))}
     .top-player-card .player-avatar-shared{width:100%;height:100%;border-radius:50%;object-fit:cover}
     .team-detail-page .player-avatar-shared{width:100%;height:100%;border-radius:50%;object-fit:cover}
     .player-detail-page .player-avatar-shared{width:100%;height:100%;border-radius:50%;object-fit:cover}
+    .top-player-card .player-avatar-big{box-shadow:0 0 28px var(--avatar-glow,rgba(255,77,28,.16));}
+    .player-detail-page .player-avatar-big{box-shadow:0 0 34px var(--avatar-glow,rgba(255,77,28,.16));}
+    .team-detail-page .roster-item .player-avatar{box-shadow:0 0 18px var(--avatar-glow,rgba(255,77,28,.12));}
     .avatar-wrapper .status-dot{position:absolute;bottom:0;right:0;width:10px;height:10px;background:#34d399;border-radius:50%;border:2px solid var(--bg);animation:pulse-dot 2s infinite}
     .avatar-wrapper:hover .avatar-img{border-color:var(--accent);transform:scale(1.05)}
     .burger-btn{display:none;background:none;border:none;color:var(--ink);font-size:24px;padding:4px 6px;cursor:pointer;transition:0.3s;flex-shrink:0}
@@ -415,22 +424,6 @@
     .hero-side small{opacity:.75;font-weight:600}
     .live-btn{align-self:flex-start;border:0;background:var(--live-btn-bg);color:var(--live-btn-color);padding:13px 18px;border-radius:12px;font-weight:800;cursor:pointer;transition:.2s;box-shadow:0 4px 20px rgba(255,77,28,0.2)}
     .live-btn:hover{background:var(--live-btn-hover);transform:scale(1.02)}
-    
-    .timer-settings{display:flex;align-items:center;gap:10px;margin-top:8px;flex-wrap:wrap;background:rgba(255,255,255,0.08);padding:8px 14px;border-radius:12px;border:1px solid rgba(255,255,255,0.1)}
-    .timer-settings label{font-size:11px;font-weight:600;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:0.5px}
-    .timer-settings .timer-input-group{display:flex;align-items:center;gap:4px}
-    .timer-settings .timer-input-group input[type="number"]{width:70px;padding:4px 6px;border:1px solid rgba(255,255,255,0.2);border-radius:8px;background:rgba(255,255,255,0.1);color:#fff;font-weight:600;font-size:14px;text-align:center;transition:0.3s}
-    .timer-settings .timer-input-group input[type="number"]:focus{border-color:var(--accent);outline:none;background:rgba(255,255,255,0.15)}
-    .timer-settings .timer-presets{display:flex;gap:4px}
-    .timer-settings .timer-presets button{padding:3px 10px;border-radius:6px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.7);font-weight:600;font-size:11px;cursor:pointer;transition:0.2s}
-    .timer-settings .timer-presets button:hover{background:rgba(255,255,255,0.15);color:#fff;border-color:var(--accent)}
-    .timer-settings .timer-presets button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
-    .timer-settings .timer-actions{display:flex;gap:4px}
-    .timer-settings .timer-actions button{padding:4px 12px;border-radius:6px;border:none;font-weight:600;font-size:12px;cursor:pointer;transition:0.2s}
-    .timer-settings .timer-actions .timer-set-btn{background:var(--accent);color:#fff}
-    .timer-settings .timer-actions .timer-set-btn:hover{opacity:0.85;transform:scale(1.02)}
-    .timer-settings .timer-actions .timer-reset-btn{background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.7);border:1px solid rgba(255,255,255,0.1)}
-    .timer-settings .timer-actions .timer-reset-btn:hover{background:rgba(255,255,255,0.2);color:#fff}
     
     .section{margin-top:38px}
     .section-head{display:flex;justify-content:space-between;align-items:end;margin-bottom:16px}
@@ -708,7 +701,7 @@
     .team-detail-page .roster-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}
     .team-detail-page .roster-item{padding:12px 16px;background:var(--bg2);border-radius:12px;border:1px solid var(--line);display:flex;align-items:center;gap:12px;cursor:pointer;transition:all .3s}
     .team-detail-page .roster-item:hover{border-color:var(--accent);transform:translateX(6px)}
-    .team-detail-page .roster-item .player-avatar{width:36px;height:36px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:700}
+    .team-detail-page .roster-item .player-avatar{width:44px;height:44px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:700;flex:0 0 44px;position:relative;overflow:visible}
     .team-detail-page .roster-item .player-name{font-weight:700}
     .team-detail-page .roster-item .player-role{font-size:12px;color:var(--muted);font-weight:500}
     .team-detail-page .team-description{margin-top:20px;padding-top:20px;border-top:1px solid var(--line)}
@@ -721,7 +714,7 @@
     .player-detail-page .back-btn{background:none;border:none;color:var(--muted);font-size:14px;cursor:pointer;margin-bottom:16px;padding:8px 0;font-weight:600}
     .player-detail-page .back-btn:hover{color:var(--ink)}
     .player-detail-page .player-header{display:flex;align-items:center;gap:24px;flex-wrap:wrap;padding-bottom:20px;border-bottom:1px solid var(--line);margin-bottom:20px}
-    .player-detail-page .player-avatar-big{width:80px;height:80px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-size:32px;font-weight:700}
+    .player-detail-page .player-avatar-big{width:92px;height:92px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-size:32px;font-weight:700;position:relative;overflow:visible}
     .player-detail-page .player-info h2{font-size:28px;font-weight:800;font-family:"Space Grotesk"}
     .player-detail-page .player-info .player-team{color:var(--muted);font-size:14px;font-weight:500;margin-top:4px}
     .player-detail-page .player-stats{display:flex;gap:24px;flex-wrap:wrap;margin:16px 0;padding:16px;background:var(--bg2);border-radius:12px;border:1px solid var(--line)}
@@ -1070,8 +1063,17 @@
     .mobile-view .hero-main .hero-copy{font-size:13px;margin:8px 0 14px}
     .mobile-view .hero-side{padding:14px;min-height:100px}
     .mobile-view .hero-side .time{font-size:22px}
-    .mobile-view .hero-side .live-btn{padding:8px 14px;font-size:13px}
+     .mobile-view .hero-side .live-btn{padding:8px 14px;font-size:13px}
+    .mobile-view #nextMatchTitle{white-space:normal;overflow-wrap:anywhere;word-break:break-word;line-height:1.2}
+    .mobile-view #nextMatchTeams{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px;min-width:0}
+    .mobile-view #nextMatchTeams .team-pill{min-width:0;max-width:100%;white-space:normal;overflow-wrap:anywhere;word-break:break-word;text-align:center}
+    .mobile-view #nextMatchTeams.no-match{display:none}
     .mobile-view .live-grid,.mobile-view .upcoming-grid,.mobile-view .teams-grid{grid-template-columns:1fr;gap:6px}
+
+    .mobile-view .match-teams{min-width:0;flex-wrap:wrap;gap:8px}
+    .mobile-view .match-teams .team-name,.mobile-view .match-teams .team-pill{min-width:0;max-width:100%;white-space:normal;overflow-wrap:anywhere;word-break:break-word}
+    .mobile-view .upcoming-card .match-teams{justify-content:center;text-align:center;line-height:1.25}
+    .mobile-view .upcoming-card .match-time{white-space:normal;overflow-wrap:anywhere}
     .mobile-view .top-players-grid{grid-template-columns:1fr 1fr;gap:6px}
     .mobile-view .news{grid-template-columns:1fr;gap:6px}
     .mobile-view .rank-row{grid-template-columns:28px 1fr 50px;padding:6px 8px;font-size:12px}
@@ -1095,6 +1097,7 @@
     .mobile-view .profile-page{padding:10px}
     .mobile-view .profile-page .profile-header{flex-direction:column;text-align:center;gap:8px}
     .mobile-view .profile-page .profile-avatar-big{width:56px;height:56px;margin:0 auto}
+    .mobile-view .player-detail-page .player-avatar-big{width:64px;height:64px}
     .mobile-view .profile-page .profile-stats{grid-template-columns:1fr 1fr;gap:4px}
     .mobile-view .profile-page .stat-card{padding:6px 8px}
     .mobile-view .profile-page .stat-card .num{font-size:20px}
@@ -1105,17 +1108,15 @@
     .mobile-view .player-detail-page .player-header{flex-direction:column;text-align:center;gap:8px}
     .mobile-view .player-detail-page .player-stats{justify-content:center;gap:6px}
     .mobile-view .highlights-grid{grid-template-columns:1fr}
-    .mobile-view .timer-settings{padding:4px 6px;gap:4px}
     .mobile-view .timer-settings label{font-size:8px}
-    .mobile-view .timer-settings .timer-input-group input[type="number"]{width:36px;font-size:10px}
     .mobile-view .timer-settings .timer-presets button{font-size:7px;padding:1px 4px}
-    .mobile-view .timer-settings .timer-actions button{font-size:8px;padding:2px 5px}
     .mobile-view .notification{max-width:calc(100% - 12px);right:6px;top:56px;padding:8px 12px;font-size:12px}
     .mobile-view .section-head h2{font-size:16px}
     .mobile-view .modal{padding:14px 10px}
     .mobile-view .modal .form-row{grid-template-columns:1fr;gap:6px}
     .mobile-view .team-detail-page .roster-grid{grid-template-columns:1fr 1fr;gap:4px}
     .mobile-view .roster-item{padding:4px 6px;font-size:11px}
+    .mobile-view .team-detail-page .roster-item .player-avatar{width:34px;height:34px;flex-basis:34px}
     .mobile-view .admin-panel{padding:8px 10px}
     .mobile-view .admin-panel .create-btn{font-size:10px;padding:4px 8px}
     .mobile-view .stream-widget{padding:10px 12px;gap:10px}
@@ -1545,24 +1546,6 @@
             <div>
               <small id="nextMatchTimeLabel">СТАРТ • —</small>
               <div class="time" id="countdown">00:00:00</div>
-              <div class="timer-settings">
-                <label>Таймер</label>
-                <div class="timer-input-group">
-                  <input type="number" id="timerInput" value="0" min="0" max="86400" step="1">
-                  <span style="color:rgba(255,255,255,0.5);font-size:11px;font-weight:600;">сек</span>
-                </div>
-                <div class="timer-presets">
-                  <button data-value="300">5м</button>
-                  <button data-value="600">10м</button>
-                  <button data-value="1800">30м</button>
-                  <button data-value="3600">1ч</button>
-                  <button data-value="8130">2.25ч</button>
-                </div>
-                <div class="timer-actions">
-                  <button class="timer-set-btn" id="timerSetBtn"><i class="fas fa-check"></i> Уст.</button>
-                  <button class="timer-reset-btn" id="timerResetBtn"><i class="fas fa-undo"></i></button>
-                </div>
-              </div>
             </div>
             <button class="live-btn" id="heroLive">Смотреть LIVE →</button>
           </div>
@@ -3011,8 +2994,46 @@
   function getSupportMessages() { return JSON.parse(localStorage.getItem(STORAGE_KEYS.SUPPORT_MESSAGES)) || []; }
   function setSupportMessages(messages) { localStorage.setItem(STORAGE_KEYS.SUPPORT_MESSAGES, JSON.stringify(messages)); }
   function getTeamRoster(teamName) { const team = getTeams().find(t => t.name === teamName); return (team && team.roster && team.roster.length > 0) ? team.roster : null; }
-  function getPlayerData(teamId, playerName) { const players = getPlayers(); const key = teamId + '_' + playerName; if (!players[key]) { players[key] = { name: playerName, teamId: teamId, role: 'Игрок', matches: 0, wins: 0, losses: 0, earnings: '0 ₽', bio: 'Биография игрока пока не заполнена.', rating: 1000, lts: 0 }; setPlayers(players); } return players[key]; }
-  function savePlayerData(teamId, playerName, data) { const players = getPlayers(); const key = teamId + '_' + playerName; players[key] = data; setPlayers(players); }
+  // Единый профиль игрока: один ключ на аккаунт, независимо от команды.
+  // Благодаря этому ТОП, страница команды и личный профиль всегда читают одни и те же данные.
+  function canonicalPlayerKey(playerName) { return 'player_' + String(playerName || '').trim().toLowerCase(); }
+  function migratePlayerRecord(teamId, playerName) {
+    const players = getPlayers();
+    const canonical = canonicalPlayerKey(playerName);
+    if (!playerName) return null;
+    if (players[canonical]) {
+      players[canonical].name = players[canonical].name || playerName;
+      players[canonical].teamId = teamId ?? players[canonical].teamId ?? null;
+      return players[canonical];
+    }
+    const candidates = [playerStorageKey(teamId, playerName), String(teamId || '') + '_' + String(playerName || ''), playerStorageKey(null, playerName)];
+    let found = null;
+    for (const key of candidates) { if (players[key]) { found = players[key]; break; } }
+    if (!found) {
+      const lower = String(playerName).toLowerCase();
+      const anyKey = Object.keys(players).find(k => players[k] && String(players[k].name || '').toLowerCase() === lower);
+      if (anyKey) found = players[anyKey];
+    }
+    if (!found) {
+      found = { name: playerName, teamId: teamId || null, role: 'Игрок', matches: 0, wins: 0, losses: 0, earnings: '0 ₽', bio: 'Биография игрока пока не заполнена.', rating: 1000, lts: 0 };
+    } else {
+      found = { name: playerName, teamId: teamId ?? found.teamId ?? null, role: 'Игрок', matches: 0, wins: 0, losses: 0, earnings: '0 ₽', bio: 'Биография игрока пока не заполнена.', rating: 1000, lts: 0, ...found, teamId: teamId ?? found.teamId ?? null, name: playerName };
+    }
+    players[canonical] = found;
+    candidates.forEach(k => { if (k !== canonical && players[k]) delete players[k]; });
+    setPlayers(players);
+    return found;
+  }
+  function getPlayerData(teamId, playerName) { return migratePlayerRecord(teamId, playerName); }
+  function savePlayerData(teamId, playerName, data) {
+    const players = getPlayers();
+    const key = canonicalPlayerKey(playerName);
+    players[key] = { ...data, name: playerName, teamId: teamId ?? data.teamId ?? null };
+    // Удаляем старые team-specific записи этого игрока, чтобы больше не было двух источников истины.
+    const lower = String(playerName || '').toLowerCase();
+    Object.keys(players).forEach(k => { if (k !== key && players[k] && String(players[k].name || '').toLowerCase() === lower) delete players[k]; });
+    setPlayers(players);
+  }
 
   function showNotification(title, text, icon = 'fa-bolt') {
     document.getElementById('notifTitle').textContent = title;
@@ -3287,11 +3308,22 @@
   function playerAvatarMarkup(username, className, extraClass='') {
     const url = getPlayerAvatarUrl(username);
     const safeName = String(username || '?').replace(/[<>&"]/g, '');
+    const initial = safeName.charAt(0).toUpperCase();
     if (url) {
       const safeUrl = String(url).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
-      return `<img class="${className} ${extraClass}" src="${safeUrl}" alt="${safeName}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='grid';"><span class="${className} ${extraClass}" style="display:none;">${safeName.charAt(0).toUpperCase()}</span>`;
+      return `<span class="avatar-adaptive-wrap ${extraClass}" style="--avatar-fallback:var(--accent);--avatar-glow:rgba(255,77,28,.18);" aria-label="${safeName}"><img class="avatar-adaptive-bg" src="${safeUrl}" alt="" aria-hidden="true" loading="lazy"><img class="${className}" src="${safeUrl}" alt="${safeName}" loading="lazy" onload="this.parentElement.classList.add('has-avatar')" onerror="this.style.display='none';this.parentElement.querySelector('.avatar-adaptive-bg')?.remove();this.parentElement.querySelector('.avatar-adaptive-fallback').style.display='grid';"><span class="avatar-adaptive-fallback" style="display:none;">${initial}</span></span>`;
     }
-    return `<span class="${className} ${extraClass}">${safeName.charAt(0).toUpperCase()}</span>`;
+    return `<span class="avatar-adaptive-wrap ${extraClass}" style="--avatar-fallback:var(--accent);--avatar-glow:rgba(255,77,28,.12);"><span class="avatar-adaptive-fallback">${initial}</span></span>`;
+  }
+
+  function refreshAdaptiveAvatarEffects(root=document) {
+    try {
+      root.querySelectorAll?.('.avatar-adaptive-wrap').forEach(w => {
+        const img = w.querySelector('.player-avatar-shared');
+        const bg = w.querySelector('.avatar-adaptive-bg');
+        if (img && bg && img.complete && img.naturalWidth > 0) w.classList.add('has-avatar');
+      });
+    } catch (_) {}
   }
 
   function renderRoleBadge(role) {
@@ -3495,6 +3527,7 @@
     const match = getNextMatch();
     if (match) {
       document.getElementById('nextMatchTitle').textContent = match.teamA + '\nvs ' + match.teamB;
+      document.getElementById('nextMatchTeams').classList.remove('no-match');
       document.getElementById('nextTeamA').textContent = match.teamA;
       document.getElementById('nextTeamB').textContent = match.teamB;
       document.getElementById('nextMatchLabel').textContent = match.status === 'live' ? 'Сейчас в эфире!' : 'Следующий матч';
@@ -3508,22 +3541,50 @@
       }
     } else {
       document.getElementById('nextMatchTitle').textContent = 'Нет матчей';
+      document.getElementById('nextMatchTeams').classList.add('no-match');
       document.getElementById('nextTeamA').textContent = '—';
       document.getElementById('nextTeamB').textContent = '—';
       document.getElementById('nextMatchLabel').textContent = 'Следующий матч';
       document.getElementById('nextMatchTimeLabel').textContent = 'СТАРТ • —';
       document.getElementById('heroLive').style.display = 'none';
     }
+    autoStartTimer();
   }
 
-  function determineWinner(score, teamA, teamB) {
-    if (!score || score === '0:0') return null;
-    const parts = score.split(':');
-    if (parts.length !== 2) return null;
-    const a = parseInt(parts[0]) || 0;
-    const b = parseInt(parts[1]) || 0;
-    if (a > b) return teamA;
-    if (b > a) return teamB;
+  function isGrandFinalMatch(match) {
+    if (!match) return false;
+    if (match.isGrandFinal === true) return true;
+    const label = String(match.roundName || match.stage || match.name || '').toLowerCase();
+    if (label.includes('гранд') || label.includes('grand final')) return true;
+    try {
+      const tournaments = getTournaments();
+      const t = tournaments.find(x => x.name === match.tournament || x.id === match.tournament);
+      const b = t && Array.isArray(t.bracket) ? t.bracket.find(x => x.isGrandFinal && samePair(x.teamA, x.teamB, match.teamA, match.teamB)) : null;
+      return !!b;
+    } catch (_) { return false; }
+  }
+  function getSeriesFormat(match) { return isGrandFinalMatch(match) ? { bestOf: 5, winsNeeded: 3, label: 'BO5' } : { bestOf: 3, winsNeeded: 2, label: 'BO3' }; }
+  function parseSeriesScore(score) {
+    const m = String(score || '').trim().match(/^(\d+)\s*:\s*(\d+)$/);
+    if (!m) return null;
+    return { a: Number(m[1]), b: Number(m[2]) };
+  }
+  function isValidSeriesScore(score, match, requireWinner = false) {
+    const p = parseSeriesScore(score);
+    if (!p || p.a < 0 || p.b < 0) return false;
+    const fmt = getSeriesFormat(match);
+    if (p.a >= fmt.winsNeeded && p.b >= fmt.winsNeeded) return false;
+    if (p.a > fmt.winsNeeded || p.b > fmt.winsNeeded) return false;
+    const finished = p.a === fmt.winsNeeded || p.b === fmt.winsNeeded;
+    if (requireWinner && !finished) return false;
+    return true;
+  }
+  function determineWinner(score, teamA, teamB, match = null) {
+    const p = parseSeriesScore(score);
+    if (!p) return null;
+    const fmt = getSeriesFormat(match || {});
+    if (p.a === fmt.winsNeeded && p.b < fmt.winsNeeded) return teamA;
+    if (p.b === fmt.winsNeeded && p.a < fmt.winsNeeded) return teamB;
     return null;
   }
 
@@ -3595,7 +3656,7 @@
 
           // 2) Матча нет — создаём его в списке матчей
           if (!matchInList) {
-            const winner = bm.winner || determineWinner(bm.score, bm.teamA, bm.teamB);
+            const winner = bm.winner || determineWinner(bm.score, bm.teamA, bm.teamB, bm);
             matchInList = {
               id: 'm' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
               dateTime: bm.dateTime || (tourn.start ? tourn.start + 'T12:00' : 'Дата не указана'),
@@ -3608,6 +3669,7 @@
               stage: bm.roundName || '',
               stream: '',
               winner: winner || null,
+              isGrandFinal: !!bm.isGrandFinal,
               bracketId: bm.id,
               updatedAt: stamp(bm) || Date.now()
             };
@@ -3628,7 +3690,7 @@
 
           const srcScore = src.score || '';
           const srcStatus = src.status || 'upcoming';
-          const srcWinner = src.winner || determineWinner(srcScore, src.teamA, src.teamB) || null;
+          const srcWinner = src.winner || determineWinner(srcScore, src.teamA, src.teamB, src) || null;
 
           if (scoreFilled(srcScore) && dst.score !== srcScore) { dst.score = srcScore; changed = true; }
           if (scoreFilled(srcScore)) { try { ensureGameForScore(matchInList.id, srcScore); } catch (e) {} }
@@ -3651,6 +3713,7 @@
           }
           if (!matchInList.tournament) { matchInList.tournament = tourn.name; changed = true; }
           if (bm.roundName && matchInList.stage !== bm.roundName) { matchInList.stage = bm.roundName; changed = true; }
+          if (!!bm.isGrandFinal !== !!matchInList.isGrandFinal) { matchInList.isGrandFinal = !!bm.isGrandFinal; changed = true; }
 
           // Общая метка времени, чтобы стороны не «перетягивали» друг друга
           const ts = Math.max(stamp(bm), stamp(matchInList), 1);
@@ -3788,6 +3851,8 @@
         </div>
       `;
     }).join('');
+
+    refreshAdaptiveAvatarEffects(grid);
 
     if (currentRole === ROLES.HEAD) {
       grid.querySelectorAll('.top-player-delete-btn').forEach(btn => {
@@ -4101,13 +4166,30 @@
   }
 
   function updateTimerDisplay() {
-    const h = Math.floor(totalSeconds / 3600);
-    const m = Math.floor((totalSeconds % 3600) / 60);
-    const s = totalSeconds % 60;
-    document.getElementById('countdown').textContent = String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+    const el = document.getElementById('countdown');
+    if (!el) return;
+    const h = Math.floor(Math.max(0,totalSeconds) / 3600);
+    const m = Math.floor((Math.max(0,totalSeconds) % 3600) / 60);
+    const s = Math.max(0,totalSeconds) % 60;
+    el.textContent = String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
   }
 
-  function autoStartTimer() { /* Автозапуск таймера отключён. Таймер запускается только вручную. */ }
+  function autoStartTimer() {
+    if (timerInterval) clearInterval(timerInterval);
+    const tick = () => {
+      const match = getNextMatch();
+      const el = document.getElementById('countdown');
+      if (!el) return;
+      if (!match) { totalSeconds = 0; el.textContent = '--:--:--'; return; }
+      if (match.status === 'live') { totalSeconds = 0; el.textContent = 'LIVE'; return; }
+      const when = match.dateTime ? new Date(match.dateTime).getTime() : NaN;
+      if (!Number.isFinite(when)) { totalSeconds = 0; el.textContent = '--:--:--'; return; }
+      totalSeconds = Math.max(0, Math.floor((when - Date.now()) / 1000));
+      updateTimerDisplay();
+    };
+    tick();
+    timerInterval = setInterval(tick, 1000);
+  }
 
   function playerStorageKey(teamId, playerName) {
     return String(teamId || 'free') + '_' + String(playerName || '');
@@ -4153,17 +4235,13 @@
   };
 
   function ensurePlayerProfile(playerName, teamId = null, silent = true) {
-    const players = getPlayers();
-    const key = playerStorageKey(teamId, playerName);
-    if (!players[key]) {
-      players[key] = { name: playerName, teamId: teamId || null, role: 'Игрок', matches: 0, wins: 0, losses: 0, earnings: '0 ₽', bio: 'Биография игрока пока не заполнена.', rating: 1000, lts: 0 };
-      setPlayers(players);
-      if (!silent) showNotification('Игрок добавлен в топ!', playerName + ' теперь отображается в Топ игроков', 'fa-star');
-    } else if (players[key].teamId !== (teamId || null)) {
-      players[key].teamId = teamId || null;
-      setPlayers(players);
+    const data = getPlayerData(teamId, playerName);
+    if (data) {
+      if (data.teamId !== (teamId || null)) { data.teamId = teamId || null; savePlayerData(teamId || null, playerName, data); }
+      return data;
     }
-    return players[key];
+    if (!silent) showNotification('Игрок добавлен в топ!', playerName + ' теперь отображается в Топ игроков', 'fa-star');
+    return data;
   }
 
   function addPlayerToTop(playerName, teamId) {
@@ -4571,6 +4649,7 @@
     document.getElementById('playerAvatarBig').style.overflow = 'hidden';
     document.getElementById('playerAvatarBig').style.display = 'grid';
     document.getElementById('playerAvatarBig').style.placeItems = 'center';
+    refreshAdaptiveAvatarEffects(document.getElementById('playerDetailPage'));
     document.getElementById('playerName').textContent = playerName;
     document.getElementById('playerTeam').textContent = team ? team.name : 'Команда не найдена';
     document.getElementById('playerMatches').textContent = data.matches || 0;
@@ -4581,7 +4660,15 @@
     document.getElementById('playerBio').textContent = data.bio || 'Биография игрока пока не заполнена.';
     editingPlayerName = playerName;
     editingPlayerTeamId = teamId;
-    const highlights = getHighlights()[playerStorageKey(teamId, playerName)] || [];
+    const highlightsStore = getHighlights();
+    const highlightKey = canonicalPlayerKey(playerName);
+    const legacyHighlightKey = playerStorageKey(teamId, playerName);
+    if (!highlightsStore[highlightKey] && highlightsStore[legacyHighlightKey]) {
+      highlightsStore[highlightKey] = highlightsStore[legacyHighlightKey];
+      delete highlightsStore[legacyHighlightKey];
+      setHighlights(highlightsStore);
+    }
+    const highlights = highlightsStore[highlightKey] || [];
     const highlightsGrid = document.getElementById('highlightsGrid');
     if (highlights.length === 0) {
       highlightsGrid.innerHTML = '<p style="color:var(--muted); font-size:14px;">Пока нет добавленных моментов</p>';
@@ -5443,43 +5530,6 @@
       });
     });
 
-    // Таймер
-    document.getElementById('timerSetBtn').addEventListener('click', function() {
-      const val = parseInt(document.getElementById('timerInput').value);
-      if (isNaN(val) || val < 0) { showNotification('Ошибка', 'Введите корректное число секунд', 'fa-times-circle'); return; }
-      if (val > 86400) { showNotification('Ошибка', 'Максимальное значение 86400 сек', 'fa-times-circle'); return; }
-      totalSeconds = val;
-      if (timerInterval) clearInterval(timerInterval);
-      updateTimerDisplay();
-      if (val > 0) {
-        timerInterval = setInterval(() => {
-          if (totalSeconds <= 0) { clearInterval(timerInterval); timerInterval = null; return; }
-          totalSeconds--;
-          updateTimerDisplay();
-        }, 1000);
-      }
-      showNotification('Таймер установлен', 'Новое значение: ' + val + ' сек', 'fa-clock');
-    });
-    document.getElementById('timerResetBtn').addEventListener('click', function() {
-      if (timerInterval) clearInterval(timerInterval);
-      timerInterval = null;
-      totalSeconds = 0;
-      document.getElementById('timerInput').value = 0;
-      updateTimerDisplay();
-      document.querySelectorAll('.timer-presets button').forEach(b => b.classList.remove('active'));
-      showNotification('Таймер сброшен', 'Значение: 0 сек', 'fa-undo');
-    });
-    document.querySelectorAll('.timer-presets button').forEach(btn => {
-      btn.addEventListener('click', function() {
-        const val = parseInt(this.dataset.value);
-        if (!isNaN(val)) {
-          document.getElementById('timerInput').value = val;
-          document.querySelectorAll('.timer-presets button').forEach(b => b.classList.remove('active'));
-          this.classList.add('active');
-        }
-      });
-    });
-
     // Короткое название команды: максимум 5 символов, включая вставку из буфера.
     ['newTeamIcon','editTeamIcon'].forEach(function(id) {
       const el = document.getElementById(id);
@@ -6107,10 +6157,16 @@
       if (!teamA || !teamB) { showNotification('Ошибка', 'Выберите обе команды', 'fa-times-circle'); return; }
       if (teamA === teamB) { showNotification('Ошибка', 'Команды должны быть разными', 'fa-times-circle'); return; }
       if (!tournament) { showNotification('Ошибка', 'Выберите турнир', 'fa-times-circle'); return; }
+      const initialScore = document.getElementById('matchScore').value.trim() || '0:0';
+      const existingForFormat = editingMatchId ? getMatches().find(m => m.id === editingMatchId) : null;
+      if (!isValidSeriesScore(initialScore, existingForFormat || { teamA, teamB, tournament, isGrandFinal:false }, document.getElementById('matchStatus').value === 'finished')) {
+        showNotification('Ошибка', 'Счёт должен соответствовать системе ' + getSeriesFormat(existingForFormat || { isGrandFinal:false }).label + '.', 'fa-times-circle');
+        return;
+      }
       const matchData = {
         dateTime: document.getElementById('matchDateTime').value || 'Дата не указана',
         teamA, teamB,
-        score: document.getElementById('matchScore').value.trim() || '0:0',
+        score: initialScore,
         status: document.getElementById('matchStatus').value,
         game: document.getElementById('matchGame').value.trim() || 'Матч',
         tournament: tournament,
@@ -6424,8 +6480,9 @@
         users[newUserKey] = user; setUsers(users);
       }
 
-      delete players[sourceKey]; delete players[legacyKey];
-      players[playerStorageKey(selectedTeamId, name)] = data;
+      // Единый источник данных игрока: профиль не дублируется по командам.
+      Object.keys(players).forEach(k => { if (players[k] && String(players[k].name || '').toLowerCase() === String(oldName || '').toLowerCase()) delete players[k]; });
+      players[canonicalPlayerKey(name)] = { ...data, name, teamId:selectedTeamId };
       setPlayers(players);
 
       editingPlayerName = name;
@@ -6457,7 +6514,7 @@
       const btn = document.getElementById('saveHighlightBtn');
       const oldText = btn.textContent; btn.disabled = true; btn.textContent = 'Загрузка видео...';
       try {
-        const key = playerStorageKey(editingPlayerTeamId, editingPlayerName);
+        const key = canonicalPlayerKey(editingPlayerName);
         const uploaded = await ltlUploadMedia(file, 'highlights/' + ltlSafeFileName(key));
         const highlights = getHighlights();
         if (!highlights[key]) highlights[key] = [];
@@ -6490,10 +6547,12 @@
       const matches = getMatches();
       const match = matches.find(m => m.id === currentMatchId);
       if (match) {
+        const requireWinner = match.status === 'finished';
+        if (!isValidSeriesScore(newScore, match, requireWinner)) { showNotification('Ошибка', 'Неверный счёт для ' + getSeriesFormat(match).label + '. Победа должна быть определена по системе BO3/BO5.', 'fa-times-circle'); return; }
         match.score = newScore;
         markMatchUpdated(match);
         const createdGame = ensureGameForScore(match.id, newScore);
-        match.winner = determineWinner(newScore, match.teamA, match.teamB);
+        match.winner = determineWinner(newScore, match.teamA, match.teamB, match);
         if (match.winner && match.status === 'live') {
           match.status = 'finished';
         }
@@ -6597,8 +6656,9 @@
       const scoreA = scoreAInput ? scoreAInput.value.trim() : '';
       const scoreB = scoreBInput ? scoreBInput.value.trim() : '';
       if (scoreA || scoreB) tourn.bracket[matchIndex].score = (scoreA || '0') + ':' + (scoreB || '0');
+      if (tourn.bracket[matchIndex].score && !isValidSeriesScore(tourn.bracket[matchIndex].score, tourn.bracket[matchIndex], false)) { showNotification('Ошибка', 'Неверный счёт для ' + getSeriesFormat(tourn.bracket[matchIndex]).label, 'fa-times-circle'); return; }
       markBracketMatchUpdated(tourn.bracket[matchIndex]);
-      const winner = determineWinner(tourn.bracket[matchIndex].score, tourn.bracket[matchIndex].teamA, tourn.bracket[matchIndex].teamB);
+      const winner = determineWinner(tourn.bracket[matchIndex].score, tourn.bracket[matchIndex].teamA, tourn.bracket[matchIndex].teamB, tourn.bracket[matchIndex]);
       if (winner) {
         tourn.bracket[matchIndex].winner = winner;
         tourn.bracket[matchIndex].status = 'finished';
@@ -6652,10 +6712,10 @@
       if (parts.length !== 2) { showNotification('Ошибка', 'Используйте формат X:Y', 'fa-times-circle'); return; }
       const scoreA = parseInt(parts[0]) || 0;
       const scoreB = parseInt(parts[1]) || 0;
-      if (scoreA < maxWins && scoreB < maxWins) { showNotification('Матч ещё не завершён', `Для победы нужно ${maxWins} побед. Сейчас ${scoreA}:${scoreB}`, 'fa-info-circle'); return; }
+      if (!isValidSeriesScore(scoreInput, match, true)) { showNotification('Ошибка', `Для ${formatLabel} нужна победа ${isGrandFinal ? '3:0, 3:1 или 3:2' : '2:0 или 2:1'} .`, 'fa-times-circle'); return; }
       match.score = scoreInput;
       markBracketMatchUpdated(match);
-      const winner = determineWinner(scoreInput, match.teamA, match.teamB);
+      const winner = determineWinner(scoreInput, match.teamA, match.teamB, match);
       if (winner) {
         match.winner = winner;
         match.status = 'finished';
@@ -6741,7 +6801,7 @@
     
     populateTeamSelects();
     populateTournamentSelect();
-    updateTimerDisplay();
+    autoStartTimer();
     populateSupportPlayerSelects();
     forceRenderAll();
 
