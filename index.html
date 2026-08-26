@@ -4792,7 +4792,10 @@
     } else {
       highlightsGrid.innerHTML = highlights.map(h => `
         <div class="highlight-item">
-          <div class="highlight-header"><span class="highlight-text">${h.text}</span></div>
+          <div class="highlight-header">
+            <span class="highlight-text">${h.text}</span>
+            ${currentRole === ROLES.HEAD ? `<button type="button" class="highlight-delete" title="Удалить лучший момент" data-highlight-id="${h.id}" data-highlight-player="${encodeURIComponent(highlightKey)}">🗑️</button>` : ''}
+          </div>
           ${h.video ? `<div class="highlight-video"><video controls preload="metadata" playsinline style="width:100%;max-height:420px;background:#000;border-radius:12px"><source src="${ltlMediaSource(h.video)}" type="${h.videoType || 'video/mp4'}">Ваш браузер не поддерживает видео.</video></div>` : ''}
         </div>
       `).join('');
@@ -6743,6 +6746,32 @@
       openModal(document.getElementById('addHighlightModal'));
     });
     document.getElementById('closeHighlightModal').addEventListener('click', () => closeModal(document.getElementById('addHighlightModal')));
+    // Удаление лучших моментов: только Глава. Удаляем запись и видео из Supabase Storage.
+    document.getElementById('highlightsGrid').addEventListener('click', async function(e) {
+      const btn = e.target.closest('.highlight-delete');
+      if (!btn) return;
+      if (currentRole !== ROLES.HEAD) { showNotification('Доступ запрещён', 'Удалять лучшие моменты может только Глава', 'fa-lock'); return; }
+      const highlightId = String(btn.dataset.highlightId || '');
+      const key = decodeURIComponent(btn.dataset.highlightPlayer || '');
+      if (!highlightId || !key) return;
+      const store = getHighlights();
+      const list = Array.isArray(store[key]) ? store[key] : [];
+      const item = list.find(h => String(h.id) === highlightId);
+      if (!item) { showNotification('Ошибка', 'Лучший момент не найден', 'fa-times-circle'); return; }
+      showConfirm('Удалить лучший момент?', 'Видео и запись этого момента будут удалены. Продолжить?', async function() {
+        try {
+          if (item.video) await ltlDeleteMedia(item.video);
+          store[key] = list.filter(h => String(h.id) !== highlightId);
+          if (store[key].length === 0) delete store[key];
+          setHighlights(store);
+          window.showPlayerDetail(editingPlayerTeamId, editingPlayerName, playerDetailOrigin);
+          showNotification('Лучший момент удалён', 'Глава удалил момент из профиля игрока.', 'fa-trash');
+        } catch (err) {
+          showNotification('Ошибка удаления', err.message || 'Не удалось удалить лучший момент', 'fa-times-circle');
+        }
+      });
+    });
+
     document.getElementById('saveHighlightBtn').addEventListener('click', async function() {
       const text = document.getElementById('highlightText').value.trim();
       const file = document.getElementById('highlightVideoFile').files[0];
