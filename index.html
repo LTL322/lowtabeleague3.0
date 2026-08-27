@@ -225,18 +225,6 @@
       color: var(--ink);
       font-weight: 700;
     }
-
-    .registration-security-note {
-      margin: 8px 0 12px;
-      padding: 10px 12px;
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      background: var(--bg2);
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.45;
-    }
-    .registration-security-note strong { color: var(--ink); }
     
     .donate-btn {
       display: flex;
@@ -295,19 +283,10 @@
     .avatar-wrapper .avatar-img.small{width:36px;height:36px}
     .avatar-wrapper .avatar-placeholder{width:100%;height:100%;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;border:2px solid var(--accent)}
     .avatar-wrapper .avatar-placeholder.small{font-size:14px}
-    .player-avatar-shared{width:100%;height:100%;border-radius:50%;object-fit:cover;display:block;flex-shrink:0;position:relative;z-index:2}
-    .avatar-adaptive-wrap{position:relative;width:100%;height:100%;border-radius:50%;overflow:hidden;display:grid;place-items:center;isolation:isolate;background:var(--avatar-fallback,var(--accent));box-shadow:0 0 0 1px rgba(255,255,255,.08),0 10px 28px var(--avatar-glow,rgba(255,77,28,.16))}
-    .avatar-adaptive-wrap::before{content:"";position:absolute;inset:-18%;background-image:var(--avatar-bg-image);background-size:cover;background-position:center;filter:blur(16px) saturate(1.35);transform:scale(1.12);opacity:.62;z-index:0}
-    .avatar-adaptive-wrap::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 45%,rgba(255,255,255,.10),rgba(0,0,0,.18) 72%);z-index:1;pointer-events:none}
-    .avatar-adaptive-wrap .avatar-adaptive-bg{position:absolute;inset:-2px;width:calc(100% + 4px);height:calc(100% + 4px);object-fit:cover;border-radius:50%;filter:blur(14px) saturate(1.35);opacity:.48;transform:scale(1.08);z-index:0;display:block}
-    .avatar-adaptive-wrap .player-avatar-shared{position:relative;z-index:2}
-    .avatar-adaptive-wrap .avatar-adaptive-fallback{position:relative;z-index:2;width:100%;height:100%;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:800;font-size:inherit;background:var(--avatar-fallback,var(--accent))}
+    .player-avatar-shared{width:100%;height:100%;border-radius:50%;object-fit:cover;display:block;flex-shrink:0}
     .top-player-card .player-avatar-shared{width:100%;height:100%;border-radius:50%;object-fit:cover}
     .team-detail-page .player-avatar-shared{width:100%;height:100%;border-radius:50%;object-fit:cover}
     .player-detail-page .player-avatar-shared{width:100%;height:100%;border-radius:50%;object-fit:cover}
-    .top-player-card .player-avatar-big{box-shadow:0 0 28px var(--avatar-glow,rgba(255,77,28,.16));}
-    .player-detail-page .player-avatar-big{box-shadow:0 0 34px var(--avatar-glow,rgba(255,77,28,.16));}
-    .team-detail-page .roster-item .player-avatar{box-shadow:0 0 18px var(--avatar-glow,rgba(255,77,28,.12));}
     .avatar-wrapper .status-dot{position:absolute;bottom:0;right:0;width:10px;height:10px;background:#34d399;border-radius:50%;border:2px solid var(--bg);animation:pulse-dot 2s infinite}
     .avatar-wrapper:hover .avatar-img{border-color:var(--accent);transform:scale(1.05)}
     .burger-btn{display:none;background:none;border:none;color:var(--ink);font-size:24px;padding:4px 6px;cursor:pointer;transition:0.3s;flex-shrink:0}
@@ -424,6 +403,22 @@
     .hero-side small{opacity:.75;font-weight:600}
     .live-btn{align-self:flex-start;border:0;background:var(--live-btn-bg);color:var(--live-btn-color);padding:13px 18px;border-radius:12px;font-weight:800;cursor:pointer;transition:.2s;box-shadow:0 4px 20px rgba(255,77,28,0.2)}
     .live-btn:hover{background:var(--live-btn-hover);transform:scale(1.02)}
+    
+    .timer-settings{display:flex;align-items:center;gap:10px;margin-top:8px;flex-wrap:wrap;background:rgba(255,255,255,0.08);padding:8px 14px;border-radius:12px;border:1px solid rgba(255,255,255,0.1)}
+    .timer-settings label{font-size:11px;font-weight:600;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:0.5px}
+    .timer-settings .timer-input-group{display:flex;align-items:center;gap:4px}
+    .timer-settings .timer-input-group input[type="number"]{width:70px;padding:4px 6px;border:1px solid rgba(255,255,255,0.2);border-radius:8px;background:rgba(255,255,255,0.1);color:#fff;font-weight:600;font-size:14px;text-align:center;transition:0.3s}
+    .timer-settings .timer-input-group input[type="number"]:focus{border-color:var(--accent);outline:none;background:rgba(255,255,255,0.15)}
+    .timer-settings .timer-presets{display:flex;gap:4px}
+    .timer-settings .timer-presets button{padding:3px 10px;border-radius:6px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.7);font-weight:600;font-size:11px;cursor:pointer;transition:0.2s}
+    .timer-settings .timer-presets button:hover{background:rgba(255,255,255,0.15);color:#fff;border-color:var(--accent)}
+    .timer-settings .timer-presets button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+    .timer-settings .timer-actions{display:flex;gap:4px}
+    .timer-settings .timer-actions button{padding:4px 12px;border-radius:6px;border:none;font-weight:600;font-size:12px;cursor:pointer;transition:0.2s}
+    .timer-settings .timer-actions .timer-set-btn{background:var(--accent);color:#fff}
+    .timer-settings .timer-actions .timer-set-btn:hover{opacity:0.85;transform:scale(1.02)}
+    .timer-settings .timer-actions .timer-reset-btn{background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.7);border:1px solid rgba(255,255,255,0.1)}
+    .timer-settings .timer-actions .timer-reset-btn:hover{background:rgba(255,255,255,0.2);color:#fff}
     
     .section{margin-top:38px}
     .section-head{display:flex;justify-content:space-between;align-items:end;margin-bottom:16px}
@@ -677,15 +672,7 @@
     .role-management .role-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
     .role-management .role-item{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--paper);border-radius:12px;border:1px solid var(--line)}
     .role-management .role-item .user-name{font-weight:700}
-    .role-management .role-item .role-select{padding:7px 9px;border-radius:8px;border:1px solid var(--line);background:var(--paper);font-size:12px;color:var(--ink);font-weight:600;min-width:105px}.role-quick-actions{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}.role-quick-actions button{border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:7px;padding:5px 7px;font-size:11px;font-weight:700;cursor:pointer}.role-quick-actions button:hover{transform:translateY(-1px)}
-    .head-points-actions{display:flex;flex-wrap:wrap;gap:5px;width:100%;margin-top:6px}.head-points-actions button{border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:7px;padding:5px 7px;font-size:10px;font-weight:800;cursor:pointer}.head-points-actions button.plus{border-color:#1f9d68;color:#1f9d68}.head-points-actions button.minus{border-color:#ef5350;color:#ef5350}.head-points-actions button:hover{transform:translateY(-1px)}
-    .head-team-points{margin-top:18px;padding-top:18px;border-top:1px solid var(--line)}.head-team-points h4{font-size:15px;margin:0 0 10px;font-weight:800}.head-team-points-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px}.head-team-points-item{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;background:var(--paper);border:1px solid var(--line);border-radius:10px}.head-team-points-actions{display:flex;gap:4px;flex-wrap:wrap}.head-team-points-actions button{padding:5px 7px;border-radius:7px;border:1px solid var(--line);background:var(--paper);color:var(--ink);font-size:10px;font-weight:800;cursor:pointer}.head-team-points-actions .plus{border-color:#1f9d68;color:#1f9d68}.head-team-points-actions .minus{border-color:#ef5350;color:#ef5350}
-
-    .role-management .role-item{gap:10px;flex-wrap:wrap}
-    .role-management .role-item .user-name{min-width:0;overflow-wrap:anywhere}
-    .top-player-card{cursor:pointer;user-select:none}
-    .top-player-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
-    @media (max-width:600px){.role-management .role-list{grid-template-columns:1fr}.role-management .role-item{align-items:flex-start}.role-management .role-item .role-select{flex:1}.role-tools input,.role-tools select{width:100%;min-width:0}.top-player-card{min-width:0}.top-player-card .player-name,.top-player-card .player-team-name,.top-player-card .player-stats-mini{overflow-wrap:anywhere;word-break:break-word}.top-player-card .player-stats-mini{display:flex;flex-wrap:wrap;gap:6px 12px;justify-content:center}}
+    .role-management .role-item .role-select{padding:4px 8px;border-radius:8px;border:1px solid var(--line);background:var(--paper);font-size:12px;color:var(--ink);font-weight:600}
     .team-detail-page{display:none;background:var(--card-bg);border:1px solid var(--line);border-radius:var(--radius);padding:32px 36px;margin-top:20px;box-shadow:var(--shadow)}
     .team-detail-page.active{display:block}
     .team-detail-page .back-btn{background:none;border:none;color:var(--muted);font-size:14px;cursor:pointer;margin-bottom:16px;padding:8px 0;font-weight:600}
@@ -704,7 +691,7 @@
     .team-detail-page .roster-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}
     .team-detail-page .roster-item{padding:12px 16px;background:var(--bg2);border-radius:12px;border:1px solid var(--line);display:flex;align-items:center;gap:12px;cursor:pointer;transition:all .3s}
     .team-detail-page .roster-item:hover{border-color:var(--accent);transform:translateX(6px)}
-    .team-detail-page .roster-item .player-avatar{width:44px;height:44px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:700;flex:0 0 44px;position:relative;overflow:visible}
+    .team-detail-page .roster-item .player-avatar{width:36px;height:36px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:700}
     .team-detail-page .roster-item .player-name{font-weight:700}
     .team-detail-page .roster-item .player-role{font-size:12px;color:var(--muted);font-weight:500}
     .team-detail-page .team-description{margin-top:20px;padding-top:20px;border-top:1px solid var(--line)}
@@ -717,7 +704,7 @@
     .player-detail-page .back-btn{background:none;border:none;color:var(--muted);font-size:14px;cursor:pointer;margin-bottom:16px;padding:8px 0;font-weight:600}
     .player-detail-page .back-btn:hover{color:var(--ink)}
     .player-detail-page .player-header{display:flex;align-items:center;gap:24px;flex-wrap:wrap;padding-bottom:20px;border-bottom:1px solid var(--line);margin-bottom:20px}
-    .player-detail-page .player-avatar-big{width:92px;height:92px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-size:32px;font-weight:700;position:relative;overflow:visible}
+    .player-detail-page .player-avatar-big{width:80px;height:80px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-size:32px;font-weight:700}
     .player-detail-page .player-info h2{font-size:28px;font-weight:800;font-family:"Space Grotesk"}
     .player-detail-page .player-info .player-team{color:var(--muted);font-size:14px;font-weight:500;margin-top:4px}
     .player-detail-page .player-stats{display:flex;gap:24px;flex-wrap:wrap;margin:16px 0;padding:16px;background:var(--bg2);border-radius:12px;border:1px solid var(--line)}
@@ -1066,17 +1053,8 @@
     .mobile-view .hero-main .hero-copy{font-size:13px;margin:8px 0 14px}
     .mobile-view .hero-side{padding:14px;min-height:100px}
     .mobile-view .hero-side .time{font-size:22px}
-     .mobile-view .hero-side .live-btn{padding:8px 14px;font-size:13px}
-    .mobile-view #nextMatchTitle{white-space:normal;overflow-wrap:anywhere;word-break:break-word;line-height:1.2}
-    .mobile-view #nextMatchTeams{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px;min-width:0}
-    .mobile-view #nextMatchTeams .team-pill{min-width:0;max-width:100%;white-space:normal;overflow-wrap:anywhere;word-break:break-word;text-align:center}
-    .mobile-view #nextMatchTeams.no-match{display:none}
+    .mobile-view .hero-side .live-btn{padding:8px 14px;font-size:13px}
     .mobile-view .live-grid,.mobile-view .upcoming-grid,.mobile-view .teams-grid{grid-template-columns:1fr;gap:6px}
-
-    .mobile-view .match-teams{min-width:0;flex-wrap:wrap;gap:8px}
-    .mobile-view .match-teams .team-name,.mobile-view .match-teams .team-pill{min-width:0;max-width:100%;white-space:normal;overflow-wrap:anywhere;word-break:break-word}
-    .mobile-view .upcoming-card .match-teams{justify-content:center;text-align:center;line-height:1.25}
-    .mobile-view .upcoming-card .match-time{white-space:normal;overflow-wrap:anywhere}
     .mobile-view .top-players-grid{grid-template-columns:1fr 1fr;gap:6px}
     .mobile-view .news{grid-template-columns:1fr;gap:6px}
     .mobile-view .rank-row{grid-template-columns:28px 1fr 50px;padding:6px 8px;font-size:12px}
@@ -1100,7 +1078,6 @@
     .mobile-view .profile-page{padding:10px}
     .mobile-view .profile-page .profile-header{flex-direction:column;text-align:center;gap:8px}
     .mobile-view .profile-page .profile-avatar-big{width:56px;height:56px;margin:0 auto}
-    .mobile-view .player-detail-page .player-avatar-big{width:64px;height:64px}
     .mobile-view .profile-page .profile-stats{grid-template-columns:1fr 1fr;gap:4px}
     .mobile-view .profile-page .stat-card{padding:6px 8px}
     .mobile-view .profile-page .stat-card .num{font-size:20px}
@@ -1111,15 +1088,17 @@
     .mobile-view .player-detail-page .player-header{flex-direction:column;text-align:center;gap:8px}
     .mobile-view .player-detail-page .player-stats{justify-content:center;gap:6px}
     .mobile-view .highlights-grid{grid-template-columns:1fr}
+    .mobile-view .timer-settings{padding:4px 6px;gap:4px}
     .mobile-view .timer-settings label{font-size:8px}
+    .mobile-view .timer-settings .timer-input-group input[type="number"]{width:36px;font-size:10px}
     .mobile-view .timer-settings .timer-presets button{font-size:7px;padding:1px 4px}
+    .mobile-view .timer-settings .timer-actions button{font-size:8px;padding:2px 5px}
     .mobile-view .notification{max-width:calc(100% - 12px);right:6px;top:56px;padding:8px 12px;font-size:12px}
     .mobile-view .section-head h2{font-size:16px}
     .mobile-view .modal{padding:14px 10px}
     .mobile-view .modal .form-row{grid-template-columns:1fr;gap:6px}
     .mobile-view .team-detail-page .roster-grid{grid-template-columns:1fr 1fr;gap:4px}
     .mobile-view .roster-item{padding:4px 6px;font-size:11px}
-    .mobile-view .team-detail-page .roster-item .player-avatar{width:34px;height:34px;flex-basis:34px}
     .mobile-view .admin-panel{padding:8px 10px}
     .mobile-view .admin-panel .create-btn{font-size:10px;padding:4px 8px}
     .mobile-view .stream-widget{padding:10px 12px;gap:10px}
@@ -1131,12 +1110,8 @@
     .mobile-view .stream-full .stream-active iframe{height:200px}
     .mobile-view .tournament-detail-page{padding:10px}
     .mobile-view .tournament-detail-page .tournament-detail-header{flex-direction:column;gap:8px}
-    .mobile-view .top-player-card{padding:10px;min-width:0;overflow:hidden}
+    .mobile-view .top-player-card{padding:10px}
     .mobile-view .top-player-card .player-avatar-big{width:40px;height:40px;font-size:16px}
-    .mobile-view .top-player-card .player-name{font-size:14px;line-height:1.25;margin-top:2px}
-    .mobile-view .top-player-card .player-team-name{font-size:11px;line-height:1.3;margin-top:3px}
-    .mobile-view .top-player-card .player-rating{font-size:12px;line-height:1.3}
-    .mobile-view .top-player-card .player-stats-mini{font-size:10px;line-height:1.3;gap:3px 7px}
     .mobile-view .top-player-card .medal{width:24px;height:24px;font-size:12px}
     .mobile-view .support-bar input{min-width:50px;font-size:9px;max-width:80px}
     .mobile-view .support-bar{padding:2px 4px;gap:3px}
@@ -1247,28 +1222,6 @@
   .team-card strong { display:block; }
   .modal input, .modal textarea, .modal select { max-width:100%; width:100%; box-sizing:border-box; }
   .table-wrap, .matches-table-wrap, .bracket-container { max-width:100%; overflow-x:auto; }
-
-  /* Мобильный ТОП игроков: длинные имена и статистика не слипаются. */
-  .top-players-grid { min-width:0; }
-  .top-player-card { min-width:0; overflow:hidden; word-break:break-word; overflow-wrap:anywhere; line-height:1.35; }
-  .top-player-card .player-rank-num,
-  .top-player-card .player-name,
-  .top-player-card .player-team-name,
-  .top-player-card .player-rating {
-    min-width:0; max-width:100%; overflow-wrap:anywhere; word-break:break-word; line-height:1.35;
-  }
-  .top-player-card .player-stats-mini {
-    display:flex; flex-wrap:wrap; align-items:center; justify-content:center;
-    gap:4px 10px; min-width:0; line-height:1.35;
-  }
-  .top-player-card .player-stats-mini > span {
-    min-width:0; overflow-wrap:anywhere; word-break:break-word;
-  }
-  .top-player-card .player-stats-mini > span > span { white-space:nowrap; }
-  .top-player-card .player-rating-edit { min-width:0; flex-wrap:wrap; }
-  .top-player-card .top-player-delete-btn { max-width:100%; white-space:normal; line-height:1.25; }
-  .rank-row { min-width:0; }
-  .rank-row > * { min-width:0; overflow-wrap:anywhere; word-break:break-word; line-height:1.3; }
 }
 
 
@@ -1296,17 +1249,6 @@
     .support-message-actions button:hover{border-color:var(--accent);color:var(--accent)}
     .player-detail-page{display:none!important}
     .player-detail-page.active{display:block!important}
-
-    .v9-role-quick{align-items:center;}
-    .v9-role-quick button{white-space:nowrap;}
-    @media(max-width:700px){
-      .role-management .role-item{align-items:flex-start;}
-      .v9-role-quick{width:100%;}
-      .v9-role-quick button{flex:1 1 auto;min-width:70px;}
-      .top-player-card{min-width:0;overflow-wrap:anywhere;}
-      .top-player-card .player-name,.top-player-card .player-team-name{overflow-wrap:anywhere;word-break:break-word;}
-      .top-player-card .player-stats-mini{display:flex;flex-wrap:wrap;gap:8px 14px;justify-content:center;line-height:1.5;}
-    }
 </style>
 
 <style id="support-chat-v11-fixes">
@@ -1549,6 +1491,24 @@
             <div>
               <small id="nextMatchTimeLabel">СТАРТ • —</small>
               <div class="time" id="countdown">00:00:00</div>
+              <div class="timer-settings">
+                <label>Таймер</label>
+                <div class="timer-input-group">
+                  <input type="number" id="timerInput" value="0" min="0" max="86400" step="1">
+                  <span style="color:rgba(255,255,255,0.5);font-size:11px;font-weight:600;">сек</span>
+                </div>
+                <div class="timer-presets">
+                  <button data-value="300">5м</button>
+                  <button data-value="600">10м</button>
+                  <button data-value="1800">30м</button>
+                  <button data-value="3600">1ч</button>
+                  <button data-value="8130">2.25ч</button>
+                </div>
+                <div class="timer-actions">
+                  <button class="timer-set-btn" id="timerSetBtn"><i class="fas fa-check"></i> Уст.</button>
+                  <button class="timer-reset-btn" id="timerResetBtn"><i class="fas fa-undo"></i></button>
+                </div>
+              </div>
             </div>
             <button class="live-btn" id="heroLive">Смотреть LIVE →</button>
           </div>
@@ -1718,7 +1678,6 @@
             </div>
           </div>
           <div class="bracket-container" id="bracketContainer"></div>
-          <div style="margin-top:10px;color:var(--muted);font-size:12px;line-height:1.5;">Победитель проходит дальше по верхней сетке. При поражении команда автоматически переводится в нижнюю сетку. Повторное поражение выбивает из турнира. Гранд-финал — BO5.</div>
           <div class="admin-only" style="margin-top:20px;padding-top:20px;border-top:1px solid var(--line);" id="bracketEditControls">
             <button class="create-btn" id="bracketSaveBtn"><i class="fas fa-save"></i> Сохранить изменения</button>
             <button class="create-btn" id="bracketToggleEditBtn" style="background:var(--bg2);color:var(--ink);border:1px solid var(--line);"><i class="fas fa-edit"></i> Режим редактирования</button>
@@ -1761,7 +1720,7 @@
           </div>
           <div id="teamAdminControls" class="admin-only" style="margin-top:16px; padding-top:16px; border-top:1px solid var(--line);">
             <button class="team-edit-btn" id="editTeamBtn"><i class="fas fa-edit"></i> Редактировать команду</button>
-            <button class="team-edit-btn admin-only" id="addTeamPointsDetailBtn" style="margin-left:8px;"><i class="fas fa-star"></i> Изменить очки</button>
+            <button class="team-edit-btn admin-only" id="addTeamPointsDetailBtn" style="margin-left:8px;"><i class="fas fa-star"></i> Начислить очки</button>
             <button class="team-edit-btn admin-only" id="changeTeamAvatarBtn" style="margin-left:8px;"><i class="fas fa-image"></i> Сменить аватар</button>
           </div>
         </div>
@@ -1795,7 +1754,7 @@
           </div>
           <div id="playerAdminControls" class="admin-only" style="margin-top:16px; padding-top:16px; border-top:1px solid var(--line);">
             <button class="team-edit-btn" id="editPlayerBtn"><i class="fas fa-edit"></i> Редактировать игрока</button>
-            <button class="team-edit-btn admin-only" id="addLTSBtn" style="margin-left:8px;"><i class="fas fa-star"></i> Изменить LTS</button>
+            <button class="team-edit-btn admin-only" id="addLTSBtn" style="margin-left:8px;"><i class="fas fa-star"></i> Начислить LTS</button>
           </div>
         </div>
       </section>
@@ -2012,16 +1971,6 @@
           <div class="role-management" id="roleManagementPanel" style="display:none;">
             <h3>👑 Управление ролями (Глава)</h3>
             <p style="color:var(--muted); font-size:14px; margin-bottom:12px;">Управляйте ролями всех пользователей платформы</p>
-            <div class="role-tools" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;align-items:center;">
-              <input id="roleUserSearch" type="search" placeholder="🔎 Найти пользователя..." autocomplete="off" style="flex:1;min-width:220px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--paper);color:var(--ink);outline:none;">
-              <select id="roleQuickFilter" style="padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--paper);color:var(--ink);">
-                <option value="all">Все роли</option>
-                <option value="guest">Гости</option>
-                <option value="player">Игроки</option>
-                <option value="captain">Капитаны</option>
-                <option value="admin">Админы</option>
-              </select>
-            </div>
             <div class="role-list" id="roleList"></div>
           </div>
           <div class="admin-panel" id="profileAdminPanel" style="margin-top:24px;">
@@ -2077,17 +2026,16 @@
     <input type="text" id="regNick" placeholder="Придумайте никнейм" autocomplete="username">
     <label>Email</label>
     <input type="email" id="regEmail" placeholder="Введите ваш email" autocomplete="email">
-    <div class="registration-security-note" role="note">⚠️ <strong>Важно:</strong> не указывайте основной email, на котором хранятся важные данные. Для этого сайта лучше использовать отдельный email, чтобы снизить риски.</div>
     <label>Пароль</label>
     <div class="password-wrapper">
-      <input type="password" id="regPassword" placeholder="Минимум 8: только латинские буквы и цифры" inputmode="text" autocomplete="new-password" pattern="[A-Za-z0-9]{8,}" title="Пароль: минимум 8 символов, только латинские буквы и цифры">
+      <input type="password" id="regPassword" placeholder="Придумайте пароль (мин. 8 символов)">
       <button class="toggle-password" id="toggleRegPass" type="button">
         <i class="far fa-eye"></i>
       </button>
     </div>
     <label>Подтверждение пароля</label>
     <div class="password-wrapper">
-      <input type="password" id="regConfirmPassword" placeholder="Повторите пароль" inputmode="text" autocomplete="new-password" pattern="[A-Za-z0-9]{8,}" title="Пароль: минимум 8 символов, только латинские буквы и цифры">
+      <input type="password" id="regConfirmPassword" placeholder="Подтвердите пароль">
       <button class="toggle-password" id="toggleRegConfirmPass" type="button">
         <i class="far fa-eye"></i>
       </button>
@@ -2368,8 +2316,8 @@
     <input type="hidden" id="ltsTargetId" value="">
     <input type="hidden" id="ltsTargetType" value="player">
     <label>Количество очков LTS</label>
-    <input type="number" id="ltsAmount" placeholder="10" step="1" value="10">
-    <div style="font-size:12px; color:var(--muted); margin-top:4px;">Положительное число выдаёт LTS, отрицательное забирает. LTS не может стать ниже 0.</div>
+    <input type="number" id="ltsAmount" placeholder="10" min="1" step="1" value="10">
+    <div style="font-size:12px; color:var(--muted); margin-top:4px;">Очки LTS будут добавлены к текущему рейтингу игрока</div>
     <button class="btn-submit" id="saveLTSBtn">Начислить</button>
   </div>
 </div>
@@ -2588,7 +2536,7 @@
     }
   }
 
-  // ===== LTL V14: ЕДИНОЕ ХРАНИЛИЩЕ nexus_users =====
+  // ===== LTL V2: ЕДИНОЕ ХРАНИЛИЩЕ nexus_users =====
   // Данные сайта больше не лежат в localStorage. localStorage используется только
   // для UI-настроек/сессии. Источник истины — public.nexus_users через RPC.
   let ltlSupabase = null;
@@ -2596,51 +2544,6 @@
   let ltlApplyingRemote = false;
   let ltlState = {};
   let ltlStatePoll = null;
-  // Надёжная синхронизация: изменения не должны затираться 15-секундным polling.
-  const ltlPendingWrites = new Map();
-  const ltlWriteTimers = new Map();
-  const ltlLastRemoteAt = new Map();
-
-  function ltlQueueWrite(key, value, delay = 250) {
-    if (!ltlIsSharedKey(key) || ltlApplyingRemote || !ltlBackendReady) return;
-    ltlPendingWrites.set(key, value);
-    if (ltlWriteTimers.has(key)) clearTimeout(ltlWriteTimers.get(key));
-    const timer = setTimeout(() => {
-      ltlWriteTimers.delete(key);
-      ltlFlushKey(key);
-    }, delay);
-    ltlWriteTimers.set(key, timer);
-  }
-
-  async function ltlFlushKey(key) {
-    if (!ltlPendingWrites.has(key) || !ltlBackendReady || ltlApplyingRemote) return;
-    const value = ltlPendingWrites.get(key);
-    const sb = ltlGetSupabaseClient();
-    if (!sb) return;
-    try {
-      if (key === STORAGE_KEYS.USERS && currentRole !== ROLES.ADMIN && currentRole !== ROLES.HEAD) {
-        const profile = ltlState[key]?.[String(currentUser || '').toLowerCase()];
-        if (profile) {
-          const { error } = await sb.rpc('nexus_update_my_profile', { p_profile: profile });
-          if (error) throw error;
-        }
-      } else {
-        const { error } = await sb.rpc('nexus_set_state', { p_key: key, p_value: value });
-        if (error) throw error;
-      }
-      // Не удаляем более новое изменение, если оно появилось во время запроса.
-      if (ltlPendingWrites.get(key) === value) ltlPendingWrites.delete(key);
-    } catch (e) {
-      console.warn('LTL: запись будет повторена:', key, e);
-      // Оставляем pending; фоновый retry повторит запись.
-    }
-  }
-
-  function ltlFlushPending() {
-    for (const key of ltlPendingWrites.keys()) ltlFlushKey(key);
-  }
-
-  setInterval(ltlFlushPending, 3000);
 
   function ltlGetSupabaseClient() {
     if (ltlSupabase) return ltlSupabase;
@@ -2678,7 +2581,22 @@
 
   async function ltlPushKey(key, value) {
     if (!ltlIsSharedKey(key) || ltlApplyingRemote || !ltlBackendReady) return;
-    ltlQueueWrite(key, value);
+    const sb = ltlGetSupabaseClient();
+    if (!sb) return;
+    try {
+      if (key === STORAGE_KEYS.USERS && currentRole !== ROLES.ADMIN && currentRole !== ROLES.HEAD) {
+        const profile = ltlState[key]?.[String(currentUser || '').toLowerCase()];
+        if (profile) {
+          await sb.rpc('nexus_update_my_profile', { p_profile: profile });
+        }
+        return;
+      }
+      const parsed = typeof value === 'string' ? (() => { try { return JSON.parse(value); } catch (_) { return value; } })() : value;
+      const { error } = await sb.rpc('nexus_set_state', { p_key: key, p_value: parsed });
+      if (error) throw error;
+    } catch (e) {
+      console.warn('V2 Supabase write failed:', key, e);
+    }
   }
 
   // Перехват shared localStorage: данные остаются только в памяти страницы,
@@ -2763,13 +2681,8 @@
             if (freshCall.error || !freshCall.data) return;
 
             ltlApplyingRemote = true;
-            const freshState = freshCall.data || {};
-            // Не затираем локальные изменения, пока они не подтверждены сервером.
-            for (const [dirtyKey, dirtyValue] of ltlPendingWrites.entries()) freshState[dirtyKey] = dirtyValue;
-            ltlState = freshState;
-            ltlState[STORAGE_KEYS.USERS] = ltlPendingWrites.has(STORAGE_KEYS.USERS)
-              ? (ltlState[STORAGE_KEYS.USERS] || {})
-              : (directoryCall.data || {});
+            ltlState = freshCall.data;
+            ltlState[STORAGE_KEYS.USERS] = directoryCall.data || {};
 
             if (currentUser) {
               const meCall = await sb.rpc('nexus_get_my_profile');
@@ -2800,9 +2713,6 @@
   }
 
   // ===== ОБЩИЙ ОНЛАЙН ЧЕРЕЗ SUPABASE REALTIME PRESENCE =====
-  // Канал должен быть объявлен до первого чтения: иначе счётчик падал с ReferenceError.
-  let ltlOnlineChannel = null;
-  let ltlPresenceSubscribed = false;
   let ltlClientId = sessionStorage.getItem('ltl_client_id');
   if (!ltlClientId) {
     ltlClientId = 'c_' + Date.now() + '_' + Math.random().toString(36).slice(2);
@@ -2810,20 +2720,13 @@
   }
 
   function ltlUpdatePresenceCount() {
+    const sb = ltlGetSupabaseClient();
+    if (!sb || !ltlOnlineChannel) return;
+    const state = ltlOnlineChannel.presenceState ? ltlOnlineChannel.presenceState() : {};
+    const ids = new Set(Object.keys(state));
+    const count = ids.size;
     const el = document.getElementById('onlineCount');
-    if (!el) return;
-    if (!ltlOnlineChannel || !ltlPresenceSubscribed) {
-      el.textContent = '1';
-      return;
-    }
-    try {
-      const state = ltlOnlineChannel.presenceState ? ltlOnlineChannel.presenceState() : {};
-      const count = Math.max(1, Object.keys(state || {}).length);
-      el.textContent = String(count);
-    } catch (e) {
-      console.warn('Не удалось получить online presence:', e);
-      el.textContent = '1';
-    }
+    if (el) el.textContent = String(count);
   }
 
   async function ltlStartOnlinePresence() {
@@ -2836,45 +2739,28 @@
       .on('presence', { event: 'leave' }, ltlUpdatePresenceCount)
       .subscribe(async (status) => {
         if (status === 'SUBSCRIBED') {
-          ltlPresenceSubscribed = true;
-          try {
-            await ltlOnlineChannel.track({ clientId: ltlClientId, username: currentUser || 'Гость', at: Date.now() });
-          } catch (e) {
-            console.warn('Не удалось зарегистрировать online presence:', e);
-          }
+          await ltlOnlineChannel.track({ clientId: ltlClientId, username: currentUser || 'Гость', at: Date.now() });
           ltlUpdatePresenceCount();
-        } else if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT' || status === 'CLOSED') {
-          ltlPresenceSubscribed = false;
-          const el = document.getElementById('onlineCount');
-          if (el) el.textContent = '1';
-          console.warn('Supabase Realtime status:', status);
         }
       });
   }
 
   async function updateOnlineCounter() {
-    if (!ltlOnlineChannel) {
+    if (ltlOnlineChannel) ltlUpdatePresenceCount();
+    else {
       const el = document.getElementById('onlineCount');
-      if (el) el.textContent = '1';
+      if (el) el.textContent = '0';
       await ltlStartOnlinePresence();
-    } else {
-      ltlUpdatePresenceCount();
     }
   }
 
   async function updateUserOnline() {
-    if (!ltlOnlineChannel) {
-      await ltlStartOnlinePresence();
-      return;
-    }
-    if (ltlPresenceSubscribed) {
+    if (ltlOnlineChannel) {
       try {
         await ltlOnlineChannel.track({ clientId: ltlClientId, username: currentUser || 'Гость', at: Date.now() });
         ltlUpdatePresenceCount();
         return;
-      } catch (e) {
-        console.warn('Presence update failed:', e);
-      }
+      } catch (e) { console.warn('Presence update failed:', e); }
     }
     await ltlStartOnlinePresence();
   }
@@ -3033,46 +2919,8 @@
   function getSupportMessages() { return JSON.parse(localStorage.getItem(STORAGE_KEYS.SUPPORT_MESSAGES)) || []; }
   function setSupportMessages(messages) { localStorage.setItem(STORAGE_KEYS.SUPPORT_MESSAGES, JSON.stringify(messages)); }
   function getTeamRoster(teamName) { const team = getTeams().find(t => t.name === teamName); return (team && team.roster && team.roster.length > 0) ? team.roster : null; }
-  // Единый профиль игрока: один ключ на аккаунт, независимо от команды.
-  // Благодаря этому ТОП, страница команды и личный профиль всегда читают одни и те же данные.
-  function canonicalPlayerKey(playerName) { return 'player_' + String(playerName || '').trim().toLowerCase(); }
-  function migratePlayerRecord(teamId, playerName) {
-    const players = getPlayers();
-    const canonical = canonicalPlayerKey(playerName);
-    if (!playerName) return null;
-    if (players[canonical]) {
-      players[canonical].name = players[canonical].name || playerName;
-      players[canonical].teamId = teamId ?? players[canonical].teamId ?? null;
-      return players[canonical];
-    }
-    const candidates = [playerStorageKey(teamId, playerName), String(teamId || '') + '_' + String(playerName || ''), playerStorageKey(null, playerName)];
-    let found = null;
-    for (const key of candidates) { if (players[key]) { found = players[key]; break; } }
-    if (!found) {
-      const lower = String(playerName).toLowerCase();
-      const anyKey = Object.keys(players).find(k => players[k] && String(players[k].name || '').toLowerCase() === lower);
-      if (anyKey) found = players[anyKey];
-    }
-    if (!found) {
-      found = { name: playerName, teamId: teamId || null, role: 'Игрок', matches: 0, wins: 0, losses: 0, earnings: '0 ₽', bio: 'Биография игрока пока не заполнена.', rating: 1000, lts: 0 };
-    } else {
-      found = { name: playerName, teamId: teamId ?? found.teamId ?? null, role: 'Игрок', matches: 0, wins: 0, losses: 0, earnings: '0 ₽', bio: 'Биография игрока пока не заполнена.', rating: 1000, lts: 0, ...found, teamId: teamId ?? found.teamId ?? null, name: playerName };
-    }
-    players[canonical] = found;
-    candidates.forEach(k => { if (k !== canonical && players[k]) delete players[k]; });
-    setPlayers(players);
-    return found;
-  }
-  function getPlayerData(teamId, playerName) { return migratePlayerRecord(teamId, playerName); }
-  function savePlayerData(teamId, playerName, data) {
-    const players = getPlayers();
-    const key = canonicalPlayerKey(playerName);
-    players[key] = { ...data, name: playerName, teamId: teamId ?? data.teamId ?? null };
-    // Удаляем старые team-specific записи этого игрока, чтобы больше не было двух источников истины.
-    const lower = String(playerName || '').toLowerCase();
-    Object.keys(players).forEach(k => { if (k !== key && players[k] && String(players[k].name || '').toLowerCase() === lower) delete players[k]; });
-    setPlayers(players);
-  }
+  function getPlayerData(teamId, playerName) { const players = getPlayers(); const key = teamId + '_' + playerName; if (!players[key]) { players[key] = { name: playerName, teamId: teamId, role: 'Игрок', matches: 0, wins: 0, losses: 0, earnings: '0 ₽', bio: 'Биография игрока пока не заполнена.', rating: 1000, lts: 0 }; setPlayers(players); } return players[key]; }
+  function savePlayerData(teamId, playerName, data) { const players = getPlayers(); const key = teamId + '_' + playerName; players[key] = data; setPlayers(players); }
 
   function showNotification(title, text, icon = 'fa-bolt') {
     document.getElementById('notifTitle').textContent = title;
@@ -3347,22 +3195,11 @@
   function playerAvatarMarkup(username, className, extraClass='') {
     const url = getPlayerAvatarUrl(username);
     const safeName = String(username || '?').replace(/[<>&"]/g, '');
-    const initial = safeName.charAt(0).toUpperCase();
     if (url) {
       const safeUrl = String(url).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
-      return `<span class="avatar-adaptive-wrap ${extraClass}" style="--avatar-fallback:var(--accent);--avatar-glow:rgba(255,77,28,.18);" aria-label="${safeName}"><img class="avatar-adaptive-bg" src="${safeUrl}" alt="" aria-hidden="true" loading="lazy"><img class="${className}" src="${safeUrl}" alt="${safeName}" loading="lazy" onload="this.parentElement.classList.add('has-avatar')" onerror="this.style.display='none';this.parentElement.querySelector('.avatar-adaptive-bg')?.remove();this.parentElement.querySelector('.avatar-adaptive-fallback').style.display='grid';"><span class="avatar-adaptive-fallback" style="display:none;">${initial}</span></span>`;
+      return `<img class="${className} ${extraClass}" src="${safeUrl}" alt="${safeName}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='grid';"><span class="${className} ${extraClass}" style="display:none;">${safeName.charAt(0).toUpperCase()}</span>`;
     }
-    return `<span class="avatar-adaptive-wrap ${extraClass}" style="--avatar-fallback:var(--accent);--avatar-glow:rgba(255,77,28,.12);"><span class="avatar-adaptive-fallback">${initial}</span></span>`;
-  }
-
-  function refreshAdaptiveAvatarEffects(root=document) {
-    try {
-      root.querySelectorAll?.('.avatar-adaptive-wrap').forEach(w => {
-        const img = w.querySelector('.player-avatar-shared');
-        const bg = w.querySelector('.avatar-adaptive-bg');
-        if (img && bg && img.complete && img.naturalWidth > 0) w.classList.add('has-avatar');
-      });
-    } catch (_) {}
+    return `<span class="${className} ${extraClass}">${safeName.charAt(0).toUpperCase()}</span>`;
   }
 
   function renderRoleBadge(role) {
@@ -3374,220 +3211,88 @@
   function renderRoleList() {
     if (currentRole !== ROLES.HEAD) return;
     const roleList = document.getElementById('roleList');
-    if (!roleList) return;
     roleList.innerHTML = '';
-    const users = getUsers() || {};
-    const searchEl = document.getElementById('roleUserSearch');
-    const filterEl = document.getElementById('roleQuickFilter');
-    const search = String(searchEl?.value || '').trim().toLowerCase();
-    const filter = String(filterEl?.value || 'all');
-
-    const entries = Object.keys(users).map(key => users[key]).filter(Boolean).filter(user => {
+    const users = getUsers();
+    Object.keys(users).forEach(key => {
+      const user = users[key];
       const role = user.role || ROLES.GUEST;
-      const name = String(user.username || '').toLowerCase();
-      return (!search || name.includes(search)) && (filter === 'all' || role === filter);
-    });
-
-    if (!entries.length) {
-      roleList.innerHTML = '<div style="padding:18px;color:var(--muted);text-align:center;border:1px dashed var(--line);border-radius:12px;">Пользователи не найдены</div>';
-    }
-
-    entries.forEach(user => {
-      const role = user.role || ROLES.GUEST;
-      const username = String(user.username || '');
       const div = document.createElement('div');
       div.className = 'role-item';
       div.innerHTML = `
-        <span class="user-name" style="flex:1">${escHtml(username)}</span>
+        <span class="user-name">${user.username}</span>
         <span>${renderRoleBadge(role)}</span>
         ${role !== ROLES.HEAD ? `
-          <select class="role-select" data-user="${escHtml(username)}" aria-label="Роль пользователя ${escHtml(username)}">
+          <select class="role-select" data-user="${user.username}">
             <option value="guest" ${role === ROLES.GUEST ? 'selected' : ''}>Гость</option>
             <option value="player" ${role === ROLES.PLAYER ? 'selected' : ''}>Игрок</option>
             <option value="captain" ${role === ROLES.CAPTAIN ? 'selected' : ''}>Капитан</option>
             <option value="admin" ${role === ROLES.ADMIN ? 'selected' : ''}>Админ</option>
           </select>
-          <div class="role-quick-actions" data-user="${escHtml(username)}">
-            <button type="button" data-role="guest">Гость</button>
-            <button type="button" data-role="player">Игрок</button>
-            <button type="button" data-role="captain">Капитан</button>
-            <button type="button" data-role="admin">Админ</button>
-          </div>
-          ${role === ROLES.ADMIN ? `<button class="remove-admin-btn" data-user="${escHtml(username)}" style="padding:7px 9px;border-radius:6px;border:1px solid #ef5350;background:transparent;color:#ef5350;cursor:pointer;font-size:11px;">✕ Снять</button>` : ''}
-          <div class="v9-role-quick" style="width:100%;display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;">
-            <button type="button" data-v9-role="guest" data-user="${escHtml(username)}" style="padding:6px 9px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink);cursor:pointer;font-size:11px;">Гость</button>
-            <button type="button" data-v9-role="player" data-user="${escHtml(username)}" style="padding:6px 9px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink);cursor:pointer;font-size:11px;">Игрок</button>
-            <button type="button" data-v9-role="captain" data-user="${escHtml(username)}" style="padding:6px 9px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink);cursor:pointer;font-size:11px;">Капитан</button>
-            <button type="button" data-v9-role="admin" data-user="${escHtml(username)}" style="padding:6px 9px;border:1px solid var(--accent);border-radius:8px;background:var(--paper);color:var(--accent);cursor:pointer;font-size:11px;font-weight:700;">Админ</button>
-          </div>
-          <div class="head-points-actions">
-            <button type="button" class="minus" data-points-action="lts-minus" data-user="${escHtml(username)}">LTS −10</button>
-            <button type="button" class="plus" data-points-action="lts-plus" data-user="${escHtml(username)}">LTS +10</button>
-            <button type="button" class="minus" data-points-action="rating-minus" data-user="${escHtml(username)}">Рейтинг −10</button>
-            <button type="button" class="plus" data-points-action="rating-plus" data-user="${escHtml(username)}">Рейтинг +10</button>
-            <button type="button" data-points-action="custom" data-user="${escHtml(username)}">✎ Свое значение</button>
-          </div>
-        ` : '<span style="color:var(--muted);font-size:12px;white-space:nowrap;">👑 Глава</span>'}
+          ${role === ROLES.ADMIN ? `<button class="remove-admin-btn" data-user="${user.username}" style="padding:4px 8px;border-radius:6px;border:1px solid #ef5350;background:transparent;color:#ef5350;cursor:pointer;font-size:11px;">✕ Снять</button>` : ''}
+        ` : '<span style="color:var(--muted);font-size:12px;">👑 Глава</span>'}
       `;
       roleList.appendChild(div);
     });
-
-    roleList.querySelectorAll('.role-select').forEach(select => {
-      select.addEventListener('change', async function() {
+    
+    document.querySelectorAll('.role-select').forEach(select => {
+      select.addEventListener('change', function() {
         const username = this.dataset.user;
         const newRole = this.value;
-        const currentUsers = getUsers() || {};
-        const userKey = String(username).toLowerCase();
-        const target = currentUsers[userKey];
-        if (!target || target.role === ROLES.HEAD) return;
-        target.role = newRole;
-        if (newRole !== ROLES.PLAYER && newRole !== ROLES.CAPTAIN) target.teamId = null;
-        setUsers(currentUsers);
-        if (newRole === ROLES.PLAYER) addPlayerToTop(target.username, target.teamId || null);
-        renderTopPlayers();
-        renderRoleList();
-        if (String(currentUser || '').toLowerCase() === userKey) {
-          currentRole = newRole;
-          updateAdminVisibility();
+        const users = getUsers();
+        const userKey = username.toLowerCase();
+        if (users[userKey] && users[userKey].role !== ROLES.HEAD) {
+          users[userKey].role = newRole;
+          if (newRole !== ROLES.PLAYER && newRole !== ROLES.CAPTAIN) {
+            users[userKey].teamId = null;
+          }
+          setUsers(users);
+          if (newRole === ROLES.PLAYER) {
+            addPlayerToTop(users[userKey].username, users[userKey].teamId || null);
+          }
+          renderTopPlayers();
           renderRoleList();
+          if (currentUser === username) {
+            currentRole = newRole;
+            document.getElementById('profileRole').textContent = ROLE_NAMES[newRole] || 'Гость';
+            document.getElementById('profileRole').className = 'role-badge ' + (ROLE_CLASSES[newRole] || 'guest');
+            document.getElementById('profileRoleBadge').textContent = ROLE_NAMES[newRole] || 'Гость';
+            document.getElementById('profileRoleBadge').className = 'role-badge ' + (ROLE_CLASSES[newRole] || 'guest');
+            const isAdmin = newRole === ROLES.ADMIN || newRole === ROLES.HEAD;
+            document.getElementById('adminPanel').classList.toggle('show', isAdmin);
+            document.getElementById('profileAdminPanel').classList.toggle('show', isAdmin);
+            document.getElementById('serverTextEdit').style.display = isAdmin ? 'block' : 'none';
+            document.getElementById('teamsAdminControls').style.display = isAdmin ? 'flex' : 'none';
+            document.getElementById('teamAdminControls').style.display = isAdmin ? 'flex' : 'none';
+            document.getElementById('matchesAdminControls').style.display = isAdmin ? 'flex' : 'none';
+            document.getElementById('tournamentAdminControls').style.display = isAdmin ? 'flex' : 'none';
+            document.getElementById('aboutAdminPanel').style.display = isAdmin ? 'block' : 'none';
+            updateAdminVisibility();
+          }
+          showNotification('Роль изменена!', 'Пользователь ' + username + ' теперь ' + ROLE_NAMES[newRole], 'fa-user-cog');
         }
-        showNotification('Роль изменена!', 'Пользователь ' + username + ' теперь ' + ROLE_NAMES[newRole], 'fa-user-cog');
       });
     });
-    roleList.querySelectorAll('.role-quick-actions button').forEach(btn => {
-      btn.addEventListener('click', function() {
-        const username = this.closest('.role-quick-actions')?.dataset.user || '';
-        const select = roleList.querySelector(`.role-select[data-user="${CSS.escape(username)}"]`);
-        if (!select) return;
-        select.value = this.dataset.role || 'guest';
-        select.dispatchEvent(new Event('change', { bubbles: true }));
-      });
-    });
-
-    roleList.querySelectorAll('[data-v9-role]').forEach(btn => {
-      btn.addEventListener('click', function(e) {
-        e.preventDefault(); e.stopPropagation();
-        const username = this.dataset.user;
-        const newRole = this.dataset.v9Role;
-        const currentUsers = getUsers() || {};
-        const userKey = String(username).toLowerCase();
-        const target = currentUsers[userKey];
-        if (!target || target.role === ROLES.HEAD) return;
-        target.role = newRole;
-        if (newRole !== ROLES.PLAYER && newRole !== ROLES.CAPTAIN) target.teamId = null;
-        setUsers(currentUsers);
-        renderRoleList();
-        renderTopPlayers();
-        if (String(currentUser || '').toLowerCase() === userKey) {
-          currentRole = newRole;
-          updateAdminVisibility();
-        }
-        showNotification('Роль изменена!', 'Пользователь ' + username + ' теперь ' + ROLE_NAMES[newRole], 'fa-user-cog');
-      });
-    });
-
-    roleList.querySelectorAll('.remove-admin-btn').forEach(btn => {
+    
+    document.querySelectorAll('.remove-admin-btn').forEach(btn => {
       btn.addEventListener('click', function() {
         const username = this.dataset.user;
         showConfirm('Снять с должности Админа', 'Вы уверены, что хотите снять пользователя ' + username + ' с должности Администратора?', function() {
-          const currentUsers = getUsers() || {};
-          const userKey = String(username).toLowerCase();
-          if (currentUsers[userKey] && currentUsers[userKey].role === ROLES.ADMIN) {
-            currentUsers[userKey].role = ROLES.GUEST;
-            currentUsers[userKey].teamId = null;
-            setUsers(currentUsers);
+          const users = getUsers();
+          const userKey = username.toLowerCase();
+          if (users[userKey] && users[userKey].role === ROLES.ADMIN) {
+            users[userKey].role = ROLES.GUEST;
+            setUsers(users);
             renderRoleList();
-            renderTopPlayers();
             showNotification('Должность снята!', username + ' больше не Администратор', 'fa-user-slash');
           }
         });
       });
     });
-
-    roleList.parentElement.querySelector('.head-team-points')?.remove();
-    const teamWrap = document.createElement('div');
-    teamWrap.className = 'head-team-points';
-    const teamsForHead = getTeams() || [];
-    teamWrap.innerHTML = `<h4>🏆 Очки рейтинга команд</h4><div class="head-team-points-list">${teamsForHead.length ? teamsForHead.map(team => `
-      <div class="head-team-points-item">
-        <div><strong>${escHtml(team.name || 'Команда')}</strong><div style="font-size:11px;color:var(--muted);margin-top:2px;">Рейтинг: ${Number(team.points || 0)}</div></div>
-        <div class="head-team-points-actions">
-          <button class="minus" type="button" data-team-points="-10" data-team-id="${escHtml(String(team.id))}">−10</button>
-          <button class="plus" type="button" data-team-points="10" data-team-id="${escHtml(String(team.id))}">+10</button>
-          <button type="button" data-team-points="custom" data-team-id="${escHtml(String(team.id))}">✎</button>
-        </div>
-      </div>`).join('') : '<div style="color:var(--muted);font-size:12px;">Команд пока нет</div>'}</div>`;
-    roleList.parentElement.appendChild(teamWrap);
-
-    roleList.querySelectorAll('[data-points-action]').forEach(btn => {
-      btn.addEventListener('click', function() {
-        if (currentRole !== ROLES.HEAD) return;
-        const username = this.dataset.user;
-        const action = this.dataset.pointsAction;
-        const usersNow = getUsers() || {};
-        const key = String(username).toLowerCase();
-        const user = usersNow[key];
-        if (!user || user.role === ROLES.HEAD) return;
-        const data = getPlayerData(user.teamId || null, username);
-        let field = action.startsWith('lts') ? 'lts' : 'rating';
-        let delta = action.endsWith('plus') ? 10 : action.endsWith('minus') ? -10 : null;
-        if (action === 'custom') {
-          const kind = prompt(`Что изменить для ${username}? Введите LTS или RATING`, 'LTS');
-          if (!kind) return;
-          field = String(kind).trim().toLowerCase() === 'rating' ? 'rating' : 'lts';
-          const amount = prompt(`Введите изменение ${field.toUpperCase()} (например 25 или -25):`, '10');
-          if (amount === null) return;
-          delta = Number(amount);
-        }
-        if (!Number.isFinite(delta) || delta === 0) { showNotification('Ошибка', 'Введите ненулевое число.', 'fa-times-circle'); return; }
-        const oldValue = Number(data[field] ?? (field === 'rating' ? 1000 : 0));
-        data[field] = field === 'lts' ? Math.max(0, oldValue + delta) : Math.max(0, oldValue + delta);
-        savePlayerData(user.teamId || null, username, data);
-        renderTopPlayers();
-        renderRoleList();
-        if (editingPlayerName && String(editingPlayerName).toLowerCase() === key) window.showPlayerDetail(editingPlayerName, user.teamId || null);
-        showNotification('Очки изменены', `${username}: ${field.toUpperCase()} ${delta > 0 ? '+' : ''}${delta}`, 'fa-star');
-      });
-    });
-
-    teamWrap.querySelectorAll('[data-team-points]').forEach(btn => {
-      btn.addEventListener('click', function() {
-        if (currentRole !== ROLES.HEAD) return;
-        const team = (getTeams() || []).find(t => String(t.id) === String(this.dataset.teamId));
-        if (!team) return;
-        let delta = Number(this.dataset.teamPoints);
-        if (this.dataset.teamPoints === 'custom') {
-          const amount = prompt(`Изменение рейтинга команды "${team.name}". Можно + и -:`, '10');
-          if (amount === null) return;
-          delta = Number(amount);
-        }
-        if (!Number.isFinite(delta) || delta === 0) { showNotification('Ошибка', 'Введите ненулевое число.', 'fa-times-circle'); return; }
-        const teamsNow = getTeams();
-        const target = teamsNow.find(t => String(t.id) === String(team.id));
-        target.points = Math.max(0, Number(target.points || 0) + delta);
-        setTeams(teamsNow);
-        forceRenderAll();
-        renderRoleList();
-        showNotification('Рейтинг команды изменён', `${target.name}: ${delta > 0 ? '+' : ''}${delta}`, 'fa-star');
-      });
-    });
-
-    if (searchEl && !searchEl.dataset.bound) {
-      searchEl.dataset.bound = '1';
-      searchEl.addEventListener('input', renderRoleList);
-    }
-    if (filterEl && !filterEl.dataset.bound) {
-      filterEl.dataset.bound = '1';
-      filterEl.addEventListener('change', renderRoleList);
-    }
   }
 
   function updateAdminVisibility() {
     const isAdmin = currentRole === ROLES.ADMIN || currentRole === ROLES.HEAD;
     document.querySelectorAll('.admin-only').forEach(el => {
-      if ((el.id === 'addLTSBtn' || el.id === 'addTeamPointsDetailBtn' || el.id === 'playerRankToggleEdit') && currentRole !== ROLES.HEAD) {
-        el.classList.remove('show'); el.style.display = 'none'; return;
-      }
       if (isAdmin) {
         el.classList.add('show');
         if (el.id === 'matchScoreEdit' || el.id === 'matchStreamEdit' || el.id === 'bracketEditControls' || el.id === 'kdaEdit') el.style.display = 'flex';
@@ -3644,7 +3349,6 @@
     const match = getNextMatch();
     if (match) {
       document.getElementById('nextMatchTitle').textContent = match.teamA + '\nvs ' + match.teamB;
-      document.getElementById('nextMatchTeams').classList.remove('no-match');
       document.getElementById('nextTeamA').textContent = match.teamA;
       document.getElementById('nextTeamB').textContent = match.teamB;
       document.getElementById('nextMatchLabel').textContent = match.status === 'live' ? 'Сейчас в эфире!' : 'Следующий матч';
@@ -3658,50 +3362,22 @@
       }
     } else {
       document.getElementById('nextMatchTitle').textContent = 'Нет матчей';
-      document.getElementById('nextMatchTeams').classList.add('no-match');
       document.getElementById('nextTeamA').textContent = '—';
       document.getElementById('nextTeamB').textContent = '—';
       document.getElementById('nextMatchLabel').textContent = 'Следующий матч';
       document.getElementById('nextMatchTimeLabel').textContent = 'СТАРТ • —';
       document.getElementById('heroLive').style.display = 'none';
     }
-    autoStartTimer();
   }
 
-  function isGrandFinalMatch(match) {
-    if (!match) return false;
-    if (match.isGrandFinal === true) return true;
-    const label = String(match.roundName || match.stage || match.name || '').toLowerCase();
-    if (label.includes('гранд') || label.includes('grand final')) return true;
-    try {
-      const tournaments = getTournaments();
-      const t = tournaments.find(x => x.name === match.tournament || x.id === match.tournament);
-      const b = t && Array.isArray(t.bracket) ? t.bracket.find(x => x.isGrandFinal && samePair(x.teamA, x.teamB, match.teamA, match.teamB)) : null;
-      return !!b;
-    } catch (_) { return false; }
-  }
-  function getSeriesFormat(match) { return isGrandFinalMatch(match) ? { bestOf: 5, winsNeeded: 3, label: 'BO5' } : { bestOf: 3, winsNeeded: 2, label: 'BO3' }; }
-  function parseSeriesScore(score) {
-    const m = String(score || '').trim().match(/^(\d+)\s*:\s*(\d+)$/);
-    if (!m) return null;
-    return { a: Number(m[1]), b: Number(m[2]) };
-  }
-  function isValidSeriesScore(score, match, requireWinner = false) {
-    const p = parseSeriesScore(score);
-    if (!p || p.a < 0 || p.b < 0) return false;
-    const fmt = getSeriesFormat(match);
-    if (p.a >= fmt.winsNeeded && p.b >= fmt.winsNeeded) return false;
-    if (p.a > fmt.winsNeeded || p.b > fmt.winsNeeded) return false;
-    const finished = p.a === fmt.winsNeeded || p.b === fmt.winsNeeded;
-    if (requireWinner && !finished) return false;
-    return true;
-  }
-  function determineWinner(score, teamA, teamB, match = null) {
-    const p = parseSeriesScore(score);
-    if (!p) return null;
-    const fmt = getSeriesFormat(match || {});
-    if (p.a === fmt.winsNeeded && p.b < fmt.winsNeeded) return teamA;
-    if (p.b === fmt.winsNeeded && p.a < fmt.winsNeeded) return teamB;
+  function determineWinner(score, teamA, teamB) {
+    if (!score || score === '0:0') return null;
+    const parts = score.split(':');
+    if (parts.length !== 2) return null;
+    const a = parseInt(parts[0]) || 0;
+    const b = parseInt(parts[1]) || 0;
+    if (a > b) return teamA;
+    if (b > a) return teamB;
     return null;
   }
 
@@ -3773,7 +3449,7 @@
 
           // 2) Матча нет — создаём его в списке матчей
           if (!matchInList) {
-            const winner = bm.winner || determineWinner(bm.score, bm.teamA, bm.teamB, bm);
+            const winner = bm.winner || determineWinner(bm.score, bm.teamA, bm.teamB);
             matchInList = {
               id: 'm' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
               dateTime: bm.dateTime || (tourn.start ? tourn.start + 'T12:00' : 'Дата не указана'),
@@ -3786,7 +3462,6 @@
               stage: bm.roundName || '',
               stream: '',
               winner: winner || null,
-              isGrandFinal: !!bm.isGrandFinal,
               bracketId: bm.id,
               updatedAt: stamp(bm) || Date.now()
             };
@@ -3807,7 +3482,7 @@
 
           const srcScore = src.score || '';
           const srcStatus = src.status || 'upcoming';
-          const srcWinner = src.winner || determineWinner(srcScore, src.teamA, src.teamB, src) || null;
+          const srcWinner = src.winner || determineWinner(srcScore, src.teamA, src.teamB) || null;
 
           if (scoreFilled(srcScore) && dst.score !== srcScore) { dst.score = srcScore; changed = true; }
           if (scoreFilled(srcScore)) { try { ensureGameForScore(matchInList.id, srcScore); } catch (e) {} }
@@ -3830,7 +3505,6 @@
           }
           if (!matchInList.tournament) { matchInList.tournament = tourn.name; changed = true; }
           if (bm.roundName && matchInList.stage !== bm.roundName) { matchInList.stage = bm.roundName; changed = true; }
-          if (!!bm.isGrandFinal !== !!matchInList.isGrandFinal) { matchInList.isGrandFinal = !!bm.isGrandFinal; changed = true; }
 
           // Общая метка времени, чтобы стороны не «перетягивали» друг друга
           const ts = Math.max(stamp(bm), stamp(matchInList), 1);
@@ -3956,7 +3630,7 @@
         <div class="player-rating-edit"><input class="player-rating-input" data-team-id="${p.teamId}" data-player-name="${p.name}" type="number" value="${p.lts}" min="0" step="1"></div>
       ` : `<div class="player-rating">⭐ ${p.lts} LTS</div>`;
       return `
-        <div class="card top-player-card ${borderClass}" data-top-player-name="${escHtml(p.name)}" data-top-team-id="${escHtml(p.teamId || '')}" role="button" tabindex="0" onclick="window.LTL_openTopPlayer(this.getAttribute('data-top-player-name'), this.getAttribute('data-top-team-id'))" style="cursor:pointer;">
+        <div class="card top-player-card ${borderClass}" data-top-player-name="${escHtml(p.name)}" onclick="window.openPlayerFromTop(${JSON.stringify(p.name)})" style="cursor:pointer;">
           ${medalHtml}
           <div class="player-rank-num ${rankClass}">#${i+1}</div>
           <div class="player-avatar-big ${avatarClass}" style="overflow:hidden;display:grid;place-items:center;">${playerAvatarMarkup(p.name, 'player-avatar-shared', '')}</div>
@@ -3969,8 +3643,6 @@
       `;
     }).join('');
 
-    refreshAdaptiveAvatarEffects(grid);
-
     if (currentRole === ROLES.HEAD) {
       grid.querySelectorAll('.top-player-delete-btn').forEach(btn => {
         btn.addEventListener('click', function(e) {
@@ -3980,17 +3652,6 @@
         });
       });
     }
-
-    // Карточка уже содержит inline-вызов LTL_openTopPlayer с точным teamId.
-    // Не добавляем второй обработчик, чтобы профиль не открывался дважды.
-    grid.querySelectorAll('.top-player-card').forEach(card => {
-      card.addEventListener('keydown', function(e) {
-        if (e.key !== 'Enter' && e.key !== ' ') return;
-        if (e.target.closest('button, a, input, select, textarea')) return;
-        e.preventDefault();
-        card.click();
-      });
-    });
   }
 
   function renderNews() {
@@ -4283,30 +3944,13 @@
   }
 
   function updateTimerDisplay() {
-    const el = document.getElementById('countdown');
-    if (!el) return;
-    const h = Math.floor(Math.max(0,totalSeconds) / 3600);
-    const m = Math.floor((Math.max(0,totalSeconds) % 3600) / 60);
-    const s = Math.max(0,totalSeconds) % 60;
-    el.textContent = String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+    const h = Math.floor(totalSeconds / 3600);
+    const m = Math.floor((totalSeconds % 3600) / 60);
+    const s = totalSeconds % 60;
+    document.getElementById('countdown').textContent = String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
   }
 
-  function autoStartTimer() {
-    if (timerInterval) clearInterval(timerInterval);
-    const tick = () => {
-      const match = getNextMatch();
-      const el = document.getElementById('countdown');
-      if (!el) return;
-      if (!match) { totalSeconds = 0; el.textContent = '--:--:--'; return; }
-      if (match.status === 'live') { totalSeconds = 0; el.textContent = 'LIVE'; return; }
-      const when = match.dateTime ? new Date(match.dateTime).getTime() : NaN;
-      if (!Number.isFinite(when)) { totalSeconds = 0; el.textContent = '--:--:--'; return; }
-      totalSeconds = Math.max(0, Math.floor((when - Date.now()) / 1000));
-      updateTimerDisplay();
-    };
-    tick();
-    timerInterval = setInterval(tick, 1000);
-  }
+  function autoStartTimer() { /* Автозапуск таймера отключён. Таймер запускается только вручную. */ }
 
   function playerStorageKey(teamId, playerName) {
     return String(teamId || 'free') + '_' + String(playerName || '');
@@ -4352,13 +3996,17 @@
   };
 
   function ensurePlayerProfile(playerName, teamId = null, silent = true) {
-    const data = getPlayerData(teamId, playerName);
-    if (data) {
-      if (data.teamId !== (teamId || null)) { data.teamId = teamId || null; savePlayerData(teamId || null, playerName, data); }
-      return data;
+    const players = getPlayers();
+    const key = playerStorageKey(teamId, playerName);
+    if (!players[key]) {
+      players[key] = { name: playerName, teamId: teamId || null, role: 'Игрок', matches: 0, wins: 0, losses: 0, earnings: '0 ₽', bio: 'Биография игрока пока не заполнена.', rating: 1000, lts: 0 };
+      setPlayers(players);
+      if (!silent) showNotification('Игрок добавлен в топ!', playerName + ' теперь отображается в Топ игроков', 'fa-star');
+    } else if (players[key].teamId !== (teamId || null)) {
+      players[key].teamId = teamId || null;
+      setPlayers(players);
     }
-    if (!silent) showNotification('Игрок добавлен в топ!', playerName + ' теперь отображается в Топ игроков', 'fa-star');
-    return data;
+    return players[key];
   }
 
   function addPlayerToTop(playerName, teamId) {
@@ -4755,8 +4403,6 @@
 
   window.showPlayerDetail = function(teamId, playerName, origin = 'teams') {
     playerDetailOrigin = origin;
-    const backBtn = document.getElementById('backToTeamBtn');
-    if (backBtn) backBtn.innerHTML = origin === 'top-players' ? '<i class="fas fa-arrow-left"></i> Назад к топу игроков' : '<i class="fas fa-arrow-left"></i> Назад к команде';
     mountPlayerDetail(origin);
     if (origin === 'teams') navigateTo('teams', true);
     else navigateTo('top-players', true);
@@ -4766,7 +4412,6 @@
     document.getElementById('playerAvatarBig').style.overflow = 'hidden';
     document.getElementById('playerAvatarBig').style.display = 'grid';
     document.getElementById('playerAvatarBig').style.placeItems = 'center';
-    refreshAdaptiveAvatarEffects(document.getElementById('playerDetailPage'));
     document.getElementById('playerName').textContent = playerName;
     document.getElementById('playerTeam').textContent = team ? team.name : 'Команда не найдена';
     document.getElementById('playerMatches').textContent = data.matches || 0;
@@ -4777,25 +4422,14 @@
     document.getElementById('playerBio').textContent = data.bio || 'Биография игрока пока не заполнена.';
     editingPlayerName = playerName;
     editingPlayerTeamId = teamId;
-    const highlightsStore = getHighlights();
-    const highlightKey = canonicalPlayerKey(playerName);
-    const legacyHighlightKey = playerStorageKey(teamId, playerName);
-    if (!highlightsStore[highlightKey] && highlightsStore[legacyHighlightKey]) {
-      highlightsStore[highlightKey] = highlightsStore[legacyHighlightKey];
-      delete highlightsStore[legacyHighlightKey];
-      setHighlights(highlightsStore);
-    }
-    const highlights = highlightsStore[highlightKey] || [];
+    const highlights = getHighlights()[playerStorageKey(teamId, playerName)] || [];
     const highlightsGrid = document.getElementById('highlightsGrid');
     if (highlights.length === 0) {
       highlightsGrid.innerHTML = '<p style="color:var(--muted); font-size:14px;">Пока нет добавленных моментов</p>';
     } else {
       highlightsGrid.innerHTML = highlights.map(h => `
         <div class="highlight-item">
-          <div class="highlight-header">
-            <span class="highlight-text">${h.text}</span>
-            ${currentRole === ROLES.HEAD ? `<button type="button" class="highlight-delete" title="Удалить лучший момент" data-highlight-id="${h.id}" data-highlight-player="${encodeURIComponent(highlightKey)}">🗑️</button>` : ''}
-          </div>
+          <div class="highlight-header"><span class="highlight-text">${h.text}</span></div>
           ${h.video ? `<div class="highlight-video"><video controls preload="metadata" playsinline style="width:100%;max-height:420px;background:#000;border-radius:12px"><source src="${ltlMediaSource(h.video)}" type="${h.videoType || 'video/mp4'}">Ваш браузер не поддерживает видео.</video></div>` : ''}
         </div>
       `).join('');
@@ -4947,153 +4581,32 @@
   };
 
   function generateEmptyBracket(teamsCount) {
-    // Double Elimination flow. Winners stay in Upper Bracket; losers drop
-    // into the corresponding Lower Bracket round. The winner of the Upper
-    // Final goes to Grand Final A, the Lower Final winner goes to Grand Final B.
-    const n = Math.max(2, Number(teamsCount) || 8);
-    const rounds = Math.ceil(Math.log2(n));
     const bracket = [];
+    const rounds = Math.ceil(Math.log2(teamsCount || 8));
     let matchId = 1;
-    const upper = {};
-    const lower = {};
-    const countForRound = r => Math.max(1, Math.pow(2, rounds - r));
-    const upperName = r => r === 1 ? (rounds >= 4 ? '1/16' : rounds === 3 ? '1/8' : rounds === 2 ? '1/4' : 'Раунд 1')
-      : r === 2 ? (rounds >= 4 ? '1/8' : '1/4')
-      : r === 3 ? (rounds >= 4 ? '1/4' : '1/2')
-      : r === rounds ? 'Финал верхней' : 'Раунд ' + r;
-
-    // Upper bracket.
-    for (let r = 1; r <= rounds; r++) {
-      upper[r] = [];
-      for (let i = 0; i < countForRound(r); i++) {
-        const m = {
-          id: 'u' + matchId++, round: r, roundName: upperName(r), section: 'upper',
-          index: i, teamA: 'TBD', teamB: 'TBD', score: '', status: 'upcoming',
-          winner: null, loser: null, isGrandFinal: false, flowVersion: 2
-        };
-        upper[r].push(m); bracket.push(m);
+    for (let round = 1; round <= rounds; round++) {
+      const matchesInRound = Math.pow(2, rounds - round);
+      const roundName = round === 1 ? '1/8' : round === 2 ? '1/4' : round === 3 ? '1/2' : round === rounds ? 'Финал верхней' : 'Раунд ' + round;
+      for (let i = 0; i < matchesInRound; i++) {
+        bracket.push({ id: 'u' + matchId++, round, roundName, section: 'upper', teamA: 'TBD', teamB: 'TBD', score: '', status: 'upcoming', winner: null, loser: null, isGrandFinal: false });
       }
     }
-
-    // Lower bracket. For each pair of rounds the number of matches halves:
-    // 8 teams -> 2,2,1,1; 16 teams -> 4,4,2,2,1,1.
-    const lowerRounds = Math.max(0, rounds * 2 - 2);
-    const lowerCount = r => {
-      const pair = Math.ceil(r / 2);
-      return Math.max(1, Math.pow(2, rounds - pair - 1));
-    };
-    const lowerName = r => {
-      if (r === lowerRounds) return 'Финал нижней';
-      return 'Раунд ' + r + ' нижней';
-    };
-    for (let r = 1; r <= lowerRounds; r++) {
-      lower[r] = [];
-      for (let i = 0; i < lowerCount(r); i++) {
-        const m = {
-          id: 'l' + matchId++, round: r, roundName: lowerName(r), section: 'lower',
-          index: i, teamA: 'TBD', teamB: 'TBD', score: '', status: 'upcoming',
-          winner: null, loser: null, isGrandFinal: false, flowVersion: 2
-        };
-        lower[r].push(m); bracket.push(m);
+    const lowerRounds = rounds - 1;
+    for (let round = 1; round <= lowerRounds; round++) {
+      const matchesInRound = round === 1 ? Math.pow(2, lowerRounds - 1) : Math.pow(2, lowerRounds - round);
+      const roundName = round === 1 ? 'Раунд 1 нижней' : round === 2 ? 'Раунд 2 нижней' : round === lowerRounds ? 'Финал нижней' : 'Раунд ' + round;
+      for (let i = 0; i < matchesInRound; i++) {
+        bracket.push({ id: 'l' + matchId++, round, roundName, section: 'lower', teamA: 'TBD', teamB: 'TBD', score: '', status: 'upcoming', winner: null, loser: null, isGrandFinal: false });
       }
     }
-
-    const gf = {
-      id: 'gf' + matchId++, round: 0, roundName: 'Гранд-финал', section: 'final', index: 0,
-      teamA: 'TBD', teamB: 'TBD', score: '', status: 'upcoming', winner: null, loser: null,
-      isGrandFinal: true, flowVersion: 2
-    };
-    bracket.push(gf);
-
-    // Explicit flow links make advancement deterministic and prevent matches
-    // from being placed into the first free slot of an unrelated round.
-    const setSlot = (target, side, sourceId, sourceType) => {
-      if (!target) return;
-      target[side === 'A' ? 'sourceA' : 'sourceB'] = sourceId;
-      target[side === 'A' ? 'sourceAType' : 'sourceBType'] = sourceType;
-    };
-    const getUpper = (r, i) => upper[r] && upper[r][i];
-    const getLower = (r, i) => lower[r] && lower[r][i];
-
-    for (let r = 1; r <= rounds; r++) {
-      upper[r].forEach((m, i) => {
-        if (r < rounds) {
-          const next = getUpper(r + 1, Math.floor(i / 2));
-          const side = i % 2 === 0 ? 'A' : 'B';
-          m.nextWinMatchId = next.id;
-          m.nextWinSide = side;
-          setSlot(next, side, m.id, 'win');
-        } else {
-          m.nextWinMatchId = gf.id; m.nextWinSide = 'A';
-          setSlot(gf, 'A', m.id, 'win');
-        }
-        const loserRound = r === 1 ? 1 : (2 * r - 2);
-        const lm = getLower(loserRound, r === 1 ? Math.floor(i / 2) : i);
-        if (lm) {
-          m.nextLoseMatchId = lm.id;
-          m.nextLoseSide = r === 1 ? (i % 2 === 0 ? 'A' : 'B') : (i % 2 === 0 ? 'B' : 'A');
-          setSlot(lm, m.nextLoseSide, m.id, 'lose');
-        }
-      });
-    }
-
-    for (let r = 1; r <= lowerRounds; r++) {
-      lower[r].forEach((m, i) => {
-        if (r === lowerRounds) {
-          m.nextWinMatchId = gf.id; m.nextWinSide = 'B';
-          setSlot(gf, 'B', m.id, 'win');
-        } else if (r % 2 === 1) {
-          const next = getLower(r + 1, i);
-          if (next) { m.nextWinMatchId = next.id; m.nextWinSide = 'A'; setSlot(next, 'A', m.id, 'win'); }
-        } else {
-          const next = getLower(r + 1, Math.floor(i / 2));
-          const side = i % 2 === 0 ? 'A' : 'B';
-          if (next) { m.nextWinMatchId = next.id; m.nextWinSide = side; setSlot(next, side, m.id, 'win'); }
-        }
-      });
-    }
+    bracket.push({ id: 'gf' + matchId++, round: 0, roundName: 'Гранд-финал', section: 'final', teamA: 'TBD', teamB: 'TBD', score: '', status: 'upcoming', winner: null, loser: null, isGrandFinal: true });
     return bracket;
-  }
-
-  function upgradeBracketFlow(tourn) {
-    if (!tourn) return false;
-    const old = Array.isArray(tourn.bracket) ? tourn.bracket : [];
-    if (old.length && old.every(m => Number(m.flowVersion) === 2)) return false;
-    const fresh = generateEmptyBracket(tourn.teamsCount || 8);
-    const copyState = (dst, src) => {
-      if (!src) return;
-      ['teamA','teamB','score','status','winner','loser','dateTime','matchId','updatedAt'].forEach(k => {
-        if (src[k] !== undefined && src[k] !== null && src[k] !== '') dst[k] = src[k];
-      });
-    };
-    const byKey = new Map();
-    old.forEach(m => {
-      if (!m) return;
-      const key = [m.section || '', m.round || 0, m.index ?? '', normTeam(m.teamA), normTeam(m.teamB)].join('|');
-      byKey.set(key, m);
-    });
-    fresh.forEach((m, idx) => {
-      let src = byKey.get([m.section, m.round || 0, m.index ?? '', normTeam(m.teamA), normTeam(m.teamB)].join('|'));
-      if (!src) {
-        src = old.find(x => x && x.section === m.section && Number(x.round || 0) === Number(m.round || 0) &&
-          (m.section === 'final' || Number(x.index ?? -1) === Number(m.index ?? -2)));
-      }
-      if (src) copyState(m, src);
-    });
-    // Preserve meaningful manually entered first-round pairs when possible.
-    old.filter(x => x && x.section === 'upper' && Number(x.round) === 1 && (isRealTeam(x.teamA) || isRealTeam(x.teamB))).forEach((src, i) => {
-      const dst = fresh.find(x => x.section === 'upper' && Number(x.round) === 1 && Number(x.index) === i);
-      if (dst) copyState(dst, src);
-    });
-    tourn.bracket = fresh;
-    return true;
   }
 
   function renderDoubleEliminationBracket(tourn) {
     const container = document.getElementById('bracketContainer');
     let bracket = tourn.bracket || [];
     if (bracket.length === 0) { bracket = generateEmptyBracket(tourn.teamsCount || 8); tourn.bracket = bracket; setTournaments(getTournaments()); }
-    if (upgradeBracketFlow(tourn)) { bracket = tourn.bracket; setTournaments(getTournaments()); }
     const isAdmin = currentRole === ROLES.ADMIN || currentRole === ROLES.HEAD;
     const teamNames = getTeams().map(t => t.name);
     const teamOptions = teamNames.map(name => `<option value="${name}">${name}</option>`).join('');
@@ -5421,16 +4934,6 @@
       document.getElementById('loginPassword').value = '';
     });
     
-    // Ограничение пароля при вводе: только латинские буквы и цифры.
-    ['regPassword', 'regConfirmPassword'].forEach(function(id) {
-      const input = document.getElementById(id);
-      if (!input) return;
-      input.addEventListener('input', function() {
-        const clean = this.value.replace(/[^A-Za-z0-9]/g, '');
-        if (this.value !== clean) this.value = clean;
-      });
-    });
-
     // Регистрация
     document.getElementById('registerSubmit').addEventListener('click', async function() {
       const nick = document.getElementById('regNick').value.trim();
@@ -5447,7 +4950,7 @@
       const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
       if (!passwordRegex.test(password)) {
         passError.style.display = 'block';
-        passError.textContent = 'Пароль: минимум 8 символов, только латинские буквы и цифры. Знаки вроде №, ;, !, @, # и пробелы запрещены.';
+        passError.textContent = 'Пароль должен содержать минимум 8 символов, буквы и цифры';
         return;
       }
       
@@ -5768,6 +5271,43 @@
         updateSupportBadge();
         document.getElementById('supportAdminMessagesList').innerHTML = '<p style="color:var(--muted);text-align:center;padding:20px;">Сообщений пока нет</p>';
         showNotification('Сообщения очищены', '', 'fa-trash');
+      });
+    });
+
+    // Таймер
+    document.getElementById('timerSetBtn').addEventListener('click', function() {
+      const val = parseInt(document.getElementById('timerInput').value);
+      if (isNaN(val) || val < 0) { showNotification('Ошибка', 'Введите корректное число секунд', 'fa-times-circle'); return; }
+      if (val > 86400) { showNotification('Ошибка', 'Максимальное значение 86400 сек', 'fa-times-circle'); return; }
+      totalSeconds = val;
+      if (timerInterval) clearInterval(timerInterval);
+      updateTimerDisplay();
+      if (val > 0) {
+        timerInterval = setInterval(() => {
+          if (totalSeconds <= 0) { clearInterval(timerInterval); timerInterval = null; return; }
+          totalSeconds--;
+          updateTimerDisplay();
+        }, 1000);
+      }
+      showNotification('Таймер установлен', 'Новое значение: ' + val + ' сек', 'fa-clock');
+    });
+    document.getElementById('timerResetBtn').addEventListener('click', function() {
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = null;
+      totalSeconds = 0;
+      document.getElementById('timerInput').value = 0;
+      updateTimerDisplay();
+      document.querySelectorAll('.timer-presets button').forEach(b => b.classList.remove('active'));
+      showNotification('Таймер сброшен', 'Значение: 0 сек', 'fa-undo');
+    });
+    document.querySelectorAll('.timer-presets button').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const val = parseInt(this.dataset.value);
+        if (!isNaN(val)) {
+          document.getElementById('timerInput').value = val;
+          document.querySelectorAll('.timer-presets button').forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+        }
       });
     });
 
@@ -6306,9 +5846,8 @@
           const val = parseInt(input.value);
           if (!isNaN(val) && val >= 0) {
             const data = getPlayerData(teamId, playerName);
-            // LTS и рейтинг — разные показатели. Редактирование LTS не
-            // должно искусственно пересчитывать базовый рейтинг игрока.
             data.lts = val;
+            data.rating = 1000 + val;
             savePlayerData(teamId, playerName, data);
           }
         });
@@ -6399,16 +5938,10 @@
       if (!teamA || !teamB) { showNotification('Ошибка', 'Выберите обе команды', 'fa-times-circle'); return; }
       if (teamA === teamB) { showNotification('Ошибка', 'Команды должны быть разными', 'fa-times-circle'); return; }
       if (!tournament) { showNotification('Ошибка', 'Выберите турнир', 'fa-times-circle'); return; }
-      const initialScore = document.getElementById('matchScore').value.trim() || '0:0';
-      const existingForFormat = editingMatchId ? getMatches().find(m => m.id === editingMatchId) : null;
-      if (!isValidSeriesScore(initialScore, existingForFormat || { teamA, teamB, tournament, isGrandFinal:false }, document.getElementById('matchStatus').value === 'finished')) {
-        showNotification('Ошибка', 'Счёт должен соответствовать системе ' + getSeriesFormat(existingForFormat || { isGrandFinal:false }).label + '.', 'fa-times-circle');
-        return;
-      }
       const matchData = {
         dateTime: document.getElementById('matchDateTime').value || 'Дата не указана',
         teamA, teamB,
-        score: initialScore,
+        score: document.getElementById('matchScore').value.trim() || '0:0',
         status: document.getElementById('matchStatus').value,
         game: document.getElementById('matchGame').value.trim() || 'Матч',
         tournament: tournament,
@@ -6486,40 +6019,40 @@
     });
     document.getElementById('closeLTSModal').addEventListener('click', () => closeModal(document.getElementById('addLTSModal')));
     document.getElementById('saveLTSBtn').addEventListener('click', function() {
-      if (currentRole !== ROLES.HEAD) { showNotification('Нет доступа', 'Изменять очки может только Глава.', 'fa-times-circle'); return; }
       const id = document.getElementById('ltsTargetId').value;
-      const amount = Number(document.getElementById('ltsAmount').value);
-      if (!Number.isFinite(amount) || amount === 0) { showNotification('Ошибка', 'Введите ненулевое число. Можно использовать отрицательное значение.', 'fa-times-circle'); return; }
+      const amount = parseInt(document.getElementById('ltsAmount').value) || 0;
+      if (amount <= 0) { showNotification('Ошибка', 'Введите положительное число', 'fa-times-circle'); return; }
       const parts = id.split('_');
-      if (parts.length >= 2) {
-        const teamId = parts.shift();
-        const playerName = parts.join('_');
+      if (parts.length === 2) {
+        const teamId = parts[0];
+        const playerName = parts[1];
         const data = getPlayerData(teamId, playerName);
-        data.lts = Math.max(0, Number(data.lts || 0) + amount);
+        data.lts = (data.lts || 0) + amount;
+        data.rating = (data.rating || 1000) + amount;
         savePlayerData(teamId, playerName, data);
         renderTopPlayers();
-        if (editingPlayerName) window.showPlayerDetail(editingPlayerName, editingPlayerTeamId);
-        showNotification('LTS изменён', `${playerName}: ${amount > 0 ? '+' : ''}${amount} LTS`, 'fa-star');
+        showNotification('Очки LTS начислены!', `${playerName} +${amount} LTS`, 'fa-star');
       }
       closeModal(document.getElementById('addLTSModal'));
     });
 
-    // Изменение рейтинга команды — только Глава, можно + и -
+    // Начисление очков команде
     document.getElementById('addTeamPointsDetailBtn').addEventListener('click', function() {
-      if (currentRole !== ROLES.HEAD) { showNotification('Нет доступа', 'Изменять рейтинг команд может только Глава.', 'fa-times-circle'); return; }
       if (!editingTeamId) { showNotification('Ошибка', 'Сначала выберите команду', 'fa-times-circle'); return; }
       const teams = getTeams();
       const team = teams.find(t => t.id === editingTeamId);
       if (!team) { showNotification('Ошибка', 'Команда не найдена', 'fa-times-circle'); return; }
-      const amount = prompt(`Изменение рейтинга команды "${team.name}".\nТекущее значение: ${Number(team.points || 0)}\nВведите изменение: например 10 или -10`, '10');
+      
+      const amount = prompt(`Введите количество очков рейтинга для "${team.name}":`, '10');
       if (amount === null) return;
-      const val = Number(amount);
-      if (!Number.isFinite(val) || val === 0) { showNotification('Ошибка', 'Введите ненулевое число.', 'fa-times-circle'); return; }
-      team.points = Math.max(0, Number(team.points || 0) + val);
+      const val = parseInt(amount);
+      if (isNaN(val) || val <= 0) { showNotification('Ошибка', 'Введите положительное число', 'fa-times-circle'); return; }
+      
+      team.points = (team.points || 0) + val;
       setTeams(teams);
       forceRenderAll();
       window.showTeamDetail(editingTeamId);
-      showNotification('Рейтинг команды изменён', `${team.name}: ${val > 0 ? '+' : ''}${val}`, 'fa-star');
+      showNotification('Очки начислены!', `${team.name} +${val} очков рейтинга`, 'fa-star');
     });
 
     // Редактирование команды
@@ -6722,9 +6255,8 @@
         users[newUserKey] = user; setUsers(users);
       }
 
-      // Единый источник данных игрока: профиль не дублируется по командам.
-      Object.keys(players).forEach(k => { if (players[k] && String(players[k].name || '').toLowerCase() === String(oldName || '').toLowerCase()) delete players[k]; });
-      players[canonicalPlayerKey(name)] = { ...data, name, teamId:selectedTeamId };
+      delete players[sourceKey]; delete players[legacyKey];
+      players[playerStorageKey(selectedTeamId, name)] = data;
       setPlayers(players);
 
       editingPlayerName = name;
@@ -6746,32 +6278,6 @@
       openModal(document.getElementById('addHighlightModal'));
     });
     document.getElementById('closeHighlightModal').addEventListener('click', () => closeModal(document.getElementById('addHighlightModal')));
-    // Удаление лучших моментов: только Глава. Удаляем запись и видео из Supabase Storage.
-    document.getElementById('highlightsGrid').addEventListener('click', async function(e) {
-      const btn = e.target.closest('.highlight-delete');
-      if (!btn) return;
-      if (currentRole !== ROLES.HEAD) { showNotification('Доступ запрещён', 'Удалять лучшие моменты может только Глава', 'fa-lock'); return; }
-      const highlightId = String(btn.dataset.highlightId || '');
-      const key = decodeURIComponent(btn.dataset.highlightPlayer || '');
-      if (!highlightId || !key) return;
-      const store = getHighlights();
-      const list = Array.isArray(store[key]) ? store[key] : [];
-      const item = list.find(h => String(h.id) === highlightId);
-      if (!item) { showNotification('Ошибка', 'Лучший момент не найден', 'fa-times-circle'); return; }
-      showConfirm('Удалить лучший момент?', 'Видео и запись этого момента будут удалены. Продолжить?', async function() {
-        try {
-          if (item.video) await ltlDeleteMediaUrl(item.video);
-          store[key] = list.filter(h => String(h.id) !== highlightId);
-          if (store[key].length === 0) delete store[key];
-          setHighlights(store);
-          window.showPlayerDetail(editingPlayerTeamId, editingPlayerName, playerDetailOrigin);
-          showNotification('Лучший момент удалён', 'Глава удалил момент из профиля игрока.', 'fa-trash');
-        } catch (err) {
-          showNotification('Ошибка удаления', err.message || 'Не удалось удалить лучший момент', 'fa-times-circle');
-        }
-      });
-    });
-
     document.getElementById('saveHighlightBtn').addEventListener('click', async function() {
       const text = document.getElementById('highlightText').value.trim();
       const file = document.getElementById('highlightVideoFile').files[0];
@@ -6782,7 +6288,7 @@
       const btn = document.getElementById('saveHighlightBtn');
       const oldText = btn.textContent; btn.disabled = true; btn.textContent = 'Загрузка видео...';
       try {
-        const key = canonicalPlayerKey(editingPlayerName);
+        const key = playerStorageKey(editingPlayerTeamId, editingPlayerName);
         const uploaded = await ltlUploadMedia(file, 'highlights/' + ltlSafeFileName(key));
         const highlights = getHighlights();
         if (!highlights[key]) highlights[key] = [];
@@ -6815,12 +6321,10 @@
       const matches = getMatches();
       const match = matches.find(m => m.id === currentMatchId);
       if (match) {
-        const requireWinner = match.status === 'finished';
-        if (!isValidSeriesScore(newScore, match, requireWinner)) { showNotification('Ошибка', 'Неверный счёт для ' + getSeriesFormat(match).label + '. Победа должна быть определена по системе BO3/BO5.', 'fa-times-circle'); return; }
         match.score = newScore;
         markMatchUpdated(match);
         const createdGame = ensureGameForScore(match.id, newScore);
-        match.winner = determineWinner(newScore, match.teamA, match.teamB, match);
+        match.winner = determineWinner(newScore, match.teamA, match.teamB);
         if (match.winner && match.status === 'live') {
           match.status = 'finished';
         }
@@ -6924,14 +6428,11 @@
       const scoreA = scoreAInput ? scoreAInput.value.trim() : '';
       const scoreB = scoreBInput ? scoreBInput.value.trim() : '';
       if (scoreA || scoreB) tourn.bracket[matchIndex].score = (scoreA || '0') + ':' + (scoreB || '0');
-      if (tourn.bracket[matchIndex].score && !isValidSeriesScore(tourn.bracket[matchIndex].score, tourn.bracket[matchIndex], false)) { showNotification('Ошибка', 'Неверный счёт для ' + getSeriesFormat(tourn.bracket[matchIndex]).label, 'fa-times-circle'); return; }
       markBracketMatchUpdated(tourn.bracket[matchIndex]);
-      const winner = determineWinner(tourn.bracket[matchIndex].score, tourn.bracket[matchIndex].teamA, tourn.bracket[matchIndex].teamB, tourn.bracket[matchIndex]);
+      const winner = determineWinner(tourn.bracket[matchIndex].score, tourn.bracket[matchIndex].teamA, tourn.bracket[matchIndex].teamB);
       if (winner) {
         tourn.bracket[matchIndex].winner = winner;
         tourn.bracket[matchIndex].status = 'finished';
-        tourn.bracket[matchIndex].loser = winner === tourn.bracket[matchIndex].teamA ? tourn.bracket[matchIndex].teamB : tourn.bracket[matchIndex].teamA;
-        advanceBracketAfterResult(tourn, tourn.bracket[matchIndex]);
       }
       setTournaments(tournaments);
       renderDoubleEliminationBracket(tourn);
@@ -6965,89 +6466,6 @@
       });
     };
     
-    function setBracketSlot(match, side, team) {
-      if (!match || !team || team === 'TBD') return false;
-      const key = side === 'A' ? 'teamA' : 'teamB';
-      if (match[key] === team) return false;
-      if (match[key] !== 'TBD' && match[key] !== '' && match[key] !== team) return false;
-      match[key] = team;
-      if (match.status === 'finished' && !match.winner) match.status = 'upcoming';
-      touch(match);
-      return true;
-    }
-
-    function advanceBracketAfterResult(tourn, match) {
-      if (!tourn || !match || !match.winner) return false;
-      const loser = match.teamA === match.winner ? match.teamB : match.teamA;
-      match.loser = loser && loser !== 'TBD' ? loser : null;
-      const byId = id => (tourn.bracket || []).find(x => x && x.id === id);
-      let changed = false;
-      const nextWin = byId(match.nextWinMatchId);
-      if (nextWin) changed = setBracketSlot(nextWin, match.nextWinSide || 'A', match.winner) || changed;
-      const nextLose = byId(match.nextLoseMatchId);
-      if (nextLose && loser && loser !== 'TBD') changed = setBracketSlot(nextLose, match.nextLoseSide || 'A', loser) || changed;
-      // Fallback for older/custom brackets that do not have flow links.
-      if (!nextWin && match.section === 'upper') {
-        const nr = Number(match.round || 0) + 1;
-        const candidates = tourn.bracket.filter(x => x.section === 'upper' && Number(x.round) === nr);
-        const target = candidates[Math.floor(Number(match.index || 0) / 2)];
-        if (target) changed = setBracketSlot(target, Number(match.index || 0) % 2 ? 'B' : 'A', match.winner) || changed;
-      }
-      if (!nextLose && match.section === 'upper' && loser && loser !== 'TBD') {
-        const lr = Number(match.round) === 1 ? 1 : Number(match.round) * 2 - 2;
-        const candidates = tourn.bracket.filter(x => x.section === 'lower' && Number(x.round) === lr);
-        const idx = Number(match.round) === 1 ? Math.floor(Number(match.index || 0) / 2) : Number(match.index || 0);
-        const target = candidates[idx];
-        if (target) changed = setBracketSlot(target, Number(match.round) === 1 ? (Number(match.index || 0) % 2 ? 'B' : 'A') : (Number(match.index || 0) % 2 ? 'A' : 'B'), loser) || changed;
-      }
-      if (!nextWin && match.section === 'lower') {
-        const nr = Number(match.round || 0) + 1;
-        const candidates = tourn.bracket.filter(x => x.section === 'lower' && Number(x.round) === nr);
-        const idx = Number(match.round || 0) % 2 === 1 ? Number(match.index || 0) : Math.floor(Number(match.index || 0) / 2);
-        const target = candidates[idx];
-        if (target) changed = setBracketSlot(target, Number(match.round || 0) % 2 === 1 ? 'A' : (Number(match.index || 0) % 2 ? 'B' : 'A'), match.winner) || changed;
-      }
-      if (changed) touch(tourn);
-      return changed;
-    }
-
-    // Начисление статистики матча — идемпотентное: повторное сохранение
-    // одного и того же результата не выдаёт очки второй раз.
-    function applyMatchResultStats(match, winner, loser) {
-      if (!match || !winner || !loser) return false;
-      if (match.statsAwarded) return false;
-
-      const teams = getTeams();
-      const winnerTeamObj = teams.find(t => t.name === winner);
-      const loserTeamObj = teams.find(t => t.name === loser);
-      if (!winnerTeamObj || !loserTeamObj) return false;
-
-      // Рейтинг команд: победа +10, поражение -5 (но не ниже 0).
-      winnerTeamObj.points = Math.max(0, Number(winnerTeamObj.points || 0) + 10);
-      loserTeamObj.points = Math.max(0, Number(loserTeamObj.points || 0) - 5);
-      winnerTeamObj.wins = Number(winnerTeamObj.wins || 0) + 1;
-      loserTeamObj.losses = Number(loserTeamObj.losses || 0) + 1;
-      setTeams(teams);
-
-      // LTS игрока: победа +5, поражение -3. LTS не смешивается с rating.
-      [winnerTeamObj, loserTeamObj].forEach(teamObj => {
-        const isWinner = teamObj === winnerTeamObj;
-        (teamObj.roster || []).forEach(playerName => {
-          const data = getPlayerData(teamObj.id, playerName);
-          data.lts = Math.max(0, Number(data.lts || 0) + (isWinner ? 5 : -3));
-          data.matches = Number(data.matches || 0) + 1;
-          if (isWinner) data.wins = Number(data.wins || 0) + 1;
-          else data.losses = Number(data.losses || 0) + 1;
-          savePlayerData(teamObj.id, playerName, data);
-        });
-      });
-
-      match.statsAwarded = true;
-      match.statsAwardedAt = Date.now();
-      match.statsAwardedVersion = 'V15';
-      return true;
-    }
-
     window.resolveMatchWithScore = function(matchId) {
       const tournaments = getTournaments();
       const tourn = tournaments.find(t => t.id === currentTournamentId);
@@ -7055,10 +6473,6 @@
       const match = tourn.bracket.find(m => m.id === matchId);
       if (!match) return;
       if (match.teamA === 'TBD' || match.teamB === 'TBD') { showNotification('Ошибка', 'Обе команды должны быть определены', 'fa-times-circle'); return; }
-      if (match.status === 'finished' && match.statsAwarded) {
-        showNotification('Матч уже завершён', 'Рейтинг и LTS за этот результат уже начислены.', 'fa-info-circle');
-        return;
-      }
       const isGrandFinal = match.isGrandFinal || false;
       const maxWins = isGrandFinal ? 3 : 2;
       const formatLabel = isGrandFinal ? 'Best of 5' : 'Best of 3';
@@ -7069,15 +6483,13 @@
       if (parts.length !== 2) { showNotification('Ошибка', 'Используйте формат X:Y', 'fa-times-circle'); return; }
       const scoreA = parseInt(parts[0]) || 0;
       const scoreB = parseInt(parts[1]) || 0;
-      if (!isValidSeriesScore(scoreInput, match, true)) { showNotification('Ошибка', `Для ${formatLabel} нужна победа ${isGrandFinal ? '3:0, 3:1 или 3:2' : '2:0 или 2:1'} .`, 'fa-times-circle'); return; }
+      if (scoreA < maxWins && scoreB < maxWins) { showNotification('Матч ещё не завершён', `Для победы нужно ${maxWins} побед. Сейчас ${scoreA}:${scoreB}`, 'fa-info-circle'); return; }
       match.score = scoreInput;
       markBracketMatchUpdated(match);
-      const winner = determineWinner(scoreInput, match.teamA, match.teamB, match);
+      const winner = determineWinner(scoreInput, match.teamA, match.teamB);
       if (winner) {
         match.winner = winner;
         match.status = 'finished';
-        match.loser = winner === match.teamA ? match.teamB : match.teamA;
-        advanceBracketAfterResult(tourn, match);
       }
       
       const matches = getMatches();
@@ -7090,10 +6502,62 @@
       }
       
       if (winner) {
+        const teams = getTeams();
+        const winnerTeamObj = teams.find(t => t.name === winner);
         const loserTeam = winner === match.teamA ? match.teamB : match.teamA;
-        const awarded = applyMatchResultStats(match, winner, loserTeam);
-        if (!awarded && match.statsAwarded) {
-          showNotification('Матч уже учтён', 'Очки рейтинга и LTS за этот матч уже были начислены.', 'fa-info-circle');
+        const loserTeamObj = teams.find(t => t.name === loserTeam);
+        if (winnerTeamObj) { winnerTeamObj.points = (winnerTeamObj.points || 0) + 10; winnerTeamObj.wins = (winnerTeamObj.wins || 0) + 1; }
+        if (loserTeamObj) { loserTeamObj.points = (loserTeamObj.points || 0) - 5; if (loserTeamObj.points < 0) loserTeamObj.points = 0; loserTeamObj.losses = (loserTeamObj.losses || 0) + 1; }
+        setTeams(teams);
+        
+        if (winnerTeamObj && winnerTeamObj.roster) {
+          winnerTeamObj.roster.forEach(playerName => {
+            const data = getPlayerData(winnerTeamObj.id, playerName);
+            data.rating = (data.rating || 1000) + 5;
+            data.lts = (data.lts || 0) + 5;
+            data.wins = (data.wins || 0) + 1;
+            data.matches = (data.matches || 0) + 1;
+            savePlayerData(winnerTeamObj.id, playerName, data);
+          });
+        }
+        if (loserTeamObj && loserTeamObj.roster) {
+          loserTeamObj.roster.forEach(playerName => {
+            const data = getPlayerData(loserTeamObj.id, playerName);
+            data.rating = (data.rating || 1000) - 3;
+            if (data.rating < 0) data.rating = 0;
+            data.lts = (data.lts || 0) - 3;
+            if (data.lts < 0) data.lts = 0;
+            data.losses = (data.losses || 0) + 1;
+            data.matches = (data.matches || 0) + 1;
+            savePlayerData(loserTeamObj.id, playerName, data);
+          });
+        }
+        
+        if (match.section === 'upper') {
+          const nextRound = match.round + 1;
+          const nextMatches = tourn.bracket.filter(m => m.section === 'upper' && m.round === nextRound && (m.teamA === 'TBD' || m.teamB === 'TBD'));
+          if (nextMatches.length > 0) {
+            const targetNext = nextMatches[0];
+            if (targetNext.teamA === 'TBD') targetNext.teamA = winner;
+            else if (targetNext.teamB === 'TBD') targetNext.teamB = winner;
+          }
+          const lowerMatches = tourn.bracket.filter(m => m.section === 'lower' && m.round === 1 && (m.teamA === 'TBD' || m.teamB === 'TBD'));
+          if (lowerMatches.length > 0 && loserTeam) {
+            const targetLower = lowerMatches[0];
+            if (targetLower.teamA === 'TBD') targetLower.teamA = loserTeam;
+            else if (targetLower.teamB === 'TBD') targetLower.teamB = loserTeam;
+          }
+        } else if (match.section === 'lower') {
+          const nextRound = match.round + 1;
+          const nextMatches = tourn.bracket.filter(m => m.section === 'lower' && m.round === nextRound && (m.teamA === 'TBD' || m.teamB === 'TBD'));
+          if (nextMatches.length > 0) {
+            const targetNext = nextMatches[0];
+            if (targetNext.teamA === 'TBD') targetNext.teamA = winner;
+            else if (targetNext.teamB === 'TBD') targetNext.teamB = winner;
+          }
+        } else if (match.section === 'final') {
+          showNotification('🏆 Чемпион турнира!', winner + ' побеждает в гранд-финале!', 'fa-trophy');
+          if (winnerTeamObj) { winnerTeamObj.points = (winnerTeamObj.points || 0) + 50; setTeams(teams); }
         }
         setTournaments(tournaments);
         forceRenderAll();
@@ -7108,7 +6572,7 @@
     
     populateTeamSelects();
     populateTournamentSelect();
-    autoStartTimer();
+    updateTimerDisplay();
     populateSupportPlayerSelects();
     forceRenderAll();
 
@@ -7117,7 +6581,7 @@
       try {
         const route = JSON.parse(localStorage.getItem('ltl_current_route') || 'null');
         if (route?.page) {
-          if (route.nested === 'player' && route.playerName) {
+          if (route.nested === 'player' && route.teamId && route.playerName) {
             const origin = route.origin === 'top-players' ? 'top-players' : 'teams';
             window.showPlayerDetail(route.teamId, route.playerName, origin);
           } else {
@@ -7133,178 +6597,148 @@
 
   });
 
-  // V9: прямой переход из карточки ТОП игрока в профиль.
-  // Функция объявляется внутри основного IIFE, поэтому имеет доступ ко всем
-  // внутренним функциям и состоянию приложения.
-  window.LTL_openTopPlayer = function(playerName, teamId) {
-    const name = String(playerName || '').trim();
-    if (!name) return;
-    try {
-      // ВАЖНО: эта функция находится внутри основного IIFE и поэтому видит
-      // настоящий showPlayerDetail и все внутренние функции приложения.
-      window.showPlayerDetail(teamId || null, name, 'top-players');
-    } catch (e) {
-      console.error('LTL V10: не удалось открыть профиль:', e);
-      if (typeof showNotification === 'function') showNotification('Ошибка', 'Не удалось открыть профиль игрока: ' + (e.message || 'неизвестная ошибка'), 'fa-exclamation-triangle');
-    }
-  };
-
-  // Надёжное сохранение при долгой открытой вкладке/возврате из сна браузера.
-  document.addEventListener('visibilitychange', () => {
-    if (!document.hidden) {
-      ltlFlushPending();
-      try { ltlBootstrapBackend(); } catch (_) {}
-      forceRenderAll();
-    } else {
-      ltlFlushPending();
-    }
-  });
-  window.addEventListener('focus', () => { ltlFlushPending(); });
-  window.addEventListener('pageshow', () => { ltlFlushPending(); });
-  window.addEventListener('online', () => { ltlFlushPending(); });
-
   setTimeout(() => { ltlMigrateLegacyMedia(); }, 2500);
 })();
-</script>
 
 
+  // ===== PATCH: стабильный просмотр профиля из «Топ игроков» =====
+  // Профиль игрока из рейтинга открывается внутри страницы top-players и
+  // никогда не переводит пользователя в раздел «Команды».
+  window.showPlayerDetail = function(teamId, playerName, origin = 'teams') {
+    origin = origin === 'top-players' ? 'top-players' : 'teams';
+    playerDetailOrigin = origin;
+    try { localStorage.setItem('ltl_current_route', JSON.stringify({page: origin, nested:'player', teamId: teamId || null, playerName: playerName || '', origin})); } catch (_) {}
+    const name = String(playerName || '').trim();
+    if (!name) return;
 
-<!-- V16: AFK-флешка после 5 минут без движения мыши -->
-<script>
-(function () {
-  const AFK_DELAY = 5 * 60 * 1000;
-  let afkTimer = null;
-  let afkTriggered = false;
-  let afkOverlay = null;
-  let afkAudio = null;
+    const teams = getTeams();
+    const team = teamId ? teams.find(t => String(t.id) === String(teamId)) : null;
+    const data = ensurePlayerProfile(name, team ? team.id : null, true);
 
-  function ensureAfkOverlay() {
-    if (afkOverlay) return afkOverlay;
-    afkOverlay = document.createElement('div');
-    afkOverlay.id = 'ltl-afk-flashbang';
-    afkOverlay.innerHTML = `
-      <div class="ltl-afk-message" role="alert" aria-live="assertive">
-        <div class="ltl-afk-title">ЧО ФЛЕШКУ СЛОВИЛ?</div>
-        <div class="ltl-afk-subtitle">ВЫЙДИ ИЗ АФК</div>
-        <div class="ltl-afk-hint">Пошевели мышкой, чтобы вернуться</div>
-      </div>`;
-    document.body.appendChild(afkOverlay);
-    return afkOverlay;
-  }
-
-  function playAfkSound() {
-    try {
-      if (!afkAudio) {
-        afkAudio = new Audio('./cs-go-flashbang.mp3');
-        afkAudio.preload = 'auto';
-      }
-      afkAudio.currentTime = 0;
-      const promise = afkAudio.play();
-      if (promise && typeof promise.catch === 'function') promise.catch(() => {});
-    } catch (_) {}
-  }
-
-  function triggerAfk() {
-    if (afkTriggered || document.hidden) return;
-    afkTriggered = true;
-    ensureAfkOverlay().classList.add('active');
-    playAfkSound();
-  }
-
-  function resetAfk() {
-    afkTriggered = false;
-    if (afkOverlay) afkOverlay.classList.remove('active');
-    if (afkAudio) {
-      try { afkAudio.pause(); afkAudio.currentTime = 0; } catch (_) {}
+    // Всегда сохраняем актуальную связь с командой, если она известна.
+    if (team && data.teamId !== team.id) {
+      data.teamId = team.id;
+      const players = getPlayers();
+      players[playerStorageKey(team.id, name)] = data;
+      setPlayers(players);
     }
-    clearTimeout(afkTimer);
-    if (!document.hidden) afkTimer = setTimeout(triggerAfk, AFK_DELAY);
-  }
 
-  function armAfk() {
-    clearTimeout(afkTimer);
-    if (!document.hidden) afkTimer = setTimeout(triggerAfk, AFK_DELAY);
-  }
+    editingPlayerName = name;
+    editingPlayerTeamId = team ? team.id : (data.teamId || null);
 
-  // Любое движение мыши мгновенно снимает AFK-экран и запускает новый отсчёт.
-  let moveThrottle = 0;
-  document.addEventListener('mousemove', function () {
-    const now = Date.now();
-    if (now - moveThrottle < 100) return;
-    moveThrottle = now;
-    if (afkTriggered) resetAfk();
-    else armAfk();
-  }, { passive: true });
+    // Показываем правильные данные профиля.
+    document.getElementById('playerAvatarBig').innerHTML = playerAvatarMarkup(name, 'player-avatar-shared', '');
+    document.getElementById('playerAvatarBig').style.overflow = 'hidden';
+    document.getElementById('playerAvatarBig').style.display = 'grid';
+    document.getElementById('playerAvatarBig').style.placeItems = 'center';
+    document.getElementById('playerName').textContent = name;
+    document.getElementById('playerTeam').textContent = team ? team.name : 'Без команды';
+    document.getElementById('playerMatches').textContent = data.matches || 0;
+    document.getElementById('playerWins').textContent = data.wins || 0;
+    document.getElementById('playerLosses').textContent = data.losses || 0;
+    document.getElementById('playerEarnings').textContent = data.earnings || '0 ₽';
+    document.getElementById('playerRatingPoints').textContent = data.lts || 0;
+    document.getElementById('playerBio').textContent = data.bio || 'Биография игрока пока не заполнена.';
 
-  document.addEventListener('visibilitychange', function () {
-    if (document.hidden) {
-      clearTimeout(afkTimer);
+    const highlights = getHighlights()[playerStorageKey(editingPlayerTeamId, name)] || [];
+    const highlightsGrid = document.getElementById('highlightsGrid');
+    highlightsGrid.innerHTML = highlights.length ? highlights.map(h => `
+      <div class="highlight-item">
+        <div class="highlight-header"><span class="highlight-text">${escHtml(h.text || '')}</span></div>
+        ${h.video ? `<div class="highlight-video"><video controls preload="metadata" playsinline style="width:100%;max-height:420px;background:#000;border-radius:12px"><source src="${ltlMediaSource(h.video)}" type="${h.videoType || 'video/mp4'}">Ваш браузер не поддерживает видео.</video></div>` : ''}
+      </div>`).join('') : '<p style="color:var(--muted);font-size:14px;">Пока нет добавленных моментов</p>';
+
+    const isAdmin = currentRole === ROLES.ADMIN || currentRole === ROLES.HEAD;
+    document.getElementById('playerAdminControls').style.display = isAdmin ? 'block' : 'none';
+    document.getElementById('addHighlightContainer').style.display = isAdmin ? 'block' : 'none';
+
+    // Ключевой фикс: не вызываем navigateTo('teams') при открытии из топа.
+    const topPage = document.getElementById('top-players');
+    const teamsPage = document.getElementById('teams');
+    if (origin === 'top-players') {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      topPage.classList.add('active');
+      document.querySelectorAll('#nav button, .nav-mobile button').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('#nav button[data-page="top-players"], .nav-mobile button[data-page="top-players"]').forEach(b => b.classList.add('active'));
+      document.getElementById('topPlayersGrid').style.display = 'none';
+      document.querySelector('#top-players .section-head').style.display = 'none';
+      document.getElementById('teamDetailPage').style.display = 'none';
+      document.getElementById('teamsGrid').style.display = 'none';
+      mountPlayerDetail('top-players');
+      document.getElementById('playerDetailPage').classList.add('active');
     } else {
-      resetAfk();
+      navigateTo('teams', true);
+      document.getElementById('teamDetailPage').style.display = 'none';
+      document.getElementById('teamsGrid').style.display = 'none';
+      mountPlayerDetail('teams');
+      document.getElementById('playerDetailPage').classList.add('active');
     }
-  });
+    try { localStorage.setItem('ltl_current_route', JSON.stringify({page:origin,nested:'player',teamId:editingPlayerTeamId,playerName:name,at:Date.now()})); } catch(e) {}
+  };
 
-  window.addEventListener('focus', armAfk);
-  window.addEventListener('blur', () => clearTimeout(afkTimer));
+  window.openPlayerFromTop = function(playerName) {
+    const name = String(playerName || '').trim();
+    if (!name) return;
+    const users = getUsers();
+    const user = users[name.toLowerCase()] || Object.values(users).find(u => u && String(u.username || '').toLowerCase() === name.toLowerCase());
+    const teams = getTeams();
+    let team = user && user.teamId ? teams.find(t => String(t.id) === String(user.teamId)) : null;
+    if (!team) team = teams.find(t => (t.roster || []).some(n => String(n).toLowerCase() === name.toLowerCase()));
+    const data = ensurePlayerProfile(name, team ? team.id : null, true);
+    if (!team && data.teamId) team = teams.find(t => String(t.id) === String(data.teamId));
+    window.showPlayerDetail(team ? team.id : null, name, 'top-players');
+  };
 
-  // Если пользователь уже взаимодействовал со страницей, браузер разрешит звук.
-  document.addEventListener('click', armAfk, { passive: true });
-  document.addEventListener('keydown', armAfk, { passive: true });
-  document.addEventListener('touchstart', armAfk, { passive: true });
-
-  // Начинаем отсчёт после загрузки.
-  setTimeout(armAfk, 1000);
-})();
+  // Назад из профиля, открытого через «Топ игроков».
+  let topBackButton = document.getElementById('backToTeamBtn');
+  if (topBackButton) {
+    // Удаляем старые обработчики, чтобы возврат из профиля не выполнялся дважды.
+    const cleanBackButton = topBackButton.cloneNode(true);
+    topBackButton.parentNode.replaceChild(cleanBackButton, topBackButton);
+    topBackButton = cleanBackButton;
+    topBackButton.onclick = function(e) {
+      e.preventDefault();
+      document.getElementById('playerDetailPage').classList.remove('active');
+      document.getElementById('playerDetailPage').style.display = 'none';
+      if (playerDetailOrigin === 'top-players') {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById('top-players').classList.add('active');
+        document.getElementById('topPlayersGrid').style.display = 'grid';
+        document.querySelector('#top-players .section-head').style.display = 'flex';
+        renderTopPlayers();
+        document.querySelectorAll('#nav button, .nav-mobile button').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('#nav button[data-page="top-players"], .nav-mobile button[data-page="top-players"]').forEach(b => b.classList.add('active'));
+        try { localStorage.setItem('ltl_current_route', JSON.stringify({page:'top-players',at:Date.now()})); } catch(e) {}
+      } else {
+        document.getElementById('teams').classList.add('active');
+        document.getElementById('teamDetailPage').style.display = 'block';
+        document.getElementById('teamDetailPage').classList.add('active');
+        if (editingPlayerTeamId) window.showTeamDetail(editingPlayerTeamId);
+      }
+    };
+  }
 </script>
 
-<style>
-  #ltl-afk-flashbang {
-    position: fixed;
-    inset: 0;
-    z-index: 2147483647;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #fff;
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-    transition: opacity .08s ease;
-  }
 
-  #ltl-afk-flashbang.active {
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
-  }
+  // Делегирование клика для строк/карточек игроков в ТОПах.
+  document.addEventListener('click', function(e) {
+    const el = e.target.closest(
+      '[data-player-name], .top-player, .top-player-card, .top-player-row, .player-ranking-item'
+    );
+    if (!el) return;
+    if (el.closest('a,button,input,select,textarea') && !el.matches('a')) return;
 
-  .ltl-afk-message {
-    text-align: center;
-    font-family: Arial, Helvetica, sans-serif;
-    color: #111;
-    padding: 24px;
-    user-select: none;
-  }
+    const playerName =
+      el.dataset.playerName ||
+      el.getAttribute('data-player') ||
+      el.querySelector('.player-name, .top-player-name, .player-link')?.textContent?.trim();
 
-  .ltl-afk-title {
-    font-size: clamp(30px, 7vw, 76px);
-    font-weight: 900;
-    letter-spacing: .02em;
-    line-height: 1.05;
-  }
-
-  .ltl-afk-subtitle {
-    margin-top: 14px;
-    font-size: clamp(22px, 4vw, 46px);
-    font-weight: 800;
-  }
-
-  .ltl-afk-hint {
-    margin-top: 26px;
-    font-size: clamp(14px, 2vw, 20px);
-    opacity: .7;
-  }
-</style>
+    if (playerName) {
+      e.preventDefault();
+      e.stopPropagation();
+      openPlayerFromTop(playerName);
+    }
+  }, true);
 
 </body>
 </html>
