@@ -325,19 +325,34 @@ grant execute on function public.nexus_storage_health() to anon, authenticated;
 -- Run only if you want uploads restricted to authenticated users.
 drop policy if exists "ltl_media_insert_auth" on storage.objects;
 create policy "ltl_media_insert_auth"
-on storage.objects for insert to authenticated
-with check (bucket_id = 'ltl-media');
+on storage.objects
+for insert
+to authenticated
+with check (
+  bucket_id = 'ltl-media'
+  and (
+    public.ltl_is_staff()
+    or (
+      (storage.foldername(name))[1] = 'avatars'
+      and (storage.filename(name) ~ '^[A-Za-z0-9_-]{1,128}\.(png|jpe?g|webp)$')
+    )
+  )
+);
 
 drop policy if exists "ltl_media_update_auth" on storage.objects;
-create policy "ltl_media_update_auth"
-on storage.objects for update to authenticated
-using (bucket_id = 'ltl-media')
-with check (bucket_id = 'ltl-media');
+create policy "ltl_media_update_staff"
+on storage.objects
+for update
+to authenticated
+using (bucket_id = 'ltl-media' and public.ltl_is_staff())
+with check (bucket_id = 'ltl-media' and public.ltl_is_staff());
 
 drop policy if exists "ltl_media_delete_auth" on storage.objects;
-create policy "ltl_media_delete_auth"
-on storage.objects for delete to authenticated
-using (bucket_id = 'ltl-media');
+create policy "ltl_media_delete_staff"
+on storage.objects
+for delete
+to authenticated
+using (bucket_id = 'ltl-media' and public.ltl_is_staff());
 
 -- Public reads are intentionally allowed only if the bucket is public,
 -- because the existing frontend uses /object/public/ URLs for images.
