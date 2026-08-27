@@ -334,7 +334,7 @@ with check (
     public.ltl_is_staff()
     or (
       (storage.foldername(name))[1] = 'avatars'
-      and (storage.filename(name) ~ '^[A-Za-z0-9_-]{1,128}\.(png|jpe?g|webp)$')
+      and lower(storage.extension(name)) in ('png','jpg','jpeg','webp')
     )
   )
 );
