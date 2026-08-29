@@ -323,6 +323,11 @@ grant execute on function public.nexus_storage_health() to anon, authenticated;
 
 -- ============================================================
 -- Storage hardening (rerunnable)
+-- Storage compatibility:
+-- In some Supabase versions storage.objects.owner_id is text, while auth.uid()
+-- returns uuid. Therefore owner_id comparisons below explicitly cast auth.uid()
+-- to text to avoid ERROR 42883: operator does not exist: text = uuid.
+
 -- ============================================================
 drop policy if exists "ltl_media_insert_auth" on storage.objects;
 drop policy if exists "ltl_media_update_auth" on storage.objects;
@@ -357,7 +362,7 @@ using (
   and (
     public.ltl_is_staff()
     or (
-      owner_id = auth.uid()
+      owner_id = auth.uid()::text
       and (storage.foldername(name))[1] = 'avatars'
     )
   )
@@ -367,7 +372,7 @@ with check (
   and (
     public.ltl_is_staff()
     or (
-      owner_id = auth.uid()
+      owner_id = auth.uid()::text
       and (storage.foldername(name))[1] = 'avatars'
       and lower(storage.extension(name)) in ('png','jpg','jpeg','webp')
     )
@@ -384,7 +389,7 @@ using (
   and (
     public.ltl_is_staff()
     or (
-      owner_id = auth.uid()
+      owner_id = auth.uid()::text
       and (storage.foldername(name))[1] = 'avatars'
     )
   )
