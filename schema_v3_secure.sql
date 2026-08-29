@@ -1,9 +1,11 @@
--- LTL Secure V3.1 / FULL RE-RUN SAFE
--- This file is designed to be executed repeatedly without failing because
--- a policy, trigger, or function already exists.
--- It does NOT delete users, teams, matches, tournaments, or profile data.
+-- LTL Secure V3.2 - FULL RE-RUN SAFE
+-- This file is based on the original valid schema and is safe to run repeatedly.
+-- Security hardening for Supabase/Postgres.
+-- IMPORTANT: execute after the existing V2 migration has been applied.
 -- Never put a service_role key in the frontend.
 
+create table if not exists public.nexus_users (
+  key text primary key,
   value_json jsonb not null default '{}'::jsonb,
   updated_at timestamptz not null default now()
 );
@@ -137,13 +139,6 @@ as $$
 begin
   if auth.uid() is null or not public.ltl_is_staff() then
     raise exception 'staff access required';
-  end if;
-
-  -- Пользовательские роли являются привилегированными данными: только Глава
-  -- может менять весь nexus_users. Админ сохраняет управление контентом,
-  -- но не может повысить себя/другого пользователя до Главы через RPC.
-  if p_key = 'nexus_users' and coalesce(public.ltl_my_profile()->>'role','guest') <> 'head' then
-    raise exception 'head access required for user roles';
   end if;
 
   if p_key is null or length(trim(p_key)) = 0 or length(p_key) > 100 then
@@ -289,8 +284,8 @@ revoke all on function public.nexus_create_profile(uuid,text,text) from public, 
 grant execute on function public.nexus_create_profile(uuid,text,text) to authenticated;
 
 -- Username -> email resolution used by the login form.
--- Passwords are NEVER checked here; Supabase Auth checks the password.
--- The function returns only the email belonging to the exact username.
+-- This returns only the email for an exact username match.
+-- Password verification is performed by Supabase Auth.
 create or replace function public.nexus_resolve_login(p_username text)
 returns text
 language sql
@@ -326,17 +321,17 @@ $$;
 revoke all on function public.nexus_storage_health() from public;
 grant execute on function public.nexus_storage_health() to anon, authenticated;
 
--- Storage hardening.
--- This section is SAFE TO RUN REPEATEDLY.
--- Existing policies with the same names are dropped before recreation.
--- The bucket "ltl-media" itself is not created or deleted by this script.
-
+-- ============================================================
+-- Storage hardening (rerunnable)
+-- ============================================================
 drop policy if exists "ltl_media_insert_auth" on storage.objects;
 drop policy if exists "ltl_media_update_auth" on storage.objects;
-drop policy if exists "ltl_media_update_staff" on storage.objects;
 drop policy if exists "ltl_media_delete_auth" on storage.objects;
+drop policy if exists "ltl_media_update_staff" on storage.objects;
 drop policy if exists "ltl_media_delete_staff" on storage.objects;
 
+-- Staff can upload any media. Ordinary authenticated users may upload
+-- only image avatars under avatars/<username>.<ext>.
 create policy "ltl_media_insert_auth"
 on storage.objects
 for insert
@@ -352,26 +347,47 @@ with check (
   )
 );
 
+-- Staff may edit media. A normal user may only update their own avatar object.
 create policy "ltl_media_update_staff"
 on storage.objects
 for update
 to authenticated
 using (
   bucket_id = 'ltl-media'
-  and public.ltl_is_staff()
+  and (
+    public.ltl_is_staff()
+    or (
+      owner_id = auth.uid()
+      and (storage.foldername(name))[1] = 'avatars'
+    )
+  )
 )
 with check (
   bucket_id = 'ltl-media'
-  and public.ltl_is_staff()
+  and (
+    public.ltl_is_staff()
+    or (
+      owner_id = auth.uid()
+      and (storage.foldername(name))[1] = 'avatars'
+      and lower(storage.extension(name)) in ('png','jpg','jpeg','webp')
+    )
+  )
 );
 
+-- Staff may delete media. A normal user may only delete their own avatar.
 create policy "ltl_media_delete_staff"
 on storage.objects
 for delete
 to authenticated
 using (
   bucket_id = 'ltl-media'
-  and public.ltl_is_staff()
+  and (
+    public.ltl_is_staff()
+    or (
+      owner_id = auth.uid()
+      and (storage.foldername(name))[1] = 'avatars'
+    )
+  )
 );
 
 -- Public reads are intentionally allowed only if the bucket is public,
@@ -453,8 +469,3 @@ create trigger on_auth_user_created_ltl
 -- Keep the legacy RPC definition for rollback/migration, but make it unavailable
 -- to clients so a normal user cannot create arbitrary extra profiles.
 revoke all on function public.nexus_create_profile(uuid,text,text) from public, anon, authenticated;
-
-
--- ============================================================
--- END OF LTL Secure V3.1 / FULL RE-RUN SAFE
--- ============================================================

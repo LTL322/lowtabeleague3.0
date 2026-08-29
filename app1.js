@@ -188,10 +188,10 @@ async function resolveLoginEmail(loginValue){
   if(login.includes('@')) return login.toLowerCase();
 
   const { data, error } = await sb.rpc('nexus_resolve_login', {
-    p_login: login
+    p_username: login
   });
   if(error) throw new Error('Не удалось найти аккаунт');
-  const email = Array.isArray(data) ? data[0]?.email : data?.email;
+  const email = typeof data === 'string' ? data : (Array.isArray(data) ? data[0]?.email : data?.email);
   if(!email) throw new Error('Неверный логин или пароль');
   return String(email).trim().toLowerCase();
 }
