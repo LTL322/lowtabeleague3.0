@@ -117,7 +117,9 @@ grant execute on function public.nexus_get_user_directory() to anon, authenticat
 
 -- Own profile only.
 -- V7: repair/complete legacy Auth accounts that exist without an application profile.
--- This is intentionally limited to the currently authenticated user.
+-- Self-healing profile resolver.
+-- Repairs old profiles that exist by username/email but have a missing/stale
+-- authUserId. It never grants a role from the client: existing role is kept.
 create or replace function public.nexus_ensure_my_profile()
 returns jsonb
 language plpgsql
@@ -132,22 +134,12 @@ declare
   k text;
   current_map jsonb;
   existing jsonb;
+  existing_key text;
   profile jsonb;
+  old_key text;
 begin
   if uid is null then
     raise exception 'authentication required';
-  end if;
-
-  -- First, return the existing profile if it is already linked to this Auth user.
-  select e.value into existing
-  from public.nexus_users n
-  cross join lateral jsonb_each(coalesce(n.value_json, '{}'::jsonb)) e(key,value)
-  where n.key = 'nexus_users'
-    and e.value->>'authUserId' = uid::text
-  limit 1;
-
-  if existing is not null then
-    return existing;
   end if;
 
   select u.email::text,
@@ -159,6 +151,41 @@ begin
 
   if auth_email is null then
     raise exception 'auth account not found';
+  end if;
+
+  select e.key, e.value
+    into existing_key, existing
+  from public.nexus_users n
+  cross join lateral jsonb_each(coalesce(n.value_json, '{}'::jsonb)) e(key,value)
+  where n.key = 'nexus_users'
+    and (
+      e.value->>'authUserId' = uid::text
+      or lower(trim(coalesce(e.value->>'email',''))) = lower(trim(auth_email))
+    )
+  order by
+    case when e.value->>'authUserId' = uid::text then 0 else 1 end
+  limit 1;
+
+  if existing is not null then
+    -- Repair the link while preserving the existing role and profile data.
+    profile := existing || jsonb_build_object(
+      'authUserId', uid,
+      'email', coalesce(existing->>'email', auth_email)
+    );
+
+    select coalesce(value_json, '{}'::jsonb)
+      into current_map
+    from public.nexus_users
+    where key = 'nexus_users'
+    for update;
+
+    current_map := jsonb_set(current_map, array[existing_key], profile, true);
+
+    update public.nexus_users
+      set value_json = current_map, updated_at = now()
+      where key = 'nexus_users';
+
+    return profile;
   end if;
 
   email_local := split_part(auth_email, '@', 1);
@@ -178,11 +205,30 @@ begin
   where key = 'nexus_users'
   for update;
 
-  -- If this username already belongs to another profile, do not overwrite it.
+  -- If the desired username key exists, repair it only when it belongs to
+  -- this email/user or is an old unlinked profile. Never take another
+  -- authenticated user's profile.
   if current_map ? k then
-    if (current_map->k->>'authUserId') = uid::text then
-      return current_map->k;
+    existing := current_map->k;
+
+    if lower(trim(coalesce(existing->>'email',''))) = lower(trim(auth_email))
+       or nullif(trim(coalesce(existing->>'authUserId','')), '') is null
+    then
+      profile := existing || jsonb_build_object(
+        'username', coalesce(existing->>'username', requested_username, email_local),
+        'email', coalesce(existing->>'email', auth_email),
+        'authUserId', uid
+      );
+
+      current_map := jsonb_set(current_map, array[k], profile, true);
+
+      update public.nexus_users
+        set value_json = current_map, updated_at = now()
+        where key = 'nexus_users';
+
+      return profile;
     end if;
+
     raise exception 'username already linked to another profile';
   end if;
 
@@ -209,7 +255,6 @@ $$;
 revoke all on function public.nexus_ensure_my_profile() from public, anon;
 grant execute on function public.nexus_ensure_my_profile() to authenticated;
 
--- Make the normal profile RPC self-healing for old Auth accounts.
 create or replace function public.nexus_get_my_profile()
 returns jsonb
 language plpgsql

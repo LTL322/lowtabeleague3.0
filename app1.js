@@ -3187,9 +3187,9 @@ async function loginWithUsername(loginValue, passwordValue){
         myProfile = await ltlGetMyProfileWithRetry(sb, 5);
       } catch (profileErr) {
         console.error('nexus_get_my_profile:', profileErr);
-        // Auth succeeded, so do NOT sign the user out. The profile RPC is
-        // self-healing on the server and may need a short moment after login.
-        error.textContent = 'Аккаунт найден. Профиль ещё загружается — повторите вход через несколько секунд.';
+        // Auth succeeded. Never sign out a valid Auth session just because
+        // profile hydration failed. The fixed SQL repairs legacy profiles.
+        error.textContent = 'Не удалось загрузить профиль. Обновите страницу и попробуйте снова.';
         error.classList.add('show');
         return;
       }
@@ -3289,7 +3289,7 @@ async function loginWithUsername(loginValue, passwordValue){
         myProfile = await ltlGetMyProfileWithRetry(sb, 5);
       } catch (profileErr) {
         console.error('nexus_get_my_profile after signup:', profileErr);
-        error.textContent = 'Аккаунт создан. Профиль ещё создаётся — обновите страницу или войдите через несколько секунд.';
+        error.textContent = 'Аккаунт создан. Профиль не загрузился. Обновите страницу — авторизация сохранится.';
         error.classList.add('show');
         return;
       }
