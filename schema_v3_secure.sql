@@ -140,6 +140,13 @@ begin
     raise exception 'staff access required';
   end if;
 
+  -- Пользовательские роли являются привилегированными данными: только Глава
+  -- может менять весь nexus_users. Админ сохраняет управление контентом,
+  -- но не может повысить себя/другого пользователя до Главы через RPC.
+  if p_key = 'nexus_users' and coalesce(public.ltl_my_profile()->>'role','guest') <> 'head' then
+    raise exception 'head access required for user roles';
+  end if;
+
   if p_key is null or length(trim(p_key)) = 0 or length(p_key) > 100 then
     raise exception 'invalid state key';
   end if;
