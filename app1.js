@@ -3125,6 +3125,8 @@ async function loginWithUsername(loginValue, passwordValue){
       }
 
       // Роль и профиль берём только с сервера после успешной Auth-сессии.
+      // V7: для старых Auth-аккаунтов без профиля RPC автоматически создаёт
+      // безопасный guest-профиль, связанный с текущим auth.uid().
       const { data: myProfile, error: myProfileError } = await sb.rpc('nexus_get_my_profile');
       if (myProfileError || !myProfile || !myProfile.username) {
         // Legacy accounts can have a valid Auth account and a profile keyed
