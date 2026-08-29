@@ -295,19 +295,19 @@ set search_path = public, auth
 as $$
   select u.email::text
   from auth.users u
-  where lower(trim(coalesce(u.raw_user_meta_data->>''username'', ))) = lower(trim(p_username))
+  where lower(trim(coalesce(u.raw_user_meta_data->>'username', ''))) = lower(trim(p_username))
      or exists (
        select 1
        from public.nexus_users n
-       cross join lateral jsonb_each(coalesce(n.value_json, {}::jsonb)) e(key, value)
-       where n.key = nexus_users
+       cross join lateral jsonb_each(coalesce(n.value_json, '{}'::jsonb)) e(key, value)
+       where n.key = 'nexus_users'
          and lower(e.key) = lower(trim(p_username))
-         and (
-           e.value->>authUserId = u.id::text
-           or lower(coalesce(e.value->>username, )) = lower(trim(p_username))
-         )
+         and (e.value->>'authUserId') = u.id::text
      )
-  order by case when lower(trim(coalesce(u.raw_user_meta_data->>''username'', ))) = lower(trim(p_username)) then 0 else 1 end
+  order by case
+    when lower(trim(coalesce(u.raw_user_meta_data->>'username', ''))) = lower(trim(p_username)) then 0
+    else 1
+  end
   limit 1;
 $$;
 
