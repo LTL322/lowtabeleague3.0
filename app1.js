@@ -1271,7 +1271,10 @@ async function loginWithUsername(loginValue, passwordValue){
       return !!b;
     } catch (_) { return false; }
   }
-  function getSeriesFormat(match) { return isGrandFinalMatch(match) ? { bestOf: 5, winsNeeded: 3, label: 'BO5' } : { bestOf: 3, winsNeeded: 2, label: 'BO3' }; }
+  function getSeriesFormat(match) {
+    // Bracket format kept as before: regular series = BO3, Grand Final = BO5.
+    return isGrandFinalMatch(match) ? { bestOf: 5, winsNeeded: 3, label: 'BO5' } : { bestOf: 3, winsNeeded: 2, label: 'BO3' };
+  }
   function parseSeriesScore(score) {
     const m = String(score || '').trim().match(/^(\d+)\s*:\s*(\d+)$/);
     if (!m) return null;
@@ -3101,7 +3104,17 @@ async function loginWithUsername(loginValue, passwordValue){
       // Не зависим от локального/публичного списка пользователей: логин всегда
       // разрешается на сервере, а пароль проверяет только Supabase Auth.
       const { data: loginEmail, error: resolveError } = await sb.rpc('nexus_resolve_login', { p_username: username });
-      if (resolveError || !loginEmail) { error.textContent = 'Пользователь не найден'; error.classList.add('show'); return; }
+      if (resolveError) {
+        console.error('nexus_resolve_login:', resolveError);
+        error.textContent = 'Ошибка входа. Проверьте настройки Supabase.';
+        error.classList.add('show');
+        return;
+      }
+      if (!loginEmail || typeof loginEmail !== 'string') {
+        error.textContent = 'Неверный логин или пароль';
+        error.classList.add('show');
+        return;
+      }
       const { data: authData, error: authError } = await sb.auth.signInWithPassword({ email: loginEmail, password });
       if (authError) {
         error.textContent = authError.message && /email.*confirm|confirmed/i.test(authError.message)

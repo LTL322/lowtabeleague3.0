@@ -284,20 +284,30 @@ revoke all on function public.nexus_create_profile(uuid,text,text) from public, 
 grant execute on function public.nexus_create_profile(uuid,text,text) to authenticated;
 
 -- Username -> email resolution used by the login form.
--- This returns only the email for an exact username match.
--- Password verification is performed by Supabase Auth.
+-- IMPORTANT: username is resolved from both Auth metadata and the application profile.
+-- Password verification is still performed only by Supabase Auth.
 create or replace function public.nexus_resolve_login(p_username text)
 returns text
 language sql
 stable
 security definer
-set search_path = public
+set search_path = public, auth
 as $$
-  select e.value->>'email'
-  from public.nexus_users n
-  cross join lateral jsonb_each(coalesce(n.value_json, '{}'::jsonb)) e(key,value)
-  where n.key = 'nexus_users'
-    and lower(e.key) = lower(trim(p_username))
+  select u.email::text
+  from auth.users u
+  where lower(trim(coalesce(u.raw_user_meta_data->>''username'', ))) = lower(trim(p_username))
+     or exists (
+       select 1
+       from public.nexus_users n
+       cross join lateral jsonb_each(coalesce(n.value_json, {}::jsonb)) e(key, value)
+       where n.key = nexus_users
+         and lower(e.key) = lower(trim(p_username))
+         and (
+           e.value->>authUserId = u.id::text
+           or lower(coalesce(e.value->>username, )) = lower(trim(p_username))
+         )
+     )
+  order by case when lower(trim(coalesce(u.raw_user_meta_data->>''username'', ))) = lower(trim(p_username)) then 0 else 1 end
   limit 1;
 $$;
 
