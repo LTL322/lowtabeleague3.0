@@ -796,23 +796,48 @@ async function loginWithUsername(loginValue, passwordValue){
     showNotification('До свидания!', 'Вы вышли из аккаунта', 'fa-sign-out-alt');
   }
 
+  async function ltlGetMyProfileWithRetry(sb, attempts = 4) {
+    let lastError = null;
+    for (let i = 0; i < attempts; i++) {
+      try {
+        const { data, error } = await sb.rpc('nexus_get_my_profile');
+        if (!error && data && data.username) return data;
+        lastError = error || new Error('profile unavailable');
+      } catch (e) {
+        lastError = e;
+      }
+      await new Promise(resolve => setTimeout(resolve, 350 * (i + 1)));
+    }
+    throw lastError || new Error('profile unavailable');
+  }
+
   async function restoreSession() {
     try {
       const sb = ltlGetSupabaseClient();
       if (!sb) return false;
-      const { data: sessionData } = await sb.auth.getSession();
-      const session = sessionData && sessionData.session;
-      if (!session || !session.user) return false;
-      const username = String(session.user.user_metadata?.username || session.user.email || '').trim();
-      if (!username) return false;
 
-      // Never restore a role from localStorage/public cache: ask the protected RPC.
-      const { data: myProfile, error: profileError } = await sb.rpc('nexus_get_my_profile');
-      if (profileError || !myProfile || !myProfile.username) {
-        await sb.auth.signOut();
-        localStorage.removeItem(STORAGE_KEYS.SESSION);
+      // Supabase Auth is the only source of truth for login persistence.
+      // A page refresh must NEVER sign the user out just because the profile RPC
+      // is temporarily unavailable while the database/trigger is catching up.
+      const { data: sessionData, error: sessionError } = await sb.auth.getSession();
+      if (sessionError) {
+        console.warn('Сессия Supabase пока недоступна:', sessionError);
         return false;
       }
+
+      const session = sessionData && sessionData.session;
+      if (!session || !session.user) return false;
+
+      let myProfile;
+      try {
+        myProfile = await ltlGetMyProfileWithRetry(sb, 4);
+      } catch (e) {
+        // Do NOT call signOut here. A refresh must preserve a valid Auth session.
+        // The next auth event / reload will retry profile hydration.
+        console.warn('Профиль временно недоступен после обновления:', e);
+        return false;
+      }
+
       const serverUsername = String(myProfile.username);
       const serverRole = myProfile.role || ROLES.GUEST;
       ltlState[STORAGE_KEYS.USERS] = {
@@ -2978,6 +3003,36 @@ async function loginWithUsername(loginValue, passwordValue){
     });
   })();
 
+  // Keep the UI synchronized with Supabase Auth across page refreshes,
+  // token refreshes, and delayed auth/profile initialization.
+  (function setupPersistentAuthListener() {
+    const sb = ltlGetSupabaseClient();
+    if (!sb) return;
+    sb.auth.onAuthStateChange(async (event, session) => {
+      if (event === 'SIGNED_OUT') {
+        currentUser = null;
+        currentRole = ROLES.GUEST;
+        localStorage.removeItem(STORAGE_KEYS.SESSION);
+        return;
+      }
+      if ((event === 'INITIAL_SESSION' || event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') && session?.user) {
+        try {
+          const profile = await ltlGetMyProfileWithRetry(sb, 4);
+          const username = String(profile.username);
+          const role = profile.role || ROLES.GUEST;
+          ltlState[STORAGE_KEYS.USERS] = {
+            ...getUsers(),
+            [username.toLowerCase()]: profile
+          };
+          loginUser(username, role, false);
+        } catch (e) {
+          // Never sign out here. Auth session remains valid and will retry.
+          console.warn('Профиль не успел загрузиться:', e);
+        }
+      }
+    });
+  })();
+
   restoreSession().then(restored => { if (!restored) {
     loadAvatar();
     setTimeout(() => showNotification('Добро пожаловать!', 'LTL | LOW TABE LEAGUE — ваш киберспортивный центр', 'fa-bolt'), 500);
@@ -3127,12 +3182,14 @@ async function loginWithUsername(loginValue, passwordValue){
       // Роль и профиль берём только с сервера после успешной Auth-сессии.
       // V7: для старых Auth-аккаунтов без профиля RPC автоматически создаёт
       // безопасный guest-профиль, связанный с текущим auth.uid().
-      const { data: myProfile, error: myProfileError } = await sb.rpc('nexus_get_my_profile');
-      if (myProfileError || !myProfile || !myProfile.username) {
-        // Legacy accounts can have a valid Auth account and a profile keyed
-        // differently. Do not leave a successful Auth session half-open.
-        await sb.auth.signOut();
-        error.textContent = 'Аккаунт найден, но профиль не привязан. Обратитесь к администратору.';
+      let myProfile;
+      try {
+        myProfile = await ltlGetMyProfileWithRetry(sb, 5);
+      } catch (profileErr) {
+        console.error('nexus_get_my_profile:', profileErr);
+        // Auth succeeded, so do NOT sign the user out. The profile RPC is
+        // self-healing on the server and may need a short moment after login.
+        error.textContent = 'Аккаунт найден. Профиль ещё загружается — повторите вход через несколько секунд.';
         error.classList.add('show');
         return;
       }
@@ -3227,10 +3284,12 @@ async function loginWithUsername(loginValue, passwordValue){
         return;
       }
 
-      const { data: myProfile, error: profileError } = await sb.rpc('nexus_get_my_profile');
-      if (profileError || !myProfile || !myProfile.username) {
-        await sb.auth.signOut();
-        error.textContent = 'Аккаунт создан, но профиль ещё не доступен. Попробуйте войти через несколько секунд.';
+      let myProfile;
+      try {
+        myProfile = await ltlGetMyProfileWithRetry(sb, 5);
+      } catch (profileErr) {
+        console.error('nexus_get_my_profile after signup:', profileErr);
+        error.textContent = 'Аккаунт создан. Профиль ещё создаётся — обновите страницу или войдите через несколько секунд.';
         error.classList.add('show');
         return;
       }
