@@ -1501,7 +1501,7 @@ async function loginWithUsername(loginValue, passwordValue){
     const teams = getTeams();
     const grid = document.getElementById('teamsGrid');
     grid.innerHTML = teams.map(t => `
-      <div class="card team-card" data-team-id="${t.id}" onclick="window.showTeamDetail('${t.id}')">
+      <div class="card team-card" data-team-id="${t.id}" data-action="team-detail">
         <div class="team-icon">${t.avatar ? `<img class="team-card-avatar" src="${t.avatar}" alt="${escHtml(t.name)}" loading="lazy" decoding="async" style="display:block;width:100%;height:100%;max-width:100%;max-height:100%;object-fit:cover;object-position:center;border-radius:inherit;">` : t.icon}</div>
         <strong>${t.name}</strong>
         <small>${t.region}</small>
@@ -1547,7 +1547,7 @@ async function loginWithUsername(loginValue, passwordValue){
         <div class="player-rating-edit"><input class="player-rating-input" data-team-id="${p.teamId}" data-player-name="${p.name}" type="number" value="${p.lts}" min="0" step="1"></div>
       ` : `<div class="player-rating">⭐ ${p.lts} LTS</div>`;
       return `
-        <div class="card top-player-card ${borderClass}" data-top-player-name="${escHtml(p.name)}" data-top-team-id="${escHtml(p.teamId || '')}" role="button" tabindex="0" onclick="window.LTL_openTopPlayer(this.getAttribute('data-top-player-name'), this.getAttribute('data-top-team-id'))" style="cursor:pointer;">
+        <div class="card top-player-card ${borderClass}" data-top-player-name="${escHtml(p.name)}" data-top-team-id="${escHtml(p.teamId || '')}" role="button" tabindex="0" data-action="top-player" style="cursor:pointer;">
           ${medalHtml}
           <div class="player-rank-num ${rankClass}">#${i+1}</div>
           <div class="player-avatar-big ${avatarClass}" style="overflow:hidden;display:grid;place-items:center;">${playerAvatarMarkup(p.name, 'player-avatar-shared', '')}</div>
@@ -1590,7 +1590,7 @@ async function loginWithUsername(loginValue, passwordValue){
     let readNews = [];
     try { readNews = JSON.parse(localStorage.getItem('ltl_read_news') || '[]'); } catch(e) {}
     list.innerHTML = news.map(n => `
-      <article class="card news-card ${n.featured ? 'featured' : ''} ${readNews.includes(n.id) ? 'read-news' : ''}" onclick="openFullNews(${n.id})">
+      <article class="card news-card ${n.featured ? 'featured' : ''} ${readNews.includes(n.id) ? 'read-news' : ''}" data-action="news-detail" data-news-id="${n.id}">
         <div class="tag">${n.date} ${n.featured ? '· Редактор' : ''}</div>
         <h3>${n.title}</h3>
         <p>${n.desc}</p>
@@ -1685,12 +1685,12 @@ async function loginWithUsername(loginValue, passwordValue){
       let actions = '';
       if (isAdmin) {
         actions = `
-          <button class="edit-match-btn" data-id="${m.id}" onclick="event.stopPropagation(); openEditMatch('${m.id}')" style="padding:4px 10px;border-radius:8px;border:1px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer;margin-right:4px;">✏️</button>
-          <button class="delete-match-btn" data-id="${m.id}" onclick="event.stopPropagation(); deleteMatch('${m.id}')" style="padding:4px 10px;border-radius:8px;border:1px solid #ef5350;background:transparent;color:#ef5350;cursor:pointer;">🗑️</button>
+          <button class="edit-match-btn" data-id="${m.id}" data-action="edit-match" data-id="${m.id}" style="padding:4px 10px;border-radius:8px;border:1px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer;margin-right:4px;">✏️</button>
+          <button class="delete-match-btn" data-id="${m.id}" data-action="delete-match" data-id="${m.id}" style="padding:4px 10px;border-radius:8px;border:1px solid #ef5350;background:transparent;color:#ef5350;cursor:pointer;">🗑️</button>
         `;
       }
       return `
-        <tr onclick="openMatchDetailPage('${m.id}')">
+        <tr data-action="match-detail" data-id="${m.id}">
           <td>${m.dateTime || 'Дата не указана'}</td>
           <td><strong>${m.teamA}</strong></td>
           <td>${m.score || '0:0'}</td>
@@ -1716,10 +1716,10 @@ async function loginWithUsername(loginValue, passwordValue){
     else {
       noLive.style.display = 'none';
       liveGrid.innerHTML = live.map(m => `
-        <article class="card live-card" onclick="openMatchDetailPage('${m.id}')">
+        <article class="card live-card" data-action="match-detail" data-id="${m.id}">
           <div class="tag">${m.game || 'Матч'}</div>
           <div class="teams"><div class="team">${m.teamA}</div><div class="score">${m.score || '0:0'}</div><div class="team">${m.teamB}</div></div>
-          <div class="live-row"><span class="live-label">● В ЭФИРЕ</span><button class="watch" onclick="event.stopPropagation(); openMatchDetailPage('${m.id}')">Смотреть</button></div>
+          <div class="live-row"><span class="live-label">● В ЭФИРЕ</span><button class="watch" data-action="match-detail" data-id="${m.id}">Смотреть</button></div>
         </article>
       `).join('');
     }
@@ -1730,7 +1730,7 @@ async function loginWithUsername(loginValue, passwordValue){
     else {
       noUpcoming.style.display = 'none';
       upcomingGrid.innerHTML = upcoming.map(m => `
-        <article class="card upcoming-card" onclick="openMatchDetailPage('${m.id}')" style="cursor:pointer;">
+        <article class="card upcoming-card" data-action="match-detail" data-id="${m.id}" style="cursor:pointer;">
           <div class="match-time">${m.dateTime || 'Дата не указана'}</div>
           <div class="match-teams"><span>${m.teamA}</span><span style="color:var(--muted);font-size:13px;">vs</span><span>${m.teamB}</span></div>
         </article>
@@ -1747,7 +1747,7 @@ async function loginWithUsername(loginValue, passwordValue){
     const list = limit ? tournaments.slice(0, limit) : tournaments;
     const isAdmin = currentRole === ROLES.ADMIN || currentRole === ROLES.HEAD;
     container.innerHTML = list.map((t, i) => `
-      <article class="card tournament" onclick="openTournamentDetail('${t.id}')">
+      <article class="card tournament" data-action="tournament-detail" data-id="${t.id}">
         <div class="num">${String(i+1).padStart(2,'0')}</div>
         <div>
           <div class="t-name">${t.name}</div>
@@ -1756,8 +1756,8 @@ async function loginWithUsername(loginValue, passwordValue){
         <div class="prize">${t.prize}<small>призовой фонд</small></div>
         ${isAdmin ? `
           <div class="tourn-actions">
-            <button class="edit-tourn-btn" data-id="${t.id}" onclick="event.stopPropagation(); openEditTournament('${t.id}')" title="Редактировать">✏️</button>
-            <button class="delete-tourn-btn" data-id="${t.id}" onclick="event.stopPropagation(); deleteTournament('${t.id}')" title="Удалить" style="border-color:#ef5350;color:#ef5350;">🗑️</button>
+            <button class="edit-tourn-btn" data-id="${t.id}" data-action="edit-tournament" data-id="${t.id}" title="Редактировать">✏️</button>
+            <button class="delete-tourn-btn" data-id="${t.id}" data-action="delete-tournament" data-id="${t.id}" title="Удалить" style="border-color:#ef5350;color:#ef5350;">🗑️</button>
           </div>
         ` : ''}
       </article>
@@ -2253,8 +2253,8 @@ async function loginWithUsername(loginValue, passwordValue){
           <input type="text" id="gameScore_${escHtml(g.id)}" placeholder="Счёт в игре (13:9)" value="${escHtml(g.ingameScore)}" style="width:140px;">
           <input type="text" id="gameBansA_${escHtml(g.id)}" placeholder="Баны ${escHtml(match.teamA)} (через запятую)" value="${escHtml(g.bansA.join(', '))}" style="flex:1;min-width:120px;">
           <input type="text" id="gameBansB_${escHtml(g.id)}" placeholder="Баны ${escHtml(match.teamB)} (через запятую)" value="${escHtml(g.bansB.join(', '))}" style="flex:1;min-width:120px;">
-          <button onclick="saveMatchGame('${escHtml(g.id)}')"><i class="fas fa-save"></i> Сохранить карту</button>
-          <button class="danger" onclick="deleteMatchGame('${escHtml(g.id)}')"><i class="fas fa-trash"></i></button>
+          <button data-action="save-game" data-id="${escHtml(g.id)}"><i class="fas fa-save"></i> Сохранить карту</button>
+          <button class="danger" data-action="delete-game" data-id="${escHtml(g.id)}"><i class="fas fa-trash"></i></button>
         </div>
         <div class="game-edit">
           <input type="text" id="gameKdaPlayer_${escHtml(g.id)}" placeholder="Игрок" style="flex:1;min-width:100px;" list="gamePlayers_${escHtml(g.id)}">
@@ -2262,7 +2262,7 @@ async function loginWithUsername(loginValue, passwordValue){
           <input type="number" min="0" id="gameKdaK_${escHtml(g.id)}" placeholder="K" style="width:60px;">
           <input type="number" min="0" id="gameKdaD_${escHtml(g.id)}" placeholder="D" style="width:60px;">
           <input type="number" min="0" id="gameKdaA_${escHtml(g.id)}" placeholder="A" style="width:60px;">
-          <button class="ghost" onclick="addGameKDA('${escHtml(g.id)}')"><i class="fas fa-plus"></i> KDA на карте</button>
+          <button class="ghost" data-action="add-game-kda" data-id="${escHtml(g.id)}"><i class="fas fa-plus"></i> KDA на карте</button>
         </div>` : ''}
       </div>`;
     });
@@ -2405,7 +2405,7 @@ async function loginWithUsername(loginValue, passwordValue){
     const rosterGrid = document.getElementById('teamRosterGrid');
     if (team.roster && team.roster.length > 0) {
       rosterGrid.innerHTML = team.roster.map(player => `
-        <div class="roster-item" onclick="window.showPlayerDetail('${team.id}', '${player}')">
+        <div class="roster-item" data-action="player-detail" data-team-id="${team.id}" data-player="${escHtml(player)}">
           <div class="player-avatar" style="overflow:hidden;display:grid;place-items:center;">${playerAvatarMarkup(player, 'player-avatar-shared', '')}</div>
           <div><div class="player-name">${player}</div><div class="player-role">${getPlayerData(team.id, player).role || 'Игрок'}</div></div>
         </div>
@@ -2533,7 +2533,7 @@ async function loginWithUsername(loginValue, passwordValue){
     const label = String(displayName || name);
     if (!name) return label;
     const safeName = name.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
-    return `<a class="player-link top-player-link" href="javascript:void(0)" onclick="event.preventDefault();event.stopPropagation();openPlayerFromTop('${safeName}')" title="Открыть страницу игрока">${label}</a>`;
+    return `<a class="player-link top-player-link" href="#" data-action="top-player-link" data-player-name="${safeName}" title="Открыть страницу игрока">${label}</a>`;
   }
 
   window.openPlayerFromMatch = function(playerName, teamName) {
@@ -2830,9 +2830,9 @@ async function loginWithUsername(loginValue, passwordValue){
     let actionsHtml = '';
     if (isAdmin) {
       if (isBracketEditMode) {
-        actionsHtml = `<div class="match-actions-small"><button class="save-edit" onclick="saveBracketMatch('${match.id}')" style="border-color:var(--accent);color:var(--accent);">💾</button><button class="cancel-edit" onclick="cancelBracketEdit()" style="border-color:var(--muted);color:var(--muted);">✖</button></div>`;
+        actionsHtml = `<div class="match-actions-small"><button class="save-edit" data-action="save-bracket" data-id="${match.id}" style="border-color:var(--accent);color:var(--accent);">💾</button><button class="cancel-edit" data-action="cancel-bracket" style="border-color:var(--muted);color:var(--muted);">✖</button></div>`;
       } else {
-        actionsHtml = `<div class="match-actions-small"><button class="edit" onclick="enterBracketEditMode()">✏️</button><button class="delete" onclick="deleteBracketMatch('${match.id}')">🗑️</button>${match.status !== 'finished' && match.teamA !== 'TBD' && match.teamB !== 'TBD' && match.teamA !== match.teamB ? `<button class="resolve" onclick="resolveMatchWithScore('${match.id}')">🏆</button>` : ''}</div>`;
+        actionsHtml = `<div class="match-actions-small"><button class="edit" data-action="enter-bracket">✏️</button><button class="delete" data-action="delete-bracket" data-id="${match.id}">🗑️</button>${match.status !== 'finished' && match.teamA !== 'TBD' && match.teamB !== 'TBD' && match.teamA !== match.teamB ? `<button class="resolve" data-action="resolve-bracket" data-id="${match.id}">🏆</button>` : ''}</div>`;
       }
     }
     return `
@@ -2861,10 +2861,10 @@ async function loginWithUsername(loginValue, passwordValue){
     document.getElementById('matchRostersPreview').style.display = 'block';
     let html = '';
     if (rosterA) {
-      html += `<div style="margin-bottom:6px;"><strong>${teamAName}:</strong> ${rosterA.map(p => `<a class="player-link" style="color:var(--accent);cursor:pointer;text-decoration:none;font-weight:600;" onclick="event.stopPropagation(); window.openPlayerFromMatch('${p}','${teamAName}')">${p}</a>`).join(', ')}</div>`;
+      html += `<div style="margin-bottom:6px;"><strong>${teamAName}:</strong> ${rosterA.map(p => `<a class="player-link" style="color:var(--accent);cursor:pointer;text-decoration:none;font-weight:600;" data-action="player-match" data-player="${escHtml(p)}" data-team="${escHtml(teamAName)}">${p}</a>`).join(', ')}</div>`;
     }
     if (rosterB) {
-      html += `<div><strong>${teamBName}:</strong> ${rosterB.map(p => `<a class="player-link" style="color:var(--accent);cursor:pointer;text-decoration:none;font-weight:600;" onclick="event.stopPropagation(); window.openPlayerFromMatch('${p}','${teamBName}')">${p}</a>`).join(', ')}</div>`;
+      html += `<div><strong>${teamBName}:</strong> ${rosterB.map(p => `<a class="player-link" style="color:var(--accent);cursor:pointer;text-decoration:none;font-weight:600;" data-action="player-match" data-player="${escHtml(p)}" data-team="${escHtml(teamBName)}">${p}</a>`).join(', ')}</div>`;
     }
     document.getElementById('matchRostersPreviewContent').innerHTML = html;
   }
@@ -2979,6 +2979,43 @@ async function loginWithUsername(loginValue, passwordValue){
     loadAvatar();
     setTimeout(() => showNotification('Добро пожаловать!', 'LTL | LOW TABE LEAGUE — ваш киберспортивный центр', 'fa-bolt'), 500);
   } });
+
+  // CSP-compatible delegated actions. No inline onclick handlers are used.
+  document.addEventListener('click', function(e) {
+    const el = e.target.closest('[data-action]');
+    if (!el) return;
+    const action = el.getAttribute('data-action');
+    const id = el.getAttribute('data-id');
+    try {
+      if (action === 'team-detail') { e.preventDefault(); window.showTeamDetail(el.getAttribute('data-team-id') || el.dataset.teamId); return; }
+      if (action === 'top-player' || action === 'top-player-link') {
+        e.preventDefault(); e.stopPropagation();
+        window.LTL_openTopPlayer(el.getAttribute('data-top-player-name') || el.getAttribute('data-player-name'), el.getAttribute('data-top-team-id') || el.getAttribute('data-team-id') || ''); return;
+      }
+      if (action === 'news-detail') { e.preventDefault(); window.openFullNews(el.getAttribute('data-news-id')); return; }
+      if (action === 'edit-match') { e.preventDefault(); e.stopPropagation(); window.openEditMatch(id); return; }
+      if (action === 'delete-match') { e.preventDefault(); e.stopPropagation(); window.deleteMatch(id); return; }
+      if (action === 'match-detail') { e.preventDefault(); window.openMatchDetailPage(id); return; }
+      if (action === 'tournament-detail') { e.preventDefault(); window.openTournamentDetail(id); return; }
+      if (action === 'edit-tournament') { e.preventDefault(); e.stopPropagation(); window.openEditTournament(id); return; }
+      if (action === 'delete-tournament') { e.preventDefault(); e.stopPropagation(); window.deleteTournament(id); return; }
+      if (action === 'save-game') { e.preventDefault(); window.saveMatchGame(id); return; }
+      if (action === 'delete-game') { e.preventDefault(); window.deleteMatchGame(id); return; }
+      if (action === 'add-game-kda') { e.preventDefault(); window.addGameKDA(id); return; }
+      if (action === 'player-detail') { e.preventDefault(); window.showPlayerDetail(el.getAttribute('data-team-id'), el.getAttribute('data-player')); return; }
+      if (action === 'player-match') { e.preventDefault(); e.stopPropagation(); window.openPlayerFromMatch(el.getAttribute('data-player'), el.getAttribute('data-team')); return; }
+      if (action === 'save-bracket') { e.preventDefault(); window.saveBracketMatch(id); return; }
+      if (action === 'cancel-bracket') { e.preventDefault(); window.cancelBracketEdit(); return; }
+      if (action === 'enter-bracket') { e.preventDefault(); window.enterBracketEditMode(); return; }
+      if (action === 'delete-bracket') { e.preventDefault(); window.deleteBracketMatch(id); return; }
+      if (action === 'resolve-bracket') { e.preventDefault(); window.resolveMatchWithScore(id); return; }
+      if (action === 'stream-home') { e.preventDefault(); window.goToStream(); return; }
+      if (action === 'admin-create-tournament') { e.preventDefault(); document.getElementById('createTournamentBtn')?.click(); return; }
+      if (action === 'admin-add-news') { e.preventDefault(); document.getElementById('addNewsBtn')?.click(); return; }
+      if (action === 'admin-create-team') { e.preventDefault(); document.getElementById('createTeamBtn')?.click(); return; }
+      if (action === 'admin-create-match') { e.preventDefault(); document.getElementById('createMatchBtn')?.click(); return; }
+    } catch (err) { console.error('LTL action failed:', action, err); }
+  }, true);
 
   document.addEventListener('DOMContentLoaded', function() {
     // Бургер-меню
