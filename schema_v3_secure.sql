@@ -283,9 +283,13 @@ $$;
 revoke all on function public.nexus_create_profile(uuid,text,text) from public, anon, authenticated;
 grant execute on function public.nexus_create_profile(uuid,text,text) to authenticated;
 
--- Username -> email resolution used by the login form.
--- IMPORTANT: username is resolved from both Auth metadata and the application profile.
--- Password verification is still performed only by Supabase Auth.
+-- Robust username -> email resolver.
+-- Supports old accounts as well as newly registered accounts:
+-- 1) username in auth.users metadata
+-- 2) username/key in public.nexus_users
+-- 3) username field in the stored profile
+-- 4) authUserId link when present
+-- Password is checked only by Supabase Auth.
 create or replace function public.nexus_resolve_login(p_username text)
 returns text
 language sql
@@ -293,22 +297,30 @@ stable
 security definer
 set search_path = public, auth
 as $$
-  select u.email::text
-  from auth.users u
-  where lower(trim(coalesce(u.raw_user_meta_data->>'username', ''))) = lower(trim(p_username))
-     or exists (
-       select 1
-       from public.nexus_users n
-       cross join lateral jsonb_each(coalesce(n.value_json, '{}'::jsonb)) e(key, value)
-       where n.key = 'nexus_users'
-         and lower(e.key) = lower(trim(p_username))
-         and (e.value->>'authUserId') = u.id::text
-     )
-  order by case
-    when lower(trim(coalesce(u.raw_user_meta_data->>'username', ''))) = lower(trim(p_username)) then 0
-    else 1
-  end
-  limit 1;
+  select coalesce(
+    (
+      select u.email::text
+      from auth.users u
+      where lower(trim(coalesce(u.raw_user_meta_data->>'username',''))) = lower(trim(p_username))
+      limit 1
+    ),
+    (
+      select e.value->>'email'
+      from public.nexus_users n
+      cross join lateral jsonb_each(coalesce(n.value_json, '{}'::jsonb)) e(key,value)
+      where n.key = 'nexus_users'
+        and (
+          lower(trim(e.key)) = lower(trim(p_username))
+          or lower(trim(coalesce(e.value->>'username',''))) = lower(trim(p_username))
+        )
+        and nullif(trim(e.value->>'email'),'') is not null
+      order by case
+        when lower(trim(e.key)) = lower(trim(p_username)) then 0
+        else 1
+      end
+      limit 1
+    )
+  );
 $$;
 
 revoke all on function public.nexus_resolve_login(text) from public;

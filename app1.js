@@ -3127,8 +3127,10 @@ async function loginWithUsername(loginValue, passwordValue){
       // Роль и профиль берём только с сервера после успешной Auth-сессии.
       const { data: myProfile, error: myProfileError } = await sb.rpc('nexus_get_my_profile');
       if (myProfileError || !myProfile || !myProfile.username) {
+        // Legacy accounts can have a valid Auth account and a profile keyed
+        // differently. Do not leave a successful Auth session half-open.
         await sb.auth.signOut();
-        error.textContent = 'Профиль пользователя не найден. Обратитесь к администратору.';
+        error.textContent = 'Аккаунт найден, но профиль не привязан. Обратитесь к администратору.';
         error.classList.add('show');
         return;
       }
