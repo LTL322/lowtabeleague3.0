@@ -1418,3 +1418,156 @@
     font-size: clamp(14px, 2vw, 20px);
     opacity: .7;
   }
+
+
+/* ===== V2.5 UI + AVATAR HARDENING ===== */
+
+/* Team logos/avatars must never escape their card. */
+.team-icon{
+  width:62px !important;
+  height:62px !important;
+  min-width:62px;
+  min-height:62px;
+  max-width:62px;
+  max-height:62px;
+  margin:0 auto 14px;
+  overflow:hidden !important;
+  position:relative;
+  display:grid;
+  place-items:center;
+  border-radius:18px;
+}
+.team-icon img{
+  display:block !important;
+  width:100% !important;
+  height:100% !important;
+  max-width:100% !important;
+  max-height:100% !important;
+  min-width:0 !important;
+  min-height:0 !important;
+  object-fit:cover !important;
+  object-position:center !important;
+  border-radius:inherit !important;
+}
+
+/* Team detail logo. */
+.team-detail-page .team-detail-icon{
+  width:92px !important;
+  height:92px !important;
+  min-width:92px;
+  min-height:92px;
+  overflow:hidden !important;
+  border-radius:18px;
+  display:grid;
+  place-items:center;
+}
+.team-detail-page .team-detail-icon img{
+  display:block !important;
+  width:100% !important;
+  height:100% !important;
+  max-width:100% !important;
+  max-height:100% !important;
+  object-fit:cover !important;
+  border-radius:inherit !important;
+}
+
+/* Every adaptive player avatar is clipped by its fixed parent. */
+.avatar-adaptive-wrap{
+  width:100%;
+  height:100%;
+  max-width:100%;
+  max-height:100%;
+  overflow:hidden !important;
+  box-sizing:border-box;
+}
+.avatar-adaptive-wrap .player-avatar-shared,
+.avatar-adaptive-wrap .avatar-adaptive-bg{
+  max-width:none !important;
+  max-height:none !important;
+}
+.top-player-card .player-avatar-big,
+.player-detail-page .player-avatar-big,
+.team-detail-page .roster-item .player-avatar{
+  overflow:hidden !important;
+}
+
+/* Editing/action buttons: no white browser/theme background. */
+.team-edit-btn,
+.rank-toggle-edit,
+#tournamentDetailEditBtn,
+#bracketToggleEditBtn,
+#matchDetailScoreSaveBtn,
+.edit-news-admin-btn,
+.edit-match-btn,
+.edit-tourn-btn,
+.bracket-match .match-actions-small .edit,
+.bracket-match .match-actions-small .save-edit,
+.bracket-match .match-actions-small .cancel-edit,
+.kda-preset-btn,
+.game-edit button.ghost,
+.server-text-edit .save-text-btn,
+.about-admin-panel .action-buttons .btn-reset{
+  background:transparent !important;
+  color:var(--ink) !important;
+  border:1px solid var(--line) !important;
+}
+.team-edit-btn:hover,
+.rank-toggle-edit:hover,
+#tournamentDetailEditBtn:hover,
+#bracketToggleEditBtn:hover,
+#matchDetailScoreSaveBtn:hover,
+.edit-news-admin-btn:hover,
+.edit-match-btn:hover,
+.edit-tourn-btn:hover,
+.bracket-match .match-actions-small .edit:hover,
+.bracket-match .match-actions-small .save-edit:hover,
+.bracket-match .match-actions-small .cancel-edit:hover,
+.kda-preset-btn:hover,
+.game-edit button.ghost:hover,
+.server-text-edit .save-text-btn:hover,
+.about-admin-panel .action-buttons .btn-reset:hover{
+  background:var(--bg2) !important;
+  color:var(--ink) !important;
+}
+
+/* Save/submit controls remain accent-colored, not white. */
+.btn-submit,
+.btn-save,
+.create-btn,
+.add-highlight-btn,
+.modal .btn-submit,
+#saveServerText,
+#saveSiteSettingsBtn{
+  color:#fff !important;
+}
+
+/* Native file controls: dark button instead of browser white button. */
+input[type="file"]{
+  color:var(--ink);
+  background:transparent;
+  border:1px solid var(--line);
+  border-radius:8px;
+  padding:4px;
+}
+input[type="file"]::file-selector-button{
+  background:var(--bg2);
+  color:var(--ink);
+  border:1px solid var(--line);
+  border-radius:7px;
+  padding:7px 12px;
+  margin-right:8px;
+  cursor:pointer;
+  font-weight:600;
+}
+input[type="file"]::file-selector-button:hover{
+  background:var(--line);
+}
+
+/* Never allow a raw avatar image to become a page-sized element. */
+.team-card img,
+.roster-item img,
+.top-player-card img,
+.player-detail-page img.player-avatar-shared,
+.profile-page img.avatar-img{
+  max-width:100% !important;
+}

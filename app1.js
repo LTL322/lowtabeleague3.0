@@ -174,6 +174,38 @@
     if (!ltlPendingWrites.has(key) || !ltlBackendReady || ltlApplyingRemote) return;
     const value = ltlPendingWrites.get(key);
     const sb = ltlGetSupabaseClient();
+
+/* ===== V2.6 LOGIN HARDENING =====
+   Login form accepts username + password.
+   Password is ALWAYS verified by Supabase Auth.
+   Username is resolved server-side through nexus_resolve_login.
+*/
+async function resolveLoginEmail(loginValue){
+  const login = String(loginValue || '').trim();
+  if(!login) throw new Error('Введите логин');
+
+  // Email input remains supported for existing accounts.
+  if(login.includes('@')) return login.toLowerCase();
+
+  const { data, error } = await sb.rpc('nexus_resolve_login', {
+    p_login: login
+  });
+  if(error) throw new Error('Не удалось найти аккаунт');
+  const email = Array.isArray(data) ? data[0]?.email : data?.email;
+  if(!email) throw new Error('Неверный логин или пароль');
+  return String(email).trim().toLowerCase();
+}
+
+async function loginWithUsername(loginValue, passwordValue){
+  const password = String(passwordValue || '');
+  if(!password) throw new Error('Введите пароль');
+
+  const email = await resolveLoginEmail(loginValue);
+  const { data, error } = await sb.auth.signInWithPassword({email, password});
+  if(error) throw new Error('Неверный логин или пароль');
+  return data;
+}
+
     if (!sb) return;
     try {
       if (key === STORAGE_KEYS.USERS && currentRole !== ROLES.ADMIN && currentRole !== ROLES.HEAD) {
@@ -1470,7 +1502,7 @@
     const grid = document.getElementById('teamsGrid');
     grid.innerHTML = teams.map(t => `
       <div class="card team-card" data-team-id="${t.id}" onclick="window.showTeamDetail('${t.id}')">
-        <div class="team-icon">${t.avatar ? `<img src="${t.avatar}" style="width:62px;height:62px;border-radius:18px;object-fit:cover;">` : t.icon}</div>
+        <div class="team-icon">${t.avatar ? `<img class="team-card-avatar" src="${t.avatar}" alt="${escHtml(t.name)}" loading="lazy" decoding="async" style="display:block;width:100%;height:100%;max-width:100%;max-height:100%;object-fit:cover;object-position:center;border-radius:inherit;">` : t.icon}</div>
         <strong>${t.name}</strong>
         <small>${t.region}</small>
         <div style="margin-top:6px;font-size:13px;color:var(--accent);font-weight:700;">⭐ ${t.points || 0}</div>
@@ -2361,7 +2393,7 @@
     const team = getTeams().find(t => t.id === teamId);
     if (!team) return;
     editingTeamId = teamId;
-    document.getElementById('teamDetailIcon').innerHTML = team.avatar ? `<img src="${team.avatar}" alt="${team.name}">` : team.icon;
+    document.getElementById('teamDetailIcon').innerHTML = team.avatar ? `<img class="team-detail-avatar" src="${team.avatar}" alt="${escHtml(team.name)}" loading="lazy" decoding="async">` : team.icon;
     document.getElementById('teamDetailName').textContent = team.name;
     document.getElementById('teamDetailRegion').textContent = team.region;
     document.getElementById('teamDescription').textContent = team.description || 'Описание отсутствует.';
